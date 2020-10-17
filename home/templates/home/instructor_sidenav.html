@@ -1,0 +1,49 @@
+<nav class="vertical_nav">
+    <div class="left_section menu_left" id="js-menu" >
+        <div class="left_section">
+            <br>
+            <ul>
+                <li class="menu--item">
+                    <a href="{% url 'home:instructor_dashboard' %}" class="menu--link {{dashboard_active}}" title="Dashboard">
+                        <i class="uil uil-apps menu--icon"></i>
+                        <span class="menu--label">Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu--item">
+                    <a href="{% url 'home:create_new_course' %}" class="menu--link {{course_active}}" title="Create Course">
+                        <i class='uil uil-plus-circle menu--icon'></i>
+                        <span class="menu--label">Create Course</span>
+                    </a>
+                </li>
+                <li class="menu--item">
+                    <a href="instructor_messages.html" class="menu--link {{messages_active}}" title="Messages">
+                        <i class='uil uil-comments menu--icon'></i>
+                        <span class="menu--label">Messages</span>
+                    </a>
+                </li>
+                <li class="menu--item">
+                    <a href="instructor_messages.html" class="menu--link {{quiz_active}}" title="Quiz Result">
+                        <i class='uil uil-comments menu--icon'></i>
+                        <span class="menu--label">Quiz & Result</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="left_section pt-2">
+            <ul>
+                <li class="menu--item">
+                    <a href="setting.html" class="menu--link {{settings_active}}" title="Setting">
+                        <i class='uil uil-cog menu--icon'></i>
+                        <span class="menu--label">Settings</span>
+                    </a>
+                </li>
+                <li class="menu--item">
+                    <a href="feedback.html" class="menu--link {{feedback_active}}" title="Send Feedback">
+                        <i class='uil uil-comment-alt-exclamation menu--icon'></i>
+                        <span class="menu--label">Send Feedback</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
