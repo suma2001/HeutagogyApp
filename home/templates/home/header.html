@@ -43,7 +43,9 @@
           </div>
         </div>
     </div> -->
+    
     <div class="header_right">
+        {% if user %}
         <ul>
             <li>
                 <a href="{% url 'home:create_new_course' %}" class="upload_btn" title="Create New Course">Create New Course</a>
@@ -120,22 +122,24 @@
                     <a class="vbm_btn" href="instructor_notifications.html">View All <i class='uil uil-arrow-right'></i></a>
                 </div>
             </li>
+            
             <li class="ui dropdown">
                 <a href="#" class="opts_account" title="Account">
-                    <img src="{% static 'home/images/hd_dp.jpg' %}" alt="">
+                    <img src="{{photo_url}}" alt="">
                 </a>
+                
                 <div class="menu dropdown_account">
                     <div class="channel_my">
                         <div class="profile_link">
-                            <img src="{% static 'home/images/hd_dp.jpg' %}" alt="">
+                            <img src="{{photo_url}}" alt="">
                             <div class="pd_content">
                                 <div class="rhte85">
-                                    <h6>Joginder Singh</h6>
+                                    <h6>{{fullname}}</h6>
                                     <div class="mef78" title="Verify">
                                         <i class='uil uil-check-circle'></i>
                                     </div>
                                 </div>
-                                <span>gambol943@gmail.com</span>
+                                <span>{{email}}</span>
                             </div>							
                         </div>
                         <a href="my_instructor_profile_view.html" class="dp_link_12">View Instructor Profile</a>						
@@ -149,13 +153,20 @@
                         </a>
                     </div>
                     <a href="{% url 'home:instructor_dashboard' %}" class="item channel_item">Cursus dashboard</a>						
-                    <a href="membership.html" class="item channel_item">Paid Memberships</a>
-                    <a href="setting.html" class="item channel_item">Setting</a>
-                    <a href="help.html" class="item channel_item">Help</a>
-                    <a href="feedback.html" class="item channel_item">Send Feedback</a>
                     <a href="{% url 'home:signin' %}" class="item channel_item">Sign Out</a>
                 </div>
             </li>
+            {% else %}
+            <ul>
+                <li>
+                    <a href="{% url 'home:signup' %}" class="upload_btn" title="signup">Sign up</a>
+                
+                    <a href="{% url 'home:signin' %}" class="upload_btn" title="signin">Log In</a>
+                </li>
+            </ul>
+            
+            {% endif %}
+
         </ul>
     </div>
 </header>
