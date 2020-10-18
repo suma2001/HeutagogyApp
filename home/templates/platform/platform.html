@@ -1,0 +1,118 @@
+{% load static %}
+{% include 'home/header.html' %}
+{% include 'home/instructor_sidenav.html' %}
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {font-family: Arial, Helvetica, sans-serif;}
+#slide {
+    color: black;
+    display: block;
+    height: 100%;
+    line-height: 40px;
+    text-decoration: none;
+    width: 100%;
+    text-align: center;
+}
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: -33.5%;
+  top: 60px;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 5px;
+  border: 1px solid #888;
+  width: 30%;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+</style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="sa4d25">
+      <div class="container">
+
+
+        here will be the mapping part <br>
+
+        <button id="myBtn">Add slide</button> <br><br><br><br><br>
+
+        <div id="myModal" class="modal wrapper">
+          <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>menu to choose type of slide (ex: long lesson, short lesson, quiz type1, etc)</p>
+            <button class='close'>add</button>
+          </div>
+        </div>
+
+        slides already added:- <br><br>
+
+         <div style="width:130px; height:130px; background-color:white">
+           <a id="slide" href="{% url 'home:studio' %}">Slide 1</a>
+         </div>
+         <br>
+         <div style="width:130px; height:130px; background-color:white">
+           <a id="slide" href="{% url 'home:studio' %}">Slide 2</a>
+         </div>
+
+
+      </div>
+    </div>
+  </div>
+
+<script>
+// Get the modal
+var modal = document.getElementById("myModal");
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+</script>
+
+</body>
+</html>
