@@ -20,7 +20,7 @@ firebase = pyrebase.initialize_app(firebaseConfig)
 auth = firebase.auth()
 
 ## For Firestore database storage
-cred = credentials.Certificate('C:\\Users\\suma shreya t v\\Downloads\\heutagogy-2020-6959a4a76c88.json')
+cred = credentials.Certificate('heutagogy-2020-6959a4a76c88.json')
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
