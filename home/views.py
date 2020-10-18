@@ -85,3 +85,9 @@ def instructor_dashboard(request):
 def create_new_course(request):
     context = {'course_active': 'active'}
     return render(request, 'home/create_new_course.html', context)
+
+def platform(request):
+    return render(request, 'platform/platform.html')
+
+def studio(request):
+    return render(request, 'studio/studio.html')
