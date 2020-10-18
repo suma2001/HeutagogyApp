@@ -1,0 +1,48 @@
+{% load static %}
+{% include 'home/base.html' %}
+
+<div class="sign_in_up_bg">
+    <div class="container">
+        <div class="row justify-content-lg-center justify-content-md-center">
+        
+            <div class="col-lg-6 col-md-8">
+                <div class="sign_form">
+                    <h2>Create Course</h2>
+                    <form action="{% url 'home:create_new_course' %}" method="POST">
+                        {% csrf_token %}
+                        <div class="ui search focus mt-15">
+                            <div class="ui left icon input swdh11 swdh19">
+                                <i class="uil uil-user icon icon2"></i>
+                                <input class="prompt srch_explore" type="text" name="courseid"  id="id_courseid" required="" maxlength="64" placeholder="Course Id">														
+                            </div>
+                        </div>
+                        
+                        <div class="ui search focus mt-15">
+                            <div class="ui left icon input swdh11 swdh19">
+                                <i class="uil uil-user icon icon2"></i>
+                                <input class="prompt srch_explore" type="text" name="coursename"  id="id_coursename" required="" maxlength="64" placeholder="Course Name">															
+                            </div>
+                        </div>
+                        <div class="ui search focus mt-15">
+                            <div class="ui left icon input swdh11 swdh19">
+                                <i class="uil uil-envelope icon icon2"></i>
+                                <input class="prompt srch_explore" type="text" name="level"  id="id_level" required="" maxlength="64" placeholder="Level">															
+                            </div>
+                        </div>
+                        <div class="ui search focus mt-15">
+                            <div class="ui left icon input swdh11 swdh19">
+                                <i class="uil uil-key-skeleton-alt icon icon2"></i>
+                                <input class="prompt srch_explore" type="text" name="general_info"  id="id_general_info" required="" maxlength="64" placeholder="Description">															
+                            </div>
+                        </div>
+                        
+                        <button class="login-btn" type="submit">Next</button>
+                    </form>
+                    <p class="sgntrm145">By signing up, you agree to our <a href="terms_of_use.html">Terms of Use</a> and <a href="terms_of_use.html">Privacy Policy</a>.</p>
+                    <p class="mb-0 mt-30">Already have an account? <a href="{% url 'home:signin' %}">Log In</a></p>
+                </div>
+                <div class="sign_footer"><img src="{% static 'home/images/sign_logo.png' %}" alt="">© 2020 <strong>Cursus</strong>. All Rights Reserved.</div>
+            </div>				
+        </div>				
+    </div>				
+</div>

@@ -6,7 +6,6 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 
 firebaseConfig = {
-<<<<<<< HEAD
     "apiKey": "AIzaSyAv2Fdg7D52VvYR9TK_H_0z8NiCDj6iQkU",
     "authDomain": "heutagogy-2020.firebaseapp.com",
     "databaseURL": "https://heutagogy-2020.firebaseio.com",
@@ -15,27 +14,13 @@ firebaseConfig = {
     "messagingSenderId": "772643974559",
     "appId": "1:772643974559:web:d63b880a446d8a70dea1aa",
     "measurementId": "G-X01CP2KNV6"
-=======
-    "apiKey": "AIzaSyAknU0Sg2mXs5l_3zayYfrHOaXc4-HsSUc",
-    "authDomain": "authdemo-1bd4d.firebaseapp.com",
-    "databaseURL": "https://authdemo-1bd4d.firebaseio.com",
-    "projectId": "authdemo-1bd4d",
-    "storageBucket": "authdemo-1bd4d.appspot.com",
-    "messagingSenderId": "524283838254",
-    "appId": "1:524283838254:web:d31594249f6d02afefc4bf",
-    "measurementId": "G-RPCZ9J16LB"
->>>>>>> 20389c338bff247d2129c56627d324999824f0be
   }
 ## For firebase authentication
 firebase = pyrebase.initialize_app(firebaseConfig) 
 auth = firebase.auth()
 
 ## For Firestore database storage
-<<<<<<< HEAD
 cred = credentials.Certificate('C:\\Users\\suma shreya t v\\Downloads\\heutagogy-2020-6959a4a76c88.json')
-=======
-cred = credentials.Certificate('C:\\Users\\suma shreya t v\\Downloads\\authdemo-1bd4d-9906baaec900.json')
->>>>>>> 20389c338bff247d2129c56627d324999824f0be
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
@@ -85,29 +70,55 @@ def signup(request):
                 'courses' : ["C1", "C2", "C3", "C4"],
             })
         
-<<<<<<< HEAD
             context = {'email': email, 'fullname': fullname, 'photo_url': photo_url}
-=======
-            context = {'email': email, 'fullname': fullname, 'url': photo_url}
->>>>>>> 20389c338bff247d2129c56627d324999824f0be
             return render(request, 'home/instructor_dashboard.html', context)
         except:
             print("Email already exists")
 
     return render(request, 'home/sign_up.html')
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 20389c338bff247d2129c56627d324999824f0be
 def instructor_dashboard(request):
     user = auth.current_user
     context = {'dashboard_active': 'active', 'user': user}
     return render(request, 'home/instructor_dashboard.html', context)
 
+
 def create_new_course(request):
-    context = {'course_active': 'active'}
-    return render(request, 'home/create_new_course.html', context)
+    if auth.current_user != None:
+        if request.method=="POST":
+            print("POSTED")
+            data = request.POST.dict()
+            cid = data.get('courseid') 
+            course_name = data.get('coursename')
+            level = data.get('level')
+            general_info = data.get('general_info')
+            print("COurse Id is: ",cid)
+            uid = auth.current_user['localId']
+
+            doc_ref = db.collection('Courses').where('course_id', '==', cid).get()
+            print(doc_ref)
+            if len(doc_ref) == 0:
+                teachers = []
+                teachers.append(uid)
+                db.collection('Courses').document(cid).set({
+                    'course_id': cid,
+                    'course_name': course_name,
+                    'teacher_ids': teachers,
+                    'levels': level,
+                    'general_info' : general_info,
+                    'lessons': ["L1", "L2", "L3"],
+                })
+            else:
+                print("I am in ")
+                teachers = db.collection('Courses').document(cid).get().to_dict()['teacher_ids']
+                teachers.append(uid)
+                print(teachers)
+                db.collection('Courses').document(cid).update({'teacher_ids': teachers})
+
+            # context = {'course_active': 'active'}
+            return render(request, 'home/instructor_dashboard.html')
+        return render(request, 'home/create_course.html')
+    return render(request, 'home/sign_in.html')
 
 def platform(request):
     return render(request, 'platform/platform.html')
