@@ -34,14 +34,14 @@ def signin(request):
         data = request.POST.dict()
         email = data.get('emailaddress')
         password = data.get('password')
-        # try:
-        user = auth.sign_in_with_email_and_password(email, password)
-        uid = user['localId']
-        results = db.collection('Teachers').where('uid', '==', uid).get()[0].to_dict()
-        return render(request, 'home/instructor_dashboard.html', results)   
-        # except:
-            # print("Wrong credentials")
-            # return render(request, 'home/sign_in.html')
+        try:
+            user = auth.sign_in_with_email_and_password(email, password)
+            uid = user['localId']
+            results = db.collection('Teachers').where('uid', '==', uid).get()[0].to_dict()
+            return render(request, 'home/instructor_dashboard.html', results)   
+        except:
+            print("Wrong credentials")
+            return render(request, 'home/sign_in.html')
     return render(request, 'home/sign_in.html')
 
 def signup(request):
@@ -77,10 +77,6 @@ def signup(request):
 
     return render(request, 'home/sign_up.html')
 
-
-# def logout(request):
-#     auth.signOut()
-#     return render(request, 'home/instructor_dashboard.html')
 
 def instructor_dashboard(request):
     user = auth.current_user
