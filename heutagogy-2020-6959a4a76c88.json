@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "heutagogy-2020",
+  "private_key_id": "6959a4a76c88dfa5899b1baf579635f8d0930b7c",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCxcc2kvIL0HQ56\nEbIrtY/IcH+e3B0NeyCrT+a8Hjk7DXitFyVi2X+iRcki3HHe1g8chGmwDM7IRNwg\n+xku0Q8jWMekrbBSNewtQzFsAyedBc0yaUcXMN0U/MfgNucRuDlWARR5B90UbKIB\nA48GMoEUK2+RgZ4xoEniJsnh3zaDvjnZ0pj2/jX2LM+3ssjAKMbAxsKP4EbdBbAk\neM9cv/zQvIx3Ol1pZLJd8CpllgZcCjao0LqroX342W0ontwqDqfVmbAJ3A1v4xEP\new/B5ZeF5OYLFZPCHmOeW3VRBKRgu702+NKVw8zH6GSCWw1DmNo3WSpFUJvT0IIj\nctNO5ZfdAgMBAAECggEAF4010MAul20F32Da559FEsMPxUuM1Z26k9Jamyxdxz89\n/addUHXy0Vx22lgtCvkZb10J1BKXHZC6MOxzBro7yqK9eNeO2BKNIuLQu/fdOaOr\n/R1pEKRtK5xzgQh4eescPRSOnZPUHaJfjEfnI1jvtfgf6k2sbATM2aXxVLf2Odz8\nSMufmsb4nBSvF9HNCWizbc9P4WR18vYeu7UE6C5O8bZJfKz9kPbu0WfIFstBBQUE\nNKHOBG17oQ1Ji7/cD2HkpuDLwErBp8r1/IvTRTO5tdBMIWV+/wprtgEsyp8thBI8\nXWyg5eOzebp9c7YQ7LogSKqFGIPG53fh3BxhJNi81wKBgQDu+24LQ4aKFBwd3J88\nOEh6bcd28ayDh/OQWrzKkY9aZGtaSgQkurYj0CUTowLc03RSkPUFMud7TshWwjgr\nPhySJ3Sw/iy26eSIFfQTiGzbxqVnZh/F/v8V90YequUzsfvSldMJVZ0bL0A35DyI\nHmy9jChXEnHkJIkDW1dhLY++kwKBgQC+FI/khgZWovFzBZd1xmEXFZkyI9Xev702\nO9ffB1bcXvLwfTgJ+knaQOdQEs5/1HxAId0/4/TENkpIU9kbc9O2J/GQGvWEJ1uG\n2wN3Y8cjcZxKT72nXoRcGuyzfjORBO3YL8gz65/Nu9tN4fwvgknZ3i9B6iqAyjMa\n5S1n0qvlzwKBgQC0oHkWLl1786MktuHr5CZz0pGWRye66oCfNNXIzafqDEhPn+3t\nzOlpvCKp6uV4/qHG3iUzXrwzKOKnIHjPxkxV81hxhktJnRLMALvQH6cXndbahgex\n4P/wHEt1VnmSTw4kpnUxcvIh397L38gYodZSlaLP3PMUGsEsNlee7Y7d3QKBgQCv\n7fQovWvMcFAt97TyC0T9yr3aTJS88Ja+RbFN+ksI+NC+igd+JKyKV5xA3sdGRXMj\nILTZV7HKkb07KHBAGnqPlHTevjUTtiHetYOF01ITmingFeIhsTes0DbZAyvTQ86o\nU8FnXOSx1PfsJAf4KQ0Vm7H9vjDMt1mJwSi/eZwkvQKBgFJxCuZVhzwqpPgzGc+6\nVcF3FSocX5vZKyAl0/SRBDZatIKP9D3+V7njj6QwuYM/CY7hjncv9SPO0NQAoLZ7\nZbMcY5cvYKdS/n4vpDp6xtOlgmCzd4qskuc7Y+Qc6vUMi6eaUQmrsEwE1SPyUP5J\nb+Xh6qbWo+5uNmKGR4ffuqn8\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-f00d8@heutagogy-2020.iam.gserviceaccount.com",
+  "client_id": "106566157600069175995",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-f00d8%40heutagogy-2020.iam.gserviceaccount.com"
+}

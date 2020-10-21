@@ -20,7 +20,7 @@ firebase = pyrebase.initialize_app(firebaseConfig)
 auth = firebase.auth()
 
 ## For Firestore database storage
-cred = credentials.Certificate('C:\\Users\\suma shreya t v\\Downloads\\heutagogy-2020-6959a4a76c88.json')
+cred = credentials.Certificate('heutagogy-2020-6959a4a76c88.json')
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
@@ -28,12 +28,14 @@ db = firestore.client()
 def landing(request):
     return render(request, 'home/landing.html')
 
+
 def signin(request):
     if request.method=="POST":
         ## Get the form data
         data = request.POST.dict()
         email = data.get('emailaddress')
         password = data.get('password')
+        
         try:
             user = auth.sign_in_with_email_and_password(email, password)
             uid = user['localId']
@@ -88,11 +90,12 @@ def create_new_course(request):
         if request.method=="POST":
             print("POSTED")
             data = request.POST.dict()
+            print(data)
             cid = data.get('courseid') 
             course_name = data.get('coursename')
             level = data.get('level')
             general_info = data.get('general_info')
-            print("COurse Id is: ",cid)
+            print("Course Id is: ",cid)
             uid = auth.current_user['localId']
 
             doc_ref = db.collection('Courses').where('course_id', '==', cid).get()
@@ -117,7 +120,7 @@ def create_new_course(request):
 
             # context = {'course_active': 'active'}
             return render(request, 'home/instructor_dashboard.html')
-        return render(request, 'home/create_course.html')
+        return render(request, 'home/create_new_course.html')
     return render(request, 'home/sign_in.html')
 
 def platform(request):

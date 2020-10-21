@@ -1,0 +1,44 @@
+<nav class="vertical_nav">
+    <div class="left_section menu_left" id="js-menu" >
+        <div class="left_section">
+            <br>
+            <ul>
+                <li class="menu--item">
+                    <a href="{% url 'admins:admin_dashboard' %}" class="menu--link active" title="Dashboard">
+                        <i class="uil uil-apps menu--icon"></i>
+                        <span class="menu--label">Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu--item">
+                    <a href="{% url 'admins:add_new_student' %}" class="menu--link" title="">
+                        <i class='uil uil-plus-circle menu--icon'></i>
+                        <span class="menu--label">Add Students</span>
+                    </a>
+                </li>
+                <li class="menu--item">
+                    <a href="instructor_messages.html" class="menu--link {{messages_active}}" title="Messages">
+                        <i class='uil uil-plus-circle menu--icon'></i>
+                        <span class="menu--label">Add Teachers</span>
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+        <div class="left_section pt-2">
+            <ul>
+                <li class="menu--item">
+                    <a href="setting.html" class="menu--link {{settings_active}}" title="Setting">
+                        <i class='uil uil-cog menu--icon'></i>
+                        <span class="menu--label">Settings</span>
+                    </a>
+                </li>
+                <li class="menu--item">
+                    <a href="feedback.html" class="menu--link {{feedback_active}}" title="Send Feedback">
+                        <i class='uil uil-comment-alt-exclamation menu--icon'></i>
+                        <span class="menu--label">Send Feedback</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

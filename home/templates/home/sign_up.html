@@ -15,9 +15,11 @@
                 <div class="sign_form">
                     <h2>Welcome to Edututs+</h2>
                     <p>Sign Up and Start Learning!</p>
+
+                    
                     <form action="{% url 'home:signup' %}" method="POST">
                         {% csrf_token %}
-                        <div class="ui search focus">
+                        <div class="ui search focus mt-15">
                             <div class="ui left icon input swdh11 swdh19">
                                 <i class="uil uil-user icon icon2"></i>
                                 <input class="prompt srch_explore" type="text" name="fullname"  id="id_fullname" required="" maxlength="64" placeholder="Full Name">															

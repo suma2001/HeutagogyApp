@@ -7,32 +7,32 @@
         
             <div class="col-lg-6 col-md-8">
                 <div class="sign_form">
-                    <h2>Create Course</h2>
-                    <form action="{% url 'home:create_new_course' %}" method="POST">
+                    <h2>Add Student</h2>
+                    <form action="{% url 'admins:add_new_student' %}" method="POST">
                         {% csrf_token %}
                         <div class="ui search focus mt-15">
                             <div class="ui left icon input swdh11 swdh19">
                                 <i class="uil uil-user icon icon2"></i>
-                                <input class="prompt srch_explore" type="text" name="courseid"  id="id_courseid" required="" maxlength="64" placeholder="Course Id">														
+                                <input class="prompt srch_explore" type="text" name="rollno"  id="id_rollno" required="" maxlength="64" placeholder="Roll No">														
                             </div>
                         </div>
                         
                         <div class="ui search focus mt-15">
                             <div class="ui left icon input swdh11 swdh19">
                                 <i class="uil uil-user icon icon2"></i>
-                                <input class="prompt srch_explore" type="text" name="coursename"  id="id_coursename" required="" maxlength="64" placeholder="Course Name">															
+                                <input class="prompt srch_explore" type="password" name="password"  id="id_password" required="" maxlength="64" placeholder="Password">															
                             </div>
                         </div>
                         <div class="ui search focus mt-15">
                             <div class="ui left icon input swdh11 swdh19">
                                 <i class="uil uil-envelope icon icon2"></i>
-                                <input class="prompt srch_explore" type="text" name="level"  id="id_level" required="" maxlength="64" placeholder="Level">															
+                                <input class="prompt srch_explore" type="text" name="name"  id="id_name" required="" maxlength="64" placeholder="Name">															
                             </div>
                         </div>
                         <div class="ui search focus mt-15">
                             <div class="ui left icon input swdh11 swdh19">
                                 <i class="uil uil-key-skeleton-alt icon icon2"></i>
-                                <input class="prompt srch_explore" type="text" name="general_info"  id="id_general_info" required="" maxlength="64" placeholder="Description">															
+                                <input class="prompt srch_explore" type="text" name="std"  id="id_std" required="" maxlength="64" placeholder="Class">															
                             </div>
                         </div>
                         
