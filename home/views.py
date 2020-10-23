@@ -35,11 +35,11 @@ def signin(request):
         data = request.POST.dict()
         email = data.get('emailaddress')
         password = data.get('password')
-        
+        print(email, password)
         try:
             user = auth.sign_in_with_email_and_password(email, password)
             uid = user['localId']
-            results = db.collection('Teachers').where('uid', '==', uid).get()[0].to_dict()
+            results = db.collection('Schools').document('School 1').collection('Teachers').where('uid', '==', uid).get()[0].to_dict()
             return render(request, 'home/instructor_dashboard.html', results)   
         except:
             print("Wrong credentials")
@@ -63,7 +63,7 @@ def signup(request):
             uid = user['localId']
         
             ## Push this user's data to the database
-            doc_ref = db.collection('Teachers').document(uid)
+            doc_ref = db.collection('Schools').document('School 1').collection('Teachers').document(uid)
             doc_ref.set({
                 'uid': uid,
                 'email': email,
@@ -94,29 +94,51 @@ def create_new_course(request):
             cid = data.get('courseid') 
             course_name = data.get('coursename')
             level = data.get('level')
-            general_info = data.get('general_info')
+            general_info = data.get('description')
+            lessonid = data.get('lessonid')
+            lessonname = data.get('lessonname')
+            lessondesc = data.get('lessondesc')
+            lessonurl = data.get('lessonurl')
             print("Course Id is: ",cid)
             uid = auth.current_user['localId']
 
-            doc_ref = db.collection('Courses').where('course_id', '==', cid).get()
+            doc_ref = db.collection('Schools').document('School 1').collection('Courses')
+            get_course = doc_ref.where('course_id', '==', cid).get()
             print(doc_ref)
-            if len(doc_ref) == 0:
+            if len(get_course) == 0:
                 teachers = []
                 teachers.append(uid)
-                db.collection('Courses').document(cid).set({
+                get_course = doc_ref.document(cid)
+                get_course.set({
                     'course_id': cid,
                     'course_name': course_name,
                     'teacher_ids': teachers,
-                    'levels': level,
+                    'level': level,
                     'general_info' : general_info,
-                    'lessons': ["L1", "L2", "L3"],
                 })
+                lesson_content = get_course.collection('Lessons').document(lessonid)
+                lesson_content.set({
+                    'lesson_id': lessonid,
+                    'lesson_name': lessonname,
+                    'description': lessondesc,
+                    'image_url': lessonurl,
+                })
+                slide_content = lesson_content.collection('Content').document('Slide 1')
+                slide_content.set({
+                    'slide_id': "S1",
+                    'type': "q0",
+                    'questions': [{
+                        'text': 'photo_url_question',
+                        'answer': 'fillup_amswer'
+                        }]
+                })
+
             else:
                 print("I am in ")
-                teachers = db.collection('Courses').document(cid).get().to_dict()['teacher_ids']
+                teachers = doc_ref.document(cid).get().to_dict()['teacher_ids']
                 teachers.append(uid)
                 print(teachers)
-                db.collection('Courses').document(cid).update({'teacher_ids': teachers})
+                doc_ref.document(cid).update({'teacher_ids': teachers})
 
             # context = {'course_active': 'active'}
             return render(request, 'home/instructor_dashboard.html')
