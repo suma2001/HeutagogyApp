@@ -1,0 +1,26 @@
+{% load static %}
+{% include 'home/base.html' %}
+
+<div class="sign_in_up_bg mt-15">
+    <div class="container">
+        <div class="row justify-content-lg-center justify-content-md-center">
+        
+            <div class="col-lg-6 col-md-8">
+                <div class="sign_form">
+                    <h2>Upload excel file</h2>
+                    <form action="{% url 'admins:upload_students' %}" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="file" title="Upload excel file" name="excel_file" style="border: 1px solid black; padding: 5px;" required>
+                    <p>
+                    <input type="submit" value="Upload" style="border: 1px solid red; padding:5px; border-radius: 2px; cursor: pointer;">
+                    <!-- <button class="login-btn" type="submit">Next</button> -->
+                    </form>
+                    <p class="sgntrm145">By signing up, you agree to our <a href="terms_of_use.html">Terms of Use</a> and <a href="terms_of_use.html">Privacy Policy</a>.</p>
+                    <p class="mb-0 mt-30">Already have an account? <a href="{% url 'admins:admin_signin' %}">Log In</a></p>
+                </div>
+                <div class="sign_footer"><img src="{% static 'home/images/sign_logo.png' %}" alt="">© 2020 <strong>Cursus</strong>. All Rights Reserved.</div>
+            </div>				
+        </div>				
+    </div>				
+</div>
+

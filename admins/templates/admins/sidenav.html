@@ -10,15 +10,15 @@
                     </a>
                 </li>
                 <li class="menu--item">
-                    <a href="{% url 'admins:add_new_student' %}" class="menu--link" title="">
+                    <a href="{% url 'admins:admin_students' %}" class="menu--link" title="">
                         <i class='uil uil-plus-circle menu--icon'></i>
-                        <span class="menu--label">Add Students</span>
+                        <span class="menu--label">Students</span>
                     </a>
                 </li>
                 <li class="menu--item">
-                    <a href="instructor_messages.html" class="menu--link {{messages_active}}" title="Messages">
+                    <a href="{% url 'admins:add_new_teacher' %}" class="menu--link {{messages_active}}" title="Messages">
                         <i class='uil uil-plus-circle menu--icon'></i>
-                        <span class="menu--label">Add Teachers</span>
+                        <span class="menu--label">Teachers</span>
                     </a>
                 </li>
                 

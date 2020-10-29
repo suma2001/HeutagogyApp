@@ -47,8 +47,6 @@
     <div class="header_right">
         {% if user %}
         <ul>
-            
-            
             <li class="ui dropdown">
                 <a href="#" class="option_links" title="Messages"><i class='uil uil-envelope-alt'></i><span class="noti_count">3</span></a>
                 <div class="menu dropdown_ms">
@@ -150,16 +148,16 @@
                             </span>
                         </a>
                     </div>
-                    <a href="{% url 'home:instructor_dashboard' %}" class="item channel_item">Cursus dashboard</a>						
-                    <a href="{% url 'home:signin' %}" class="item channel_item">Sign Out</a>
+                    <a href="{% url 'admins:admin_dashboard' %}" class="item channel_item">Cursus dashboard</a>						
+                    <a href="{% url 'admins:admin_signin' %}" class="item channel_item">Sign Out</a>
                 </div>
             </li>
             {% else %}
             <ul>
                 <li>
-                    <a href="{% url 'home:signup' %}" class="upload_btn" title="signup">Sign up</a>
+                    <a href="{% url 'admins:admin_signup' %}" class="upload_btn" title="signup">Sign up</a>
                 
-                    <a href="{% url 'home:signin' %}" class="upload_btn" title="signin">Log In</a>
+                    <a href="{% url 'admins:admin_signin' %}" class="upload_btn" title="signin">Log In</a>
                 </li>
             </ul>
             

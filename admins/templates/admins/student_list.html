@@ -1,0 +1,51 @@
+{% include 'admins/header.html' %}
+{% include 'home/base.html' %}
+{% include 'admins/sidenav.html' %}
+
+<div class="wrapper">
+    <div class="sa4d25">
+        <div class="container-fluid">			
+            <div class="row">
+                <div class="col-lg-12">	
+                    <h2 class="st_title"><i class="uil uil-award"></i> Students</h2>
+                </div>					
+            </div>				
+            <div class="row">
+                <div class="col-12">
+                    <div class="mt-10">                   
+                        <div class="table-cerificate">
+                            <div class="table-responsive">
+                                <table class="table ucp-table" id="content-table">
+                                    <thead class="thead-s">
+                                        <tr>
+                                            <th class="text-center" scope="col">S.No.</th>
+                                            <th class="text-center" scope="col">Roll No.</th>
+                                            <th scope="col" class="text-center">Name</th>
+                                            <th class="text-center" scope="col">Class</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                        {% for obj in student_list %}
+                                        <tr>
+                                            <td class="text-center">{{obj.0}}</td>
+                                            <td class="text-center">{{obj.1.Roll_No}}</td>
+                                            <td class="text-center">{{obj.1.Name}}</td>
+                                            <td class="text-center">{{obj.1.Class}}</td>
+                                            
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <a href="{% url 'admins:upload_students' %}" class="btn1542 mt-15">Add multiple students</a>
+            <a href="{% url 'admins:add_new_student' %}" class="btn1542">Add a student</a>
+        </div>
+    </div>
+  {% include 'home/footer.html' %}
+</div>
