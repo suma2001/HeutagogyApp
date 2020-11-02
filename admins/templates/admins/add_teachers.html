@@ -1,5 +1,7 @@
 {% load static %}
 {% include 'home/base.html' %}
+{% load static %}
+{% include 'home/base.html' %}
 {% include 'admins/header.html' %}
 {% include 'admins/sidenav.html' %}
 
@@ -10,7 +12,7 @@
             <div class="col-lg-6 col-md-8">
                 <div class="sign_form">
                     <h2>Upload excel file</h2>
-                    <form action="{% url 'admins:upload_students' %}" method="POST" enctype="multipart/form-data">
+                    <form action="{% url 'admins:upload_teachers' %}" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         <input type="file" title="Upload excel file" name="excel_file" style="border: 1px solid black; padding: 5px;" required>
                     <p>

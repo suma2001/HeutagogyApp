@@ -24,6 +24,10 @@ cred = credentials.Certificate('heutagogy-2020-6959a4a76c88.json')
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
+teachers_collection =  db.collection('Schools').document('School 1').collection('Teachers')
+students_collection =  db.collection('Schools').document('School 1').collection('Students') 
+courses_collection =  db.collection('Schools').document('School 1').collection('Courses')
+
 # Create your views here.
 def landing(request):
     return render(request, 'home/landing.html')
@@ -39,8 +43,7 @@ def signin(request):
         try:
             user = auth.sign_in_with_email_and_password(email, password)
             uid = user['localId']
-            results = db.collection('Schools').document('School 1').collection('Teachers').where('uid', '==', uid).get()[0].to_dict()
-            return render(request, 'home/instructor_dashboard.html', results)   
+            return redirect('home:instructor_dashboard')   
         except:
             print("Wrong credentials")
             return render(request, 'home/sign_in.html')
@@ -63,26 +66,31 @@ def signup(request):
             uid = user['localId']
         
             ## Push this user's data to the database
-            doc_ref = db.collection('Schools').document('School 1').collection('Teachers').document(uid)
+            doc_ref = teachers_collection.document(email)
             doc_ref.set({
                 'uid': uid,
-                'email': email,
-                'fullname': fullname,
-                'photo_url': photo_url,
-                'courses' : ["C1", "C2", "C3", "C4"],
+                'Name': fullname,
+                'Email': email,
+                'courses': [],
+                'Profile': "",
+                'First_time': True,
             })
-        
-            context = {'email': email, 'fullname': fullname, 'photo_url': photo_url}
-            return render(request, 'home/instructor_dashboard.html', context)
+            # context = {'email': email, 'fullname': fullname, 'photo_url': photo_url}
+            return redirect('home:instructor_dashboard')
         except:
             print("Email already exists")
 
     return render(request, 'home/sign_up.html')
 
 def instructor_dashboard(request):
-    user = auth.current_user
-    context = {'dashboard_active': 'active', 'user': user}
-    return render(request, 'home/instructor_dashboard.html', context)
+    if auth.current_user!=None:
+        user = auth.current_user
+        uid = user['localId']
+        results = teachers_collection.where('uid', '==', uid).get()[0].to_dict()
+        print(results)
+        context = {'email': results['Email'], 'fullname': results['Name'], 'photo_url': results['Profile'], 'dashboard_active': 'active'}
+        return render(request, 'home/instructor_dashboard.html', context)
+    return redirect('home:signin')
 
 
 def create_new_course(request):
@@ -102,8 +110,7 @@ def create_new_course(request):
             print("Course Id is: ",cid)
             uid = auth.current_user['localId']
 
-            doc_ref = db.collection('Schools').document('School 1').collection('Courses')
-            get_course = doc_ref.where('course_id', '==', cid).get()
+            get_course = courses_collection.where('course_id', '==', cid).get()
             print(doc_ref)
             if len(get_course) == 0:
                 teachers = []
@@ -141,8 +148,8 @@ def create_new_course(request):
                 doc_ref.document(cid).update({'teacher_ids': teachers})
 
             # context = {'course_active': 'active'}
-            return render(request, 'home/instructor_dashboard.html')
-        return render(request, 'home/create_new_course.html')
+            return redirect('home:instructor_dashboard')
+        return render(request, 'home/createnewcourse.html')
     return render(request, 'home/sign_in.html')
 
 def platform(request):

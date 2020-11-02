@@ -4,18 +4,19 @@
 {% include 'admins/sidenav.html' %}
 
 
-    <div class="wrapper">
+<div class="wrapper">
+    <div class="container">
         <div class="row justify-content-lg-center justify-content-md-center">
         
             <div class="col-lg-6 col-md-8">
                 <div class="sign_form">
-                    <center><h2>Add Student</h2></center>
-                    <form action="{% url 'admins:add_new_student' %}" method="POST">
+                    <h2>Add Teacher</h2>
+                    <form action="{% url 'admins:add_new_teacher' %}" method="POST">
                         {% csrf_token %}
                         <div class="ui search focus mt-15">
                             <div class="ui left icon input swdh11 swdh19">
                                 <i class="uil uil-user icon icon2"></i>
-                                <input class="prompt srch_explore" type="text" name="rollno"  id="id_rollno" required="" maxlength="64" placeholder="Roll No">														
+                                <input class="prompt srch_explore" type="text" name="email"  id="id_email" required="" maxlength="64" placeholder="Email">														
                             </div>
                         </div>
                         
@@ -31,20 +32,15 @@
                                 <input class="prompt srch_explore" type="text" name="name"  id="id_name" required="" maxlength="64" placeholder="Name">															
                             </div>
                         </div>
-                        <div class="ui search focus mt-15">
-                            <div class="ui left icon input swdh11 swdh19">
-                                <i class="uil uil-key-skeleton-alt icon icon2"></i>
-                                <input class="prompt srch_explore" type="text" name="std"  id="id_std" required="" maxlength="64" placeholder="Class">															
-                            </div>
-                        </div>
-                        <center><button type="submit" class="btn1542 mt-30">Next</button></center>
-                            
                         
+                        
+                        <button class="login-btn" type="submit">Next</button>
                     </form>
+                    
                 </div>
                 
             </div>				
         </div>				
     </div>				
-
+</div>
 

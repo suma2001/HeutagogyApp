@@ -22,11 +22,18 @@ firebase = pyrebase.initialize_app(firebaseConfig)
 auth = firebase.auth()
 db = firestore.client()
 
+teachers_collection = db.collection('Schools').document('School 1').collection('Teachers')
+students_collection = db.collection('Schools').document('School 1').collection('Students') 
+admins_collection = db.collection('Schools').document('School 1').collection('Admins')
+
 def admin_dashboard(request):
-    user = auth.current_user
-    print(user)
-    context = {'user': user}
-    return render(request, 'admins/admin_dashboard.html', context)
+    if auth.current_user!=None:
+        user = auth.current_user
+        print(user)
+        uid = user['localId']
+        results = admins_collection.where('uid', '==', uid).get()[0].to_dict()
+        return render(request, 'admins/admin_dashboard.html', results)
+    return redirect('admins:admin_signin')
 
 def admin_signin(request):
     if request.method=="POST":
@@ -38,13 +45,13 @@ def admin_signin(request):
         
         try:
             user = auth.sign_in_with_email_and_password(email, password)
-            uid = user['localId']
-            results = db.collection('Schools').document('School 1').collection('Admins').where('uid', '==', uid).get()[0].to_dict()
+            # uid = user['localId']
+            # results = admins_collection.where('uid', '==', uid).get()[0].to_dict()
             # print(results)
-            return render(request, 'admins/admin_dashboard.html', results)   
+            return redirect('admins:admin_dashboard')   
         except:
             print("Wrong credentials")
-            return render(request, 'admins/admin_sign_in.html')
+            return redirect('admins:admin_signin')
     return render(request, 'admins/admin_sign_in.html')
 
 def admin_signup(request):
@@ -65,7 +72,7 @@ def admin_signup(request):
             uid = user['localId']
         
             ## Push this user's data to the database
-            doc_ref = db.collection('Schools').document(school).collection('Admins').document(uid)
+            doc_ref = admins_collection.document(uid)
             doc_ref.set({
                 'uid': uid,
                 'email': email,
@@ -73,9 +80,7 @@ def admin_signup(request):
                 'school':school,
                 'photo_url': photo_url,
             })
-        
-            context = {'email': email, 'fullname': fullname, 'photo_url': photo_url, 'school':school}
-            return render(request, 'admins/admin_dashboard.html', context)
+            return redirect('admins:admin_dashboard')
         except:
             print("Email already exists")
 
@@ -83,8 +88,7 @@ def admin_signup(request):
 
 def admin_students(request):
     if auth.current_user!=None:
-        Students = db.collection('Schools').document('School 1').collection('Students')
-        students = Students.stream()
+        students = students_collection.stream()
         # print(docs)
         student_list=[]
         i=1
@@ -92,10 +96,35 @@ def admin_students(request):
             t = (i, doc.to_dict())
             student_list.append(t)
             i+=1
-        
         return render(request, 'admins/student_list.html', {'student_list' : student_list})
-    return render(request, 'admins/admin_sign_in.html')
+    return redirect('admins:admin_signin')
 
+def admin_teachers(request):
+    if auth.current_user!=None:
+        teachers = teachers_collection.stream()
+        # print(docs)
+        teacher_list=[]
+        i=1
+        for doc in teachers:
+            t = (i, doc.to_dict())
+            teacher_list.append(t)
+            i+=1
+        return render(request, 'admins/teacher_list.html', {'teacher_list' : teacher_list})
+    return redirect('admins:admin_signin')
+
+def find_cols(sheet):
+    for col in sheet.iter_rows():
+        col_length = len(col)
+        break
+    print("Col length : ", col_length)
+    return col_length
+
+def find_rows(sheet):
+    for row in sheet.iter_cols():
+        row_length = len(row)
+        break
+    print("Col length : ", row_length)
+    return row_length
 
 def upload_students(request):
     if auth.current_user!=None:
@@ -106,23 +135,15 @@ def upload_students(request):
             wb = openpyxl.load_workbook(excel_file)
             sheet = wb["Sheet1"]
             print(sheet)
-            
-            # print(sheet.iter_rows()[0])
-            for col in sheet.iter_rows():
-                col_length = len(col)
-                break
-            print("Col length : ", col_length)
 
-            for row in sheet.iter_cols():
-                row_length = len(row)
-                break
-            print("Row length : ", row_length)
+            col_length = find_cols(sheet)
+            row_length = find_rows(sheet)
             
             for i in range(2, row_length+1):
                 st = "A"+str(i)
                 print(st)
                 l=[]
-                doc_ref = db.collection('Schools').document('School 1').collection('Students').document(sheet[st].value)
+                doc_ref = students_collection.document(sheet[st].value)
                 doc = doc_ref.get()
                 if doc.exists:
                     continue
@@ -141,7 +162,44 @@ def upload_students(request):
                     })
             return redirect('admins:admin_students')
         return render(request, 'admins/add_students.html')
-    return render(request, 'admins/admin_sign_in.html')
+    return redirect('admins:admin_signin')
+
+def upload_teachers(request):
+    if auth.current_user!=None:
+        if request.method=="POST":
+            excel_file = request.FILES["excel_file"]
+            print(excel_file)
+            # loc = ("student_list.xlsx")
+            wb = openpyxl.load_workbook(excel_file)
+            sheet = wb["Sheet2"]
+            print(sheet)
+
+            col_length = find_cols(sheet)
+            row_length = find_rows(sheet)
+            
+            for i in range(2, row_length+1):
+                st = "B"+str(i)
+                print(st)
+                l=[]
+                doc_ref = teachers_collection.document(sheet[st].value)
+                doc = doc_ref.get()
+                if doc.exists:
+                    continue
+                else:
+                    for j in range(0, col_length):
+                        st = chr(ord("A") + j) + str(i)
+                        l.append(sheet[st].value)
+                    print(l)
+                    doc_ref.set({
+                        'Name': l[0],
+                        'Email': l[1],
+                        'courses': [],
+                        'Profile': "",
+                        'First_time': True,
+                    })
+            return redirect('admins:admin_teachers')
+        return render(request, 'admins/add_teachers.html')
+    return redirect('admins:admin_signin')
 
 def add_new_student(request):
     if auth.current_user!=None:
@@ -152,7 +210,7 @@ def add_new_student(request):
             name = data.get('name')
             std = data.get('std')
 
-            doc_ref = db.collection('Schools').document('School 1').collection('Students').document(rollno)
+            doc_ref = students_collection.document(rollno)
             doc_ref.set({
                 'Roll_No': rollno,
                 'Password': password,
@@ -163,32 +221,25 @@ def add_new_student(request):
             })
             return redirect(request, 'admins:admin_students')
         return render(request, 'admins/add_student.html')
-    return render(request, 'admins/admin_sign_in.html')
+    return redirect('admins:admin_signin')
 
 
 def add_new_teacher(request):
     if auth.current_user!=None:
-        loc = ("student_list.xlsx")
-        wb = xlrd.open_workbook(loc)
-        sheet = wb.sheet_by_index(1)
+        if request.method=="POST":
+            data = request.POST.dict()
+            email = data.get('email')
+            password = data.get('password')
+            name = data.get('name')
 
-        sheet.cell_value(0, 0)
-        row_length = sheet.nrows
-        for i in range(1, row_length):
-            row = sheet.row_values(i)
-            email = row[1]
-            password = row[2]
-            print(type(password))
-            teacher = auth.create_user_with_email_and_password(email, password)
-            uid = teacher['localId']
-            doc_ref = db.collection('Schools').document('School 1').collection('Teachers').document(row[1])
+            doc_ref = teachers_collection.document(email)
             doc_ref.set({
-                'uid': uid,
-                'Name': row[0],
-                'Email': row[1],
-                'courses': [],
-                'Profile': "",
-                'First_time': True,
-            })
-        return redirect(request, 'admins:admin_dashboard')
-    return render(request, 'admins/admin_sign_in.html')
+                    'Name': name,
+                    'Email': email,
+                    'courses': [],
+                    'Profile': "",
+                    'First_time': True,
+                })
+            return redirect('admins:admin_teachers')
+        return render(request, 'admins/add_teacher.html')
+    return redirect('admins:admin_signin')

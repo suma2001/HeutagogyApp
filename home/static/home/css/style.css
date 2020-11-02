@@ -7988,3 +7988,42 @@ a.rmv-btn i {
     right: 13px;
     position: absolute;
 }
+
+.nav-tabs {
+    position: relative;
+  }
+  .nav-tabs > li > a:hover,
+  .nav-tabs > li > a:focus {
+    outline: none;
+    background-color: transparent;
+  }
+  .nav-tabs > li > a,
+  .nav-tabs > li.active > a,
+  .nav-tabs > li > a:hover,
+  .nav-tabs > li.active > a:hover,
+  .nav-tabs > li > a:focus,
+  .nav-tabs > li.active > a:focus,
+  .nav-tabs > li > a:active,
+  .nav-tabs > li.active > a:active {
+    border: none;
+    background: none;
+  }
+  .nav-tabs .nav-underline {
+    position: absolute;
+    left: 0;
+    bottom: -10;
+    width: 0px;
+    height: 2px;
+    background: red;
+    will-change: left, width;
+    -webkit-transition: left 0.2s, width 0.2s;
+    transition: left 0.2s, width 0.2s;
+  }
+  .table tr {
+      cursor: pointer;
+  }
+  .hiddenRow {
+      padding: 0 4px !important;
+      background-color: #f7f7f7;
+      font-size: 13px;
+  }

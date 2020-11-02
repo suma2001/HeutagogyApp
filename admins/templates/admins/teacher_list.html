@@ -1,0 +1,51 @@
+{% include 'admins/header.html' %}
+{% include 'home/base.html' %}
+{% include 'admins/sidenav.html' %}
+
+<div class="wrapper">
+    <div class="sa4d25">
+        <div class="container-fluid">			
+            <div class="row">
+                <div class="col-lg-12">	
+                    <h2 class="st_title"><i class="uil uil-award"></i> Teachers</h2>
+                </div>					
+            </div>				
+            <div class="row">
+                <div class="col-12">
+                    <div class="mt-10">                   
+                        <div class="table-cerificate">
+                            <div class="table-responsive">
+                                <table class="table ucp-table" id="content-table">
+                                    <thead class="thead-s">
+                                        <tr>
+                                            <th class="text-center" scope="col">S.No.</th>
+                                            <th class="text-center" scope="col">Email</th>
+                                            <th scope="col" class="text-center">Name</th>
+                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                        {% for obj in teacher_list %}
+                                        <tr>
+                                            <td class="text-center">{{obj.0}}</td>
+                                            <td class="text-center">{{obj.1.Email}}</td>
+                                            <td class="text-center">{{obj.1.Name}}</td>
+                                            
+                                            
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <a href="{% url 'admins:upload_teachers' %}" class="btn1542 mt-15">Add multiple teachers</a>
+            <a href="{% url 'admins:add_new_teacher' %}" class="btn1542">Add a teacher</a>
+        </div>
+    </div>
+  {% include 'home/footer.html' %}
+</div>

@@ -7,11 +7,12 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-12">
-					<div class="back_link">
+						<a href="index.html" class="main_logo main_logo15" id="logo"><img src="{% static 'home/images/logo.svg' %}" alt=""></a>
+					<div class="back_link header_right">
 						<a href="{% url 'home:instructor_dashboard' %}" class="hde151">Instructor Dashboard</a>
 						<a href="{% url 'admins:admin_dashboard' %}" class="hde151">Admin</a>
 					</div>
-					<a href="index.html" class="main_logo main_logo15" id="logo"><img src="{% static 'home/images/logo.svg' %}" alt=""></a>
+					
 					<!-- <div class="ml_item pr-1">
 						<div class="main_logo main_logo15" id="logo">
 							<a href="index.html"><img src="{% static 'home/images/logo.svg' %}" alt=""></a>
