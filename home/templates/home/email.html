@@ -1,0 +1,21 @@
+{% include 'home/base.html' %}
+{% include 'home/header.html' %}
+{% include 'home/instructor_sidenav.html' %}
+{% load static %}
+<div class="wrapper">
+    <div class="container">
+        <div class="col-xl-10 col-lg-6 col-md-6">
+            <div class="card_dash">
+                <div class="card_dash_left">
+                    <!-- <h5>Total Enroll</h5> -->
+                    <h2>A password reset mail is sent to your email address.</h2>
+                    <a href="{% url 'home:instructor_dashboard' %}"><span class="crdbg_2">If done, Click here</span></a>
+                    
+                </div>
+                <div class="card_dash_right">
+                <i class="fa fa-check" style="color: green;font-size: 30px;"  aria-hidden="true"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

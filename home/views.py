@@ -32,6 +32,9 @@ courses_collection =  db.collection('Schools').document('School 1').collection('
 def landing(request):
     return render(request, 'home/landing.html')
 
+def password_reset_email(request):
+    
+    return render(request, 'home/email.html')
 
 def signin(request):
     if request.method=="POST":
@@ -43,6 +46,11 @@ def signin(request):
         try:
             user = auth.sign_in_with_email_and_password(email, password)
             uid = user['localId']
+            results = teachers_collection.where('uid', '==', uid).get()[0].to_dict()
+            if results['First_time']==True:
+                auth.send_password_reset_email(email)
+                teachers_collection.document(email).update({'First_time': False})
+                return redirect('home:password_reset_email')
             return redirect('home:instructor_dashboard')   
         except:
             print("Wrong credentials")
@@ -57,7 +65,7 @@ def signup(request):
         email = data.get('emailaddress')
         password = data.get('password')
         photo_url = data.get('url')
-        
+        print(email, password)
         ## Create a new user
         try:
             user = auth.create_user_with_email_and_password(email, password)
