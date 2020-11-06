@@ -1,4 +1,7 @@
 from django.shortcuts import render, redirect
+from django.contrib import messages, auth
+import requests
+
 import firebase_admin
 from firebase_admin import credentials, firestore 
 import pyrebase
@@ -19,7 +22,7 @@ firebaseConfig = {
 
 # cred = credentials.Certificate('heutagogy-2020-6959a4a76c88.json')
 firebase = pyrebase.initialize_app(firebaseConfig) 
-auth = firebase.auth()
+authe = firebase.auth()
 db = firestore.client()
 
 teachers_collection = db.collection('Schools').document('School 1').collection('Teachers')
@@ -27,8 +30,8 @@ students_collection = db.collection('Schools').document('School 1').collection('
 admins_collection = db.collection('Schools').document('School 1').collection('Admins')
 
 def admin_dashboard(request):
-    if auth.current_user!=None:
-        user = auth.current_user
+    if authe.current_user!=None:
+        user = authe.current_user
         print(user)
         uid = user['localId']
         results = admins_collection.where('uid', '==', uid).get()[0].to_dict()
@@ -44,14 +47,21 @@ def admin_signin(request):
         print(email, password, "Admins")
         
         try:
-            user = auth.sign_in_with_email_and_password(email, password)
-            # uid = user['localId']
-            # results = admins_collection.where('uid', '==', uid).get()[0].to_dict()
-            # print(results)
+            user = authe.sign_in_with_email_and_password(email, password)
+            uid = user['localId']
+            results = admins_collection.where('uid', '==', uid).get()[0].to_dict()
+            print(user)
+            messages.success(request, 'Successfully logged in ' + results['fullname'])
             return redirect('admins:admin_dashboard')   
-        except:
-            print("Wrong credentials")
-            return redirect('admins:admin_signin')
+        except requests.exceptions.HTTPError as e:
+            error_json = e.args[1]
+            error = json.loads(error_json)['error']['message']
+            print(error)
+            if str(error) == "INVALID_PASSWORD":
+                messages.warning(request, 'Invalid login credentials')
+            elif str(error) == "TOO_MANY_ATTEMPTS_TRY_LATER : Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later.":
+                messages.warning(request, 'TOO_MANY_ATTEMPTS_TRY_LATER : Access to this account has been temporarily disabled due to many failed login attempts.')
+            return render(request, 'admins/admin_sign_in.html')
     return render(request, 'admins/admin_sign_in.html')
 
 def admin_signup(request):
@@ -66,7 +76,7 @@ def admin_signup(request):
         
         ## Create a new user
         try:
-            user = auth.create_user_with_email_and_password(email, password)
+            user = authe.create_user_with_email_and_password(email, password)
         
             ## Get the UID of the user
             uid = user['localId']
@@ -80,14 +90,30 @@ def admin_signup(request):
                 'school':school,
                 'photo_url': photo_url,
             })
+            user = authe.sign_in_with_email_and_password(email, password)
             return redirect('admins:admin_dashboard')
-        except:
-            print("Email already exists")
+        except requests.exceptions.HTTPError as e:
+            error_json = e.args[1]
+            error = json.loads(error_json)['error']['message']
+            print(error)
+            if str(error) == "EMAIL_EXISTS":
+                messages.warning(request, 'Email already exists')
+            elif str(error) == "WEAK_PASSWORD : Password should be at least 6 characters":
+                messages.warning(request, 'Weak Password : Password should be at least 6 characters')
+            return render(request, 'admins/admin_sign_up.html')
+        session_id = user['idToken']
+        request.session['uid'] = str(session_id)
 
     return render(request, 'admins/admin_sign_up.html')
 
+def admin_signout(request):
+    auth.logout(request)
+    authe.current_user=None
+    messages.success(request, 'Successfully logged out !')
+    return redirect('admins:admin_signin')
+
 def admin_students(request):
-    if auth.current_user!=None:
+    if authe.current_user!=None:
         students = students_collection.stream()
         # print(docs)
         student_list=[]
@@ -100,7 +126,7 @@ def admin_students(request):
     return redirect('admins:admin_signin')
 
 def admin_teachers(request):
-    if auth.current_user!=None:
+    if authe.current_user!=None:
         teachers = teachers_collection.stream()
         # print(docs)
         teacher_list=[]
@@ -127,7 +153,7 @@ def find_rows(sheet):
     return row_length
 
 def upload_students(request):
-    if auth.current_user!=None:
+    if authe.current_user!=None:
         if request.method=="POST":
             excel_file = request.FILES["excel_file"]
             print(excel_file)
@@ -160,12 +186,13 @@ def upload_students(request):
                         'Profile': "",
                         'First_time': True,
                     })
+            messages.success(request, 'File uploaded successfully.')
             return redirect('admins:admin_students')
         return render(request, 'admins/add_students.html')
     return redirect('admins:admin_signin')
 
 def upload_teachers(request):
-    if auth.current_user!=None:
+    if authe.current_user!=None:
         if request.method=="POST":
             excel_file = request.FILES["excel_file"]
             print(excel_file)
@@ -197,12 +224,13 @@ def upload_teachers(request):
                         'Profile': "",
                         'First_time': True,
                     })
+            messages.success(request, 'File uploaded successfully.')
             return redirect('admins:admin_teachers')
         return render(request, 'admins/add_teachers.html')
     return redirect('admins:admin_signin')
 
 def add_new_student(request):
-    if auth.current_user!=None:
+    if authe.current_user!=None:
         if request.method=="POST":
             data = request.POST.dict()
             rollno = data.get('rollno')
@@ -219,13 +247,14 @@ def add_new_student(request):
                 'Profile': "",
                 'First_time': True,
             })
-            return redirect(request, 'admins:admin_students')
+            messages.success(request, 'Student added successfully.')
+            return redirect('admins:admin_students')
         return render(request, 'admins/add_student.html')
     return redirect('admins:admin_signin')
 
 
 def add_new_teacher(request):
-    if auth.current_user!=None:
+    if authe.current_user!=None:
         if request.method=="POST":
             data = request.POST.dict()
             email = data.get('email')
@@ -240,6 +269,7 @@ def add_new_teacher(request):
                     'Profile': "",
                     'First_time': True,
                 })
+            messages.success(request, 'Teacher added successfully.')
             return redirect('admins:admin_teachers')
         return render(request, 'admins/add_teacher.html')
     return redirect('admins:admin_signin')
