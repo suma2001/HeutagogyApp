@@ -51,8 +51,9 @@ def admin_signin(request):
         try:
             user = authe.sign_in_with_email_and_password(email, password)
             uid = user['localId']
-            results = admins_collection.where('uid', '==', uid).get()[0].to_dict()
             print(user)
+            results = admins_collection.where('uid', '==', uid).get()[0].to_dict()
+            print(results)
             messages.success(request, 'Successfully logged in ' + results['fullname'])
             return redirect('admins:admin_dashboard')   
         except requests.exceptions.HTTPError as e:
@@ -112,7 +113,7 @@ def admin_signout(request):
     auth.logout(request)
     authe.current_user=None
     messages.success(request, 'Successfully logged out !')
-    return redirect('admins:admin_signin')
+    return render(request, 'admins/admin_sign_in.html')
 
 def admin_students(request):
     if authe.current_user!=None:

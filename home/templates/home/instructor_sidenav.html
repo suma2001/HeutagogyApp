@@ -10,24 +10,31 @@
                     </a>
                 </li>
                 <li class="menu--item">
-                    <a href="{% url 'home:create_new_course' %}" class="menu--link {{course_active}}" title="Create Course">
+                    <a href="{% url 'home:courses' %}" class="menu--link {{course_active}}" title="Course">
+                        <i class='uil uil-book-open menu--icon'></i>
+                        <span class="menu--label">Courses</span>
+                    </a>
+                </li>
+                
+                <li class="menu--item">
+                    <a href="{% url 'home:create_new_course' %}" class="menu--link {{create_course_active}}" title="Create Course">
                         <i class='uil uil-plus-circle menu--icon'></i>
                         <span class="menu--label">Create Course</span>
                     </a>
                 </li>
-                
+                <li class="menu--item">
+                    <a href="instructor_messages.html" class="menu--link {{quiz_active}}" title="Quiz Result">
+                        <i class='uil uil-notes menu--icon'></i>
+                        <span class="menu--label">Quiz & Result</span>
+                    </a>
+                </li>
                 <li class="menu--item">
                     <a href="instructor_messages.html" class="menu--link {{messages_active}}" title="Messages">
                         <i class='uil uil-comments menu--icon'></i>
                         <span class="menu--label">Messages</span>
                     </a>
                 </li>
-                <li class="menu--item">
-                    <a href="instructor_messages.html" class="menu--link {{quiz_active}}" title="Quiz Result">
-                        <i class='uil uil-comments menu--icon'></i>
-                        <span class="menu--label">Quiz & Result</span>
-                    </a>
-                </li>
+                
             </ul>
         </div>
         <div class="left_section pt-2">

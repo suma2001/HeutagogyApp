@@ -129,6 +129,19 @@ def instructor_dashboard(request):
         return render(request, 'home/instructor_dashboard.html', context)
     return redirect('home:signin')
 
+def courses(request):
+    if authe.current_user!=None:
+        user = authe.current_user
+        uid = user['localId']
+        
+        results = teachers_collection.where('uid', '==', uid).get()[0].to_dict()
+        if len(results['Profile'])==0:
+            url = "https://www.vippng.com/png/detail/356-3563531_transparent-human-icon-png.png"
+        else:
+            url = results['Profile']
+        context = {'email': results['Email'], 'fullname': results['Name'], 'photo_url': url, 'course_active': 'active'}
+        return render(request, 'home/courses.html', context)
+    return redirect('home:signin')
 
 def create_new_course(request):
     if authe.current_user != None:
@@ -187,7 +200,7 @@ def create_new_course(request):
             # context = {'course_active': 'active'}
             # return HttpResponseRedirect(reverse('home:instructor_dashboard', kwargs={'course_active': 'active'}))
             return redirect('home:instructor_dashboard')
-        return render(request, 'home/createnewcourse.html', {'course_active': 'active'})
+        return render(request, 'home/createnewcourse.html', {'create_course_active': 'active'})
     return render(request, 'home/sign_in.html')
 
 def platform(request):

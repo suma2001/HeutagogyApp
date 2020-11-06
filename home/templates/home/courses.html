@@ -1,0 +1,50 @@
+{% include 'home/base.html' %}
+{% include 'home/header.html' %}
+{% include 'home/instructor_sidenav.html' %}
+
+<div class="wrapper">
+    <div class="container">
+            <div class="table-responsive mt-30">
+                <table class="table ucp-table table-condensed" id="content-table" style="border-collapse:collapse;">
+                    <thead class="thead-s">
+                        <tr>
+                            <th class="text-center" scope="col">S.No</th>
+                            <th class="cell-ta">Course Title</th>
+                            <th class="text-center" scope="col">No of Lessons</th>
+                        </tr>
+                        
+                    </thead>
+                    <tbody>
+                        <tr data-toggle="collapse" data-target="#demo5" class="accordion-toggle">
+                            <td class="text-center">1</td>
+                            <td class="cell-ta">Maths</td>
+                            <td class="text-center">2</td>
+                        </tr>
+                        <tr>
+                            
+                            <td colspan="6"  class="hiddenRow" style="padding: 0 4px !important;background-color: #f7f7f7;font-size: 13px;">
+                                <hr>
+                                <div id="demo5" class="accordian-body collapse">
+                                    Lesson 1
+                                    &nbsp;&nbsp;&nbsp;
+                                    
+                                    <a href="{% url 'home:platform' %}" title="Edit" class="gray-s"><i class="uil uil-edit-alt"></i></a>
+                                    
+                                </div>
+                                <hr>
+                                <div id="demo5" class="accordian-body collapse">
+                                    Lesson 2
+                                    &nbsp;&nbsp;&nbsp;
+                                   
+                                    <a href="{% url 'home:platform' %}" title="Edit" class="gray-s"><i class="uil uil-edit-alt"></i></a>
+                                 
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+</div>
+            
+            
