@@ -1,6 +1,21 @@
 {% load static %}
 {% include 'home/base.html' %}
 
+{% if messages %}
+<ul class="messages">
+    {% for msg in messages %}       
+    <li>
+        <div class="alert alert-{{msg.level_tag}} alert-dismissible fade show" role="alert">
+            {{msg.message}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+
 <div class="sign_in_up_bg">
     <div class="container">
         <div class="row justify-content-lg-center justify-content-md-center">

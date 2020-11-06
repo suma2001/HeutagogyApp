@@ -1,6 +1,22 @@
 {% load static %}
 {% include 'home/base.html' %}
 
+{% if messages %}
+<ul class="messages">
+    {% for msg in messages %}       
+    <li>
+        <div class="alert alert-{{msg.level_tag}} alert-dismissible fade show" role="alert">
+            {{msg.message}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+
 <header class="header clearfix">
     <button type="button" id="toggleMenu" class="toggle_menu">
       <i class='uil uil-bars'></i>
@@ -150,7 +166,7 @@
                         </a>
                     </div>
                     <a href="{% url 'home:instructor_dashboard' %}" class="item channel_item">Cursus dashboard</a>						
-                    <a href="{% url 'home:signin' %}" class="item channel_item">Sign Out</a>
+                    <a href="{% url 'home:signout' %}" class="item channel_item">Sign Out</a>
                 </div>
             </li>
             {% else %}

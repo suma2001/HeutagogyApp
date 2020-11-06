@@ -1,4 +1,8 @@
 from django.shortcuts import render, redirect
+from django.contrib import messages, auth
+from django.http import HttpResponse
+import requests
+
 import pyrebase
 import json
 import firebase_admin
@@ -17,7 +21,7 @@ firebaseConfig = {
   }
 ## For firebase authentication
 firebase = pyrebase.initialize_app(firebaseConfig) 
-auth = firebase.auth()
+authe = firebase.auth()
 
 ## For Firestore database storage
 cred = credentials.Certificate('heutagogy-2020-6959a4a76c88.json')
@@ -33,10 +37,10 @@ def landing(request):
     return render(request, 'home/landing.html')
 
 def password_reset_email(request):
-    
     return render(request, 'home/email.html')
 
 def signin(request):
+    print(authe.current_user)
     if request.method=="POST":
         ## Get the form data
         data = request.POST.dict()
@@ -44,16 +48,23 @@ def signin(request):
         password = data.get('password')
         print(email, password)
         try:
-            user = auth.sign_in_with_email_and_password(email, password)
+            user = authe.sign_in_with_email_and_password(email, password)
             uid = user['localId']
             results = teachers_collection.where('uid', '==', uid).get()[0].to_dict()
             if results['First_time']==True:
-                auth.send_password_reset_email(email)
+                authe.send_password_reset_email(email)
                 teachers_collection.document(email).update({'First_time': False})
                 return redirect('home:password_reset_email')
-            return redirect('home:instructor_dashboard')   
-        except:
-            print("Wrong credentials")
+            messages.success(request, 'Successfully signed in ' + results['Name'])
+            return redirect('home:instructor_dashboard')
+        except requests.exceptions.HTTPError as e:
+            error_json = e.args[1]
+            error = json.loads(error_json)['error']['message']
+            print(error)
+            if str(error) == "INVALID_PASSWORD":
+                messages.warning(request, 'Invalid login credentials')
+            elif str(error) == "TOO_MANY_ATTEMPTS_TRY_LATER : Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later.":
+                messages.warning(request, 'TOO_MANY_ATTEMPTS_TRY_LATER : Access to this account has been temporarily disabled due to many failed login attempts.')
             return render(request, 'home/sign_in.html')
     return render(request, 'home/sign_in.html')
 
@@ -68,11 +79,11 @@ def signup(request):
         print(email, password)
         ## Create a new user
         try:
-            user = auth.create_user_with_email_and_password(email, password)
+            user = authe.create_user_with_email_and_password(email, password)
         
             ## Get the UID of the user
             uid = user['localId']
-        
+
             ## Push this user's data to the database
             doc_ref = teachers_collection.document(email)
             doc_ref.set({
@@ -85,24 +96,42 @@ def signup(request):
             })
             # context = {'email': email, 'fullname': fullname, 'photo_url': photo_url}
             return redirect('home:instructor_dashboard')
-        except:
-            print("Email already exists")
-
+        except requests.exceptions.HTTPError as e:
+            error_json = e.args[1]
+            error = json.loads(error_json)['error']['message']
+            print(error)
+            if str(error) == "EMAIL_EXISTS":
+                messages.warning(request, 'Email already exists')
+            elif str(error) == "WEAK_PASSWORD : Password should be at least 6 characters":
+                messages.warning(request, 'Weak Password : Password should be at least 6 characters')
+            return render(request, 'home/sign_up.html')
+        session_id = user['idToken']
+        request.session['uid'] = str(session_id)
     return render(request, 'home/sign_up.html')
 
+def signout(request):
+    auth.logout(request)
+    authe.current_user=None
+    messages.success(request, 'Successfully logged out !')
+    return redirect('home:signin')
+
 def instructor_dashboard(request):
-    if auth.current_user!=None:
-        user = auth.current_user
+    if authe.current_user!=None:
+        user = authe.current_user
         uid = user['localId']
         results = teachers_collection.where('uid', '==', uid).get()[0].to_dict()
         print(results)
-        context = {'email': results['Email'], 'fullname': results['Name'], 'photo_url': results['Profile'], 'dashboard_active': 'active'}
+        if len(results['Profile'])==0:
+            url = "https://www.vippng.com/png/detail/356-3563531_transparent-human-icon-png.png"
+        else:
+            url = results['Profile']
+        context = {'email': results['Email'], 'fullname': results['Name'], 'photo_url': url, 'dashboard_active': 'active'}
         return render(request, 'home/instructor_dashboard.html', context)
     return redirect('home:signin')
 
 
 def create_new_course(request):
-    if auth.current_user != None:
+    if authe.current_user != None:
         if request.method=="POST":
             print("POSTED")
             data = request.POST.dict()
@@ -116,7 +145,7 @@ def create_new_course(request):
             lessondesc = data.get('lessondesc')
             lessonurl = data.get('lessonurl')
             print("Course Id is: ",cid)
-            uid = auth.current_user['localId']
+            uid = authe.current_user['localId']
 
             get_course = courses_collection.where('course_id', '==', cid).get()
             print(doc_ref)
