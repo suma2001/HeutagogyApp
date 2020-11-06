@@ -94,7 +94,7 @@ def signup(request):
                 'Profile': "",
                 'First_time': True,
             })
-            # context = {'email': email, 'fullname': fullname, 'photo_url': photo_url}
+            authe.sign_in_with_email_and_password(email, password)
             return redirect('home:instructor_dashboard')
         except requests.exceptions.HTTPError as e:
             error_json = e.args[1]
@@ -185,8 +185,9 @@ def create_new_course(request):
                 doc_ref.document(cid).update({'teacher_ids': teachers})
 
             # context = {'course_active': 'active'}
+            # return HttpResponseRedirect(reverse('home:instructor_dashboard', kwargs={'course_active': 'active'}))
             return redirect('home:instructor_dashboard')
-        return render(request, 'home/createnewcourse.html')
+        return render(request, 'home/createnewcourse.html', {'course_active': 'active'})
     return render(request, 'home/sign_in.html')
 
 def platform(request):

@@ -3,6 +3,7 @@ from django.contrib import messages, auth
 import requests
 
 import firebase_admin
+import json
 from firebase_admin import credentials, firestore 
 import pyrebase
 import xlrd
@@ -35,7 +36,8 @@ def admin_dashboard(request):
         print(user)
         uid = user['localId']
         results = admins_collection.where('uid', '==', uid).get()[0].to_dict()
-        return render(request, 'admins/admin_dashboard.html', results)
+        context = {'fullame': results['fullname'], 'email': results['email'], 'photo_url': results['photo_url'], 'dashboard_active': 'active' }
+        return render(request, 'admins/admin_dashboard.html', context)
     return redirect('admins:admin_signin')
 
 def admin_signin(request):
@@ -122,7 +124,10 @@ def admin_students(request):
             t = (i, doc.to_dict())
             student_list.append(t)
             i+=1
-        return render(request, 'admins/student_list.html', {'student_list' : student_list})
+        uid = authe.current_user['localId']
+        results = admins_collection.where('uid', '==', uid).get()[0].to_dict()
+        context = {'student_list' : student_list, 'fullame': results['fullname'], 'email': results['email'], 'photo_url': results['photo_url'], 'student_active': 'active' }
+        return render(request, 'admins/student_list.html', context)
     return redirect('admins:admin_signin')
 
 def admin_teachers(request):
@@ -135,7 +140,11 @@ def admin_teachers(request):
             t = (i, doc.to_dict())
             teacher_list.append(t)
             i+=1
-        return render(request, 'admins/teacher_list.html', {'teacher_list' : teacher_list})
+        uid = authe.current_user['localId']
+        results = admins_collection.where('uid', '==', uid).get()[0].to_dict()
+        context = {'teacher_list' : teacher_list, 'fullame': results['fullname'], 'email': results['email'], 'photo_url': results['photo_url'], 'teacher_active': 'active' }
+        return render(request, 'admins/teacher_list.html', context)
+        
     return redirect('admins:admin_signin')
 
 def find_cols(sheet):
