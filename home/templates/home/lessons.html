@@ -14,7 +14,15 @@
 			<div class="container-fluid">			
 				<div class="row">
 					<div class="col-lg-12">	
-                        <h2 class="st_title"><i class="uil uil-book-alt"></i>Courses</h2>
+                        <h2 class="st_title"><i class="uil uil-book-alt"></i>Lessons for Course {{course}}</h2>
+                            <!-- <div class="search120">
+                                <div class="ui search">
+                                <div class="ui left icon input swdh10">
+                                    <input class="prompt srch10" type="text" placeholder="Search for Tuts Videos, Tutors, Tests and more..">
+                                    <i class='uil uil-search-alt icon icon1'></i>
+                                </div>
+                                </div>
+                            </div>	 -->
                     </div>	
                     						
 				</div>
@@ -33,16 +41,15 @@
 												</tr>
 											</thead>
 											<tbody>
-                                                {% for course in courses %}
+                                                {% for lesson in lessons %}
                                                     <tr data-toggle="collapse" data-target="#demo5" class="accordion-toggle">
                                                         <td class="text-center">{{forloop.counter}}</td>
-                                                        <td class="cell-ta text-center">{{course}}</td>
+                                                        <td class="cell-ta text-center">{{lesson}}</td>
                                                         
                                                         <td class="text-center">
-                                                            <a href="{% url 'home:action_course' course %}" title="Edit" class="gray-s"><i class="uil uil-edit-alt"></i></a>
-                                                            <a href="{% url 'home:action_course' course %}" title="Delete" class="gray-s"><i class="uil uil-trash-alt"></i></a>    
+                                                            <a href="{% url 'home:platform' course lesson %}" title="Edit" class="gray-s"><i class="uil uil-edit-alt"></i></a>
+                                                            <a href="#" title="Delete" class="gray-s"><i class="uil uil-trash-alt"></i></a>    
                                                         </td>
-                                                        
                                                     </tr>
                                                     {% endfor %}
 											</tbody>

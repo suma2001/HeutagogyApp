@@ -6,8 +6,12 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <style>
-body {font-family: Arial, Helvetica, sans-serif;}
+body {font-family: 'Roboto', sans-serif;}
+
 #slide {
     color: black;
     display: block;
@@ -50,40 +54,125 @@ body {font-family: Arial, Helvetica, sans-serif;}
   color: #000;
   text-decoration: none;
   cursor: pointer;
+
 }
+
+.card-header {
+  background-color: #ffecec;
+  border-color:  #ed2a26;
+}
+
 </style>
 </head>
 <body>
   <div class="wrapper">
-    <div class="sa4d25">
       <div class="container">
-
-
-        here will be the mapping part <br>
-
-        <button id="myBtn">Add slide</button> <br><br><br><br><br>
-
-        <div id="myModal" class="modal wrapper">
-          <div class="modal-content">
-            <span class="close">&times;</span>
-            <p>menu to choose type of slide (ex: long lesson, short lesson, quiz type1, etc)</p>
-            <button class='close'>add</button>
+        <div class="row">
+					<div class="col-lg-10">	
+            <h2 class="st_title">
+              <i class="uil uil-book-alt"></i>
+              {{lesson_name}}
+            </h2>
+            <h4>{{description}}</h4>
+          </div>	
+          <div class="col-lg-2">	
+            <div class="dropdown">
+              <button class="btn dropdown-toggle" type="button" data-toggle="dropdown" style="background-color: #ed2a26; color: white;">Add Slide
+              <!-- <span class="caret"></span> -->
+              </button>
+              
+              <ul class="dropdown-menu">
+                  <li><a href="#">Long Lesson</a></li>
+                  <li><a href="#">Short Lesson</a></li>
+                  <li><a href="#">Fill in the blanks</a></li>
+                  <li><a href="#">MCQs</a></li>
+                  <li><a href="#">True or False</a></li>
+              </ul>
+          </div>
+          </div>         						
+        </div>
+        <br><br>
+        <div class="row">
+          <div class="col-lg-3">
+            <div id="accordion">
+              
+              <div class="card">
+                <div class="card-header" id="headingOne">
+                  <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" style="color: #ed2a26; text-decoration: none;">
+                      Slide 1
+                    </button>
+                  </h5>
+                </div>
+            
+                <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                  <div class="card-body">
+                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. 
+                    <a href="#" title="Edit" class="gray-s"><i class="uil uil-edit-alt" style="color: #ed2a26;"></i></a>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="card">
+                <div class="card-header" id="headingTwo">
+                  <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" style="color: #ed2a26; text-decoration: none;">
+                      Slide 2
+                    </button>
+                  </h5>
+                </div>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                  <div class="card-body">
+                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. 
+                    <a href="#" title="Edit" class="gray-s"><i class="uil uil-edit-alt" style="color: #ed2a26;"></i></a>
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header" id="headingThree">
+                  <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree" style="color: #ed2a26; text-decoration: none;">
+                      Slide 3
+                    </button>
+                  </h5>
+                </div>
+                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                  <div class="card-body">
+                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. 
+                    <a href="#" title="Edit" class="gray-s"><i class="uil uil-edit-alt" style="color: #ed2a26;"></i></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-lg-9">
+            <div style="padding: 20px; border: 2px solid #ed2a26; border-radius: 20px; background-color: #ffecec;">
+              <div class="content">
+                  <button class="btn btn-danger">Add Question</button>
+                  <br>
+                  <form method="POST" action="{% url 'home:platform' course lesson_name  %}">
+                    {% csrf_token %}
+                    <input placeholder="description" type="text" name="description" id="id_description" class="form-control" aria-label="Text input with checkbox" style="margin: 10px; padding: 20px; border: 1px solid black; border-radius: 8px;">
+                    <input placeholder="Question" type="text" name="question" id="id_question" class="form-control" aria-label="Text input with checkbox" style="height:100px; width:100%; margin: 10px; padding: 20px; border: 1px solid black; border-radius: 8px;">
+                    <div class="input-group mb-3">
+                          <input placeholder="Option 1" type="text" name="option1" id="id_option1" class="form-control" aria-label="Text input with checkbox" style="margin: 10px; padding: 20px; border: 1px solid black; border-radius: 8px;">
+                          <input placeholder="Option 2" type="text" name="option2" id="id_option2" class="form-control" aria-label="Text input with checkbox" style="margin: 10px; padding: 20px; border: 1px solid black; border-radius: 8px;">
+                          <input placeholder="Option 3" type="text" name="option3" id="id_option3" class="form-control" aria-label="Text input with checkbox" style="margin: 10px; padding: 20px; border: 1px solid black; border-radius: 8px;">
+                          <input placeholder="Option 4" type="text" name="option4" id="id_option4" class="form-control" aria-label="Text input with checkbox" style="margin: 10px; padding: 20px; border: 1px solid black; border-radius: 8px;">
+                    </div>  
+              </div>
+                    <center><button class="btn btn-success" type="submit">SAVE</button></center>
+            </form>
+            <!-- <form method="POST" action="{% url 'home:addquestion' 2  %}">
+              {% csrf_token %}
+              <center><button class="btn btn-success" type="submit">SAVE SLIDE</button></center>
+            </form> -->
           </div>
         </div>
-
-        slides already added:- <br><br>
-
-         <div style="width:130px; height:130px; background-color:white">
-           <a id="slide" href="{% url 'home:studio' %}">Slide 1</a>
-         </div>
-         <br>
-         <div style="width:130px; height:130px; background-color:white">
-           <a id="slide" href="{% url 'home:studio' %}">Slide 2</a>
-         </div>
-
-
+        
+        
       </div>
-    </div>
   </div>
 
 <script>

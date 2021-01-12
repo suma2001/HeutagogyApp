@@ -32,6 +32,7 @@ teachers_collection =  db.collection('Schools').document('School 1').collection(
 students_collection =  db.collection('Schools').document('School 1').collection('Students') 
 courses_collection =  db.collection('Schools').document('School 1').collection('Courses')
 
+
 # Create your views here.
 def landing(request):
     return render(request, 'home/landing.html')
@@ -112,8 +113,8 @@ def signup(request):
 def signout(request):
     auth.logout(request)
     authe.current_user=None
-    messages.success(request, 'Successfully logged out !')
-    return redirect('home:signin')
+    # messages.success(request, 'Successfully logged out !')
+    return redirect('home:landing')
 
 def instructor_dashboard(request):
     if authe.current_user!=None:
@@ -135,13 +136,36 @@ def courses(request):
         uid = user['localId']
         
         results = teachers_collection.where('uid', '==', uid).get()[0].to_dict()
+        # print(json.dumps(results['courses']))
         if len(results['Profile'])==0:
             url = "https://www.vippng.com/png/detail/356-3563531_transparent-human-icon-png.png"
         else:
             url = results['Profile']
-        context = {'email': results['Email'], 'fullname': results['Name'], 'photo_url': url, 'course_active': 'active'}
+        dic=[]
+        for c in results['courses']:
+            dic.append(courses_collection.where('course_id', '==', 'C'+str(c)).get()[0].to_dict()['course_name'])
+            # print()
+            # l=len(list(coll.get()))
+            # lessons=[]
+            # for i in range(l):
+                # lessons.append(coll.get()[i].to_dict()['lesson_name'])
+            # dic[courses_collection.where('course_id', '==', 'C'+str(c)).get()[0].to_dict()['course_name']] = {'lessons': lessons}
+        # print(dic)
+        context = {'email': results['Email'], 'fullname': results['Name'], 'photo_url': url, 'course_active': 'active', 'courses': dic}
         return render(request, 'home/courses.html', context)
     return redirect('home:signin')
+
+
+def action_course(request, course):
+    cid = courses_collection.where('course_name', '==', course).get()[0].to_dict()['course_id']
+    coll = courses_collection.document(cid).collection('Lessons')
+    l=len(list(coll.get()))
+    lessons=[]
+    for i in range(l):
+        lessons.append(coll.get()[i].to_dict()['lesson_name'])
+    print(lessons)
+    return render(request, 'home/lessons.html', {'lessons': lessons, 'course_active': 'active', 'course': course})
+
 
 def create_new_course(request):
     if authe.current_user != None:
@@ -180,15 +204,6 @@ def create_new_course(request):
                     'description': lessondesc,
                     'image_url': lessonurl,
                 })
-                slide_content = lesson_content.collection('Content').document('Slide 1')
-                slide_content.set({
-                    'slide_id': "S1",
-                    'type': "q0",
-                    'questions': [{
-                        'text': 'photo_url_question',
-                        'answer': 'fillup_amswer'
-                        }]
-                })
 
             else:
                 print("I am in ")
@@ -203,8 +218,95 @@ def create_new_course(request):
         return render(request, 'home/createnewcourse.html', {'create_course_active': 'active'})
     return render(request, 'home/sign_in.html')
 
-def platform(request):
-    return render(request, 'platform/platform.html')
+
+def platform(request, course, lname):
+    contentdic={}
+    cid = courses_collection.where('course_name', '==', course).get()[0].to_dict()['course_id']
+    print(cid, lname, course)
+    lid = courses_collection.document(cid).collection('Lessons').where('lesson_name', '==', lname).get()[0].to_dict()['lesson_id']
+    lesson = courses_collection.document(cid).collection('Lessons').where('lesson_name', '==', lname).get()[0].to_dict()
+    contentdic['cid'] = cid
+    contentdic['lid'] = lid
+    contentdic['lesson_name'] = lesson['lesson_name']
+    contentdic['description'] = lesson['description']
+    contentdic['course_active'] = 'active'
+    contentdic['course'] = course 
+
+    if request.method=="POST":
+        quiz = []
+        data = request.POST.dict()
+        question = data.get('question')
+        option1 = data.get('option1')
+        option2 = data.get('option2')
+        option3 = data.get('option3')
+        option4 = data.get('option4')
+        description = data.get('description')
+        quiz.append({
+            'question': question,
+            'option 1': option1,
+            'option 2': option2,
+            'option 3': option3,
+            'option 4': option4
+        })
+        print(quiz)
+        print(contentdic)
+        cid = contentdic['cid']
+        lid = contentdic['lid']
+        print(cid, lid)
+        content = courses_collection.document(cid).collection('Lessons').document(lid[2:]).collection('Content')
+        l = len(list(content.get()))
+        content.document('S'+str(l+1)).set({
+            'sid': 'S'+str(l+1),
+            'subject': contentdic['course'],
+            'questions': quiz
+        })
+    return render(request, 'platform/platform.html',contentdic)
+
+
+
+def addquestion(request, id):
+    if request.method=="POST" and id==1:
+        quiz = []
+        data = request.POST.dict()
+        question = data.get('question')
+        option1 = data.get('option1')
+        option2 = data.get('option2')
+        option3 = data.get('option3')
+        option4 = data.get('option4')
+        description = data.get('description')
+        quiz.append({
+            'question': question,
+            'option 1': option1,
+            'option 2': option2,
+            'option 3': option3,
+            'option 4': option4
+        })
+        print(quiz)
+        print(contentdic)
+        cid = contentdic['cid']
+        lid = contentdic['lid']
+        print(cid, lid)
+        content = courses_collection.document(cid).collection('Lessons').document(lid[2:]).collection('Content')
+        l = len(list(content.get()))
+        content.document('S'+str(l+1)).set({
+            'sid': 'S'+str(l+1),
+            'subject': contentdic['course'],
+            'questions': quiz
+        })
+    # if request.method=="POST" and id==2:
+    #     print(contentdic)
+    #     cid = contentdic['cid']
+    #     lid = contentdic['lid']
+    #     print(cid, lid)
+    #     content = courses_collection.document(cid).collection('Lessons').document(lid).collection('Content')
+    #     l = len(list(content.get()))
+    #     content.document('S'+str(l+1)).set({
+    #         'sid': 'S'+str(l+1),
+    #         'subject': contentdic['course'],
+    #         'questions': quiz
+    #     })
+    #     quiz=[]
+    return render(request, 'platform/platform.html',contentdic)
 
 def studio(request):
     return render(request, 'studio/studio.html')

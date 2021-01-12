@@ -13,6 +13,8 @@ urlpatterns = [
     path('instructor_dashboard/', views.instructor_dashboard, name='instructor_dashboard'),
     path('create_course/', views.create_new_course, name='create_new_course'),
     path('courses/', views.courses, name='courses'),
-    path('platform/', views.platform, name='platform'),
+    path('action_course/<course>/', views.action_course, name='action_course'),
+    path('platform/<course>/<lname>/', views.platform, name='platform'),
+    path('addquestion/<int:id>/', views.addquestion, name='addquestion'),
     path('studio/', views.studio, name='studio'),
 ]
