@@ -143,7 +143,7 @@ def courses(request):
             url = results['Profile']
         dic=[]
         for c in results['courses']:
-            dic.append(courses_collection.where('course_id', '==', 'C'+str(c)).get()[0].to_dict()['course_name'])
+            dic.append(courses_collection.where('course_id', '==', 'C' + str(c)).get()[0].to_dict()['course_name'])
             # print()
             # l=len(list(coll.get()))
             # lessons=[]
@@ -177,19 +177,16 @@ def create_new_course(request):
             course_name = data.get('coursename')
             level = data.get('level')
             general_info = data.get('description')
-            lessonid = data.get('lessonid')
-            lessonname = data.get('lessonname')
-            lessondesc = data.get('lessondesc')
-            lessonurl = data.get('lessonurl')
+            
             print("Course Id is: ",cid)
             uid = authe.current_user['localId']
 
             get_course = courses_collection.where('course_id', '==', cid).get()
-            print(doc_ref)
+            # print(doc_ref)
             if len(get_course) == 0:
                 teachers = []
                 teachers.append(uid)
-                get_course = doc_ref.document(cid)
+                get_course = courses_collection.document(cid)
                 get_course.set({
                     'course_id': cid,
                     'course_name': course_name,
@@ -197,27 +194,53 @@ def create_new_course(request):
                     'level': level,
                     'general_info' : general_info,
                 })
-                lesson_content = get_course.collection('Lessons').document(lessonid)
-                lesson_content.set({
-                    'lesson_id': lessonid,
-                    'lesson_name': lessonname,
-                    'description': lessondesc,
-                    'image_url': lessonurl,
-                })
+                teacher_email = teachers_collection.where('uid', '==', uid).get()[0].to_dict()['Email']
+                courses = teachers_collection.document(teacher_email).get().to_dict()['courses']
+                courses.append(int(str(cid)[1:]))
+                teachers_collection.document(teacher_email).update({'courses': courses})
+                # lesson_content = get_course.collection('Lessons').document(lessonid)
+                # lesson_content.set({
+                #     'lesson_id': lessonid,
+                #     'lesson_name': lessonname,
+                #     'description': lessondesc,
+                #     'image_url': lessonurl,
+                # })
 
             else:
                 print("I am in ")
-                teachers = doc_ref.document(cid).get().to_dict()['teacher_ids']
+                teachers = courses_collection.document(cid).get().to_dict()['teacher_ids']
                 teachers.append(uid)
                 print(teachers)
-                doc_ref.document(cid).update({'teacher_ids': teachers})
+                courses_collection.document(cid).update({'teacher_ids': teachers})
 
             # context = {'course_active': 'active'}
             # return HttpResponseRedirect(reverse('home:instructor_dashboard', kwargs={'course_active': 'active'}))
-            return redirect('home:instructor_dashboard')
+            messages.success(request, 'Course created successfully.')
+            return redirect('courses')
         return render(request, 'home/createnewcourse.html', {'create_course_active': 'active'})
     return render(request, 'home/sign_in.html')
 
+def create_new_lesson(request, course):
+    if authe.current_user != None:
+        if request.method=="POST":
+            print("Hello I am in")
+            data = request.POST.dict()
+            lessonid = data.get('lessonid')
+            lessonname = data.get('lessonname')
+            lessondesc = data.get('description')
+            lessonurl = data.get('lessonurl')
+            cid = courses_collection.where('course_name', '==', course).get()[0].to_dict()['course_id']
+            lesson_content = courses_collection.document(cid).collection('Lessons').document(lessonid)
+            lesson_content.set({
+                'lesson_id': lessonid,
+                'lesson_name': lessonname,
+                'description': lessondesc,
+                'image_url': lessonurl,
+            })
+            messages.success(request, 'Lesson created successfully.')
+            return redirect('home:courses')
+        return render(request, 'home/createnewlesson.html', {'create_course_active': 'active', 'course': course})
+    return render(request, 'home/sign_in.html') 
 
 def platform(request, course, lname):
     contentdic={}

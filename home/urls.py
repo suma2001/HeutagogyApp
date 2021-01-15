@@ -12,6 +12,7 @@ urlpatterns = [
     path('signup/', views.signup, name='signup'),
     path('instructor_dashboard/', views.instructor_dashboard, name='instructor_dashboard'),
     path('create_course/', views.create_new_course, name='create_new_course'),
+    path('create_lesson/<course>/', views.create_new_lesson, name='create_new_lesson'),
     path('courses/', views.courses, name='courses'),
     path('action_course/<course>/', views.action_course, name='action_course'),
     path('platform/<course>/<lname>/', views.platform, name='platform'),

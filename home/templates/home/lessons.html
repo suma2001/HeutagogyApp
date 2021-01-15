@@ -13,17 +13,12 @@
 		<div class="sa4d25">
 			<div class="container-fluid">			
 				<div class="row">
-					<div class="col-lg-12">	
+					<div class="col-lg-10 col-md-4 col-sm-9">	
                         <h2 class="st_title"><i class="uil uil-book-alt"></i>Lessons for Course {{course}}</h2>
-                            <!-- <div class="search120">
-                                <div class="ui search">
-                                <div class="ui left icon input swdh10">
-                                    <input class="prompt srch10" type="text" placeholder="Search for Tuts Videos, Tutors, Tests and more..">
-                                    <i class='uil uil-search-alt icon icon1'></i>
-                                </div>
-                                </div>
-                            </div>	 -->
-                    </div>	
+					</div>
+					<div class="col-lg-2 col-md-3 col-sm-3">	
+                        <a href="{% url 'home:create_new_lesson' course %}"><i class="fas fa-plus-circle"></i></a>
+                    </div>
                     						
 				</div>
 				<div class="row">

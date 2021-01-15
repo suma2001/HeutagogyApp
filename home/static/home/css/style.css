@@ -37,7 +37,7 @@ time, mark, audio, video {
 	border: 0;
 	font-size: 100%;
 	font: inherit;
-	vertical-align: baseline;
+    vertical-align: baseline;
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, 
@@ -429,6 +429,27 @@ i.icon1 {
     font-family: 'Roboto', sans-serif;
 }
 
+
+  .navbar .nav-item {
+    padding: 10px 20px;
+  }
+  .navbar .nav-link {
+    font-size: 20px;
+    margin-left: 10px;
+  }
+  .fa-bars {
+    color: #000000;
+    font-size: 30px;
+  }
+  .fa-bars:hover {
+    color: #ed2a26;
+    font-size: 30px;
+  }
+  .fa-plus-circle {
+      color: #ed2a26;
+      font-size: 30px;
+  }
+
 .header_right {
     margin-left: auto;
     float: right;
@@ -436,8 +457,8 @@ i.icon1 {
 }
 
 .header_right ul li {
-    display: inline-block;
-	vertical-align: middle;
+    display: inline;
+	/* vertical-align: middle; */
 }
 
 .option_links {
@@ -2534,7 +2555,7 @@ i.icon2 {
 /*--- Course Detail View Page ---*/
 
 ._bg4586 {
-	padding: 60px 0 0 !important;
+	padding: 0 0 0 !important;
 }
 
 ._215b01 {
@@ -4643,7 +4664,7 @@ a.rmv-btn i {
     float: left;
     height: 38px;
     background: #fff;
-    border: 1px solid #efefef;
+    border: 1px solid #292626;
     border-radius: 20px;
     padding: 8px 20px;
     font-size: 14px;
