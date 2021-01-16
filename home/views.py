@@ -9,6 +9,19 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
+
+from google.cloud import storage
+from firebase import firebase
+import os
+import datetime
+import urllib
+import uuid
+
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="./heutagogy-2020-6959a4a76c88.json"
+firebase = firebase.FirebaseApplication('https://heutagogy-2020.firebaseio.com')
+
 firebaseConfig = {
     "apiKey": "AIzaSyAv2Fdg7D52VvYR9TK_H_0z8NiCDj6iQkU",
     "authDomain": "heutagogy-2020.firebaseapp.com",
@@ -255,34 +268,87 @@ def platform(request, course, lname):
     contentdic['course_active'] = 'active'
     contentdic['course'] = course 
 
-    if request.method=="POST":
+    if request.method == 'POST' and request.FILES['myfile']:
+        
+        myfile = request.FILES['myfile']
+        fs = FileSystemStorage()
+        filename = fs.save(myfile.name, myfile)
+        uploaded_file_url = fs.url(filename)
+        print(uploaded_file_url)
+        client = storage.Client()
+        bucket = client.get_bucket('heutagogy-2020.appspot.com')
+        imageBlob = bucket.blob("/")
+        imagePath = "media\\" + uploaded_file_url[7:]
+        imageBlob = bucket.blob("QuizImages/" + uploaded_file_url[7:])
+        imageBlob.upload_from_filename(imagePath)
+
+        URL = imageBlob.generate_signed_url(datetime.timedelta(seconds=300), method='GET')
+        # URL = "https://firebasestorage.googleapis.com/v0/b/" + "heutagogy-2020.appspot.com" + "/o/" + urllib.parse.quote('QuizImages/' + uploaded_file_url[7:]) + "?alt=media&token=" + uuid.uuid4().hex
+        print(URL)
         quiz = []
         data = request.POST.dict()
+        print(data)
         question = data.get('question')
         option1 = data.get('option1')
+        if 'true1' in data:
+            check1 = True
+        else:
+            check1 = False
         option2 = data.get('option2')
+        if 'true2' in data:
+            check2 = True
+        else:
+            check2 = False
         option3 = data.get('option3')
+        if 'true3' in data:
+            check3 = True
+        else:
+            check3 = False
         option4 = data.get('option4')
+        if 'true4' in data:
+            check4 = True
+        else:
+            check4 = False
+        print(check4)
         description = data.get('description')
+        
         quiz.append({
+            'image': URL,
             'question': question,
-            'option 1': option1,
-            'option 2': option2,
-            'option 3': option3,
-            'option 4': option4
+            'options': [
+                {
+                'text': option1,
+                'choice': check1
+                },
+                {
+                'text': option2,
+                'choice': check2
+                },
+                {
+                'text': option3,
+                'choice': check3
+                },
+                {
+                'text': option4,
+                'choice': check4
+                }
+            ]
         })
         print(quiz)
         print(contentdic)
         cid = contentdic['cid']
         lid = contentdic['lid']
         print(cid, lid)
-        content = courses_collection.document(cid).collection('Lessons').document(lid[2:]).collection('Content')
+        content = courses_collection.document(cid).collection('Lessons').document(lid).collection('Content')
         l = len(list(content.get()))
         content.document('S'+str(l+1)).set({
             'sid': 'S'+str(l+1),
             'subject': contentdic['course'],
-            'questions': quiz
+            'questions': quiz,
+            'description': description
         })
+
+    
     return render(request, 'platform/platform.html',contentdic)
 
 
@@ -330,6 +396,16 @@ def addquestion(request, id):
     #     })
     #     quiz=[]
     return render(request, 'platform/platform.html',contentdic)
+
+def simple_upload(request):
+    if request.method == 'POST' and request.FILES['myfile']:
+        myfile = request.FILES['myfile']
+        fs = FileSystemStorage()
+        filename = fs.save(myfile.name, myfile)
+        uploaded_file_url = fs.url(filename)
+        print(uploaded_file_url)
+        return render(request, 'home/courses.html')
+    return render(request, 'home/courses.html')
 
 def studio(request):
     return render(request, 'studio/studio.html')

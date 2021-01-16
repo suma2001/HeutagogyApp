@@ -1,6 +1,8 @@
 from django.conf.urls import url, include
 from . import views
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 
 app_name = 'home'
 
@@ -17,5 +19,9 @@ urlpatterns = [
     path('action_course/<course>/', views.action_course, name='action_course'),
     path('platform/<course>/<lname>/', views.platform, name='platform'),
     path('addquestion/<int:id>/', views.addquestion, name='addquestion'),
+    path('simple_upload/', views.simple_upload, name='simple_upload'),
     path('studio/', views.studio, name='studio'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
