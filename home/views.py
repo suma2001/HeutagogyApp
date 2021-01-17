@@ -267,7 +267,18 @@ def platform(request, course, lname):
     contentdic['description'] = lesson['description']
     contentdic['course_active'] = 'active'
     contentdic['course'] = course 
-
+    print(lesson)
+    slide_contents = courses_collection.document(cid).collection('Lessons').document(lid).collection('Content').get()
+    print(len(slide_contents))
+    contentdic['slides']=[]
+    for content in slide_contents:
+        slide_dict=content.to_dict()
+        s_d={}
+        s_d['name']=slide_dict['name']
+        s_d['type']=slide_dict['type']
+        s_d['description']=slide_dict['description']
+        contentdic['slides'].append(s_d)
+    print(contentdic['slides'])
     if request.method == 'POST' and request.FILES['myfile']:
         
         myfile = request.FILES['myfile']
@@ -281,9 +292,13 @@ def platform(request, course, lname):
         imagePath = "media\\" + uploaded_file_url[7:]
         imageBlob = bucket.blob("QuizImages/" + uploaded_file_url[7:])
         imageBlob.upload_from_filename(imagePath)
-
-        URL = imageBlob.generate_signed_url(datetime.timedelta(seconds=300), method='GET')
+        imageBlob.make_public()
+        URL=imageBlob.public_url
+        print("my url: ",imageBlob.public_url)
+        # URL=imageBlob.download_as_string()
+        URL = imageBlob.generate_signed_url(expiration=datetime.timedelta(hours=1),api_access_endpoint='https://storage.googleapis.com', method='GET')
         # URL = "https://firebasestorage.googleapis.com/v0/b/" + "heutagogy-2020.appspot.com" + "/o/" + urllib.parse.quote('QuizImages/' + uploaded_file_url[7:]) + "?alt=media&token=" + uuid.uuid4().hex
+        
         print(URL)
         quiz = []
         data = request.POST.dict()
@@ -339,8 +354,7 @@ def platform(request, course, lname):
         cid = contentdic['cid']
         lid = contentdic['lid']
         print(cid, lid)
-        content = courses_collection.document(cid).collection('Lessons').document(lid).collection('Content')
-        l = len(list(content.get()))
+        
         content.document('S'+str(l+1)).set({
             'sid': 'S'+str(l+1),
             'subject': contentdic['course'],
