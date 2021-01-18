@@ -40,7 +40,7 @@ authe = firebase.auth()
 cred = credentials.Certificate('heutagogy-2020-6959a4a76c88.json')
 firebase_admin.initialize_app(cred)
 db = firestore.client()
-
+ImageStorage = firebase.storage()
 teachers_collection =  db.collection('Schools').document('School 1').collection('Teachers')
 students_collection =  db.collection('Schools').document('School 1').collection('Students') 
 courses_collection =  db.collection('Schools').document('School 1').collection('Courses')
@@ -281,10 +281,10 @@ def platform(request, course, lname):
         imagePath = "media\\" + uploaded_file_url[7:]
         imageBlob = bucket.blob("QuizImages/" + uploaded_file_url[7:])
         imageBlob.upload_from_filename(imagePath)
-
-        URL = imageBlob.generate_signed_url(datetime.timedelta(seconds=300), method='GET')
-        # URL = "https://firebasestorage.googleapis.com/v0/b/" + "heutagogy-2020.appspot.com" + "/o/" + urllib.parse.quote('QuizImages/' + uploaded_file_url[7:]) + "?alt=media&token=" + uuid.uuid4().hex
+        imageBlob.make_public()
+        URL=imageBlob.public_url
         print(URL)
+        
         quiz = []
         data = request.POST.dict()
         print(data)
