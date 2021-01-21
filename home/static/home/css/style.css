@@ -14,7 +14,7 @@ Table Of Content
 /* ================================================================================== 
 Fonts
 ===================================================================================== */
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i|Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&amp;display=swap');
+/* @import url('https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i|Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&amp;display=swap'); */
 /* ================================================================================== 
 Reset Css
 ===================================================================================== */
@@ -38,6 +38,7 @@ time, mark, audio, video {
 	font-size: 100%;
 	font: inherit;
     vertical-align: baseline;
+    font-family: Open-Sans;
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, 
@@ -449,10 +450,49 @@ i.icon1 {
       color: #ed2a26;
       font-size: 30px;
   }
+  .fa-image {
+      font-size: 20px;
+      padding: 10px;
+      color: #ed2a26;
+  }
+  .fa-eye {
+      color: #ed2a26;
+  }
+  .reveal:focus {
+      outline: none;
+      box-shadow: none;
+  }
+  /* .checkbox {
+      margin: 20px;
+      margin-left: 70px;
+      float: right;
+  } */
+
+  .checkbox1 input[type=checkbox] {
+      margin-left: 10px;
+      margin-top: 10px;
+      height: 20px;
+      width: 20px;
+      background-color: green;
+  }
+
+  .checkbox1:checked {
+    background-color: green;
+  }
+  #CheckboxGroup1_0 {
+    background-color: green;
+  }
+
 
 .header_right {
     margin-left: auto;
     float: right;
+    padding-right: 15px;
+}
+
+.header_center {
+    margin-left: auto;
+    text-align: center;
     padding-right: 15px;
 }
 
@@ -4151,7 +4191,7 @@ a.rmv-btn i {
 }
 
 .ui.label.lb12 {
-    background-color: #dedfe !important;
+    /* background-color: #dedfe !important; */
     padding: .9999em 1.2em !important;
     color: #686f7a !important;
     border-top-left-radius: 500rem !important;
@@ -4965,7 +5005,6 @@ a.rmv-btn i {
     color: #686f7a;
     line-height: 26px;
     padding-top: 27px;
-}
 }
 
 .story125 {
@@ -5830,7 +5869,8 @@ a.rmv-btn i {
 .sign_in_up_bg {
     background: #f7f7f7 !important;
     position: relative;
-	width: 100%;
+    width: 100%;
+    margin-top: 0%;
 }
 
 .sign_in_up_bg:before {
@@ -5840,6 +5880,7 @@ a.rmv-btn i {
     right: 0;
     top: 0;
     bottom: 0;
+    margin-top: 0%;
     position: absolute;
     pointer-events: none;
     background-size: cover;
@@ -6014,7 +6055,7 @@ a.rmv-btn i {
 	background: #34a853 !important;
 }
 
-./* --- Forgot Password Page --- */
+/* --- Forgot Password Page --- */
 
 .main-tabs {
     width: 100%;
@@ -8048,3 +8089,4 @@ a.rmv-btn i {
       background-color: #f7f7f7;
       font-size: 13px;
   }
+

@@ -82,11 +82,13 @@ body {font-family: 'Roboto', sans-serif;}
               </button>
               
               <ul class="dropdown-menu">
-                  <li><a href="#">Long Lesson</a></li>
-                  <li><a href="#">Short Lesson</a></li>
-                  <li><a href="#">Fill in the blanks</a></li>
-                  <li><a href="#quiz_form">MCQs</a></li>
-                  <li><a href="#">True or False</a></li>
+                  <li><a href="#Tutorial" aria-controls="tutorial">Tutorial</a></li>
+                  <li><a href="#FillUps" onclick="repeatDivElement()">Fill in the blanks</a></li>
+                  <li><a href="#ImageMCQs" aria-controls="ImageMCQs">MCQs (Image as options)</a></li>
+                  <li><a href="#TextMCQs">MCQs (Text as options)</a></li>
+                  <li><a href="#">Drag Drop Image</a></li>
+                  <li><a href="#">Drag Drop Audio</a></li>
+                  <li><a href="#">Drag Drop Text</a></li>
               </ul>
           </div>
           </div>         						
@@ -95,229 +97,424 @@ body {font-family: 'Roboto', sans-serif;}
         <div class="row">
           <div class="col-lg-3">
             <div id="accordion">
+              {% for slide in slides %}
+                <div class="card">
+                  <div class="card-header" id="heading{{slide.id}}">
+                    <h5 class="mb-0">
+                      <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapse{{slide.id}}" aria-expanded="false" aria-controls="collapse{{slide.id}}" style="color: #ed2a26; text-decoration: none;">
+                        {{slide.name}}
+                      </button>
+                    </h5>
+                  </div>
               
-              <div class="card">
-                <div class="card-header" id="headingOne">
-                  <h5 class="mb-0">
-                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" style="color: #ed2a26; text-decoration: none;">
-                      Slide 1
-                    </button>
-                  </h5>
-                </div>
-            
-                <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
-                  <div class="card-body">
-                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. 
-                    <a href="#" title="Edit" class="gray-s"><i class="uil uil-edit-alt" style="color: #ed2a26;"></i></a>
+                  <div id="collapse{{slide.id}}" class="collapse" aria-labelledby="heading{{slide.id}}" data-parent="#accordion">
+                    <div class="card-body">
+                      {{slide.description}}
+                      <a href="#" title="Edit" class="gray-s"><i class="uil uil-edit-alt" style="color: #ed2a26;"></i></a>
+                    </div>
                   </div>
                 </div>
-              </div>
-              
-              <div class="card">
-                <div class="card-header" id="headingTwo">
-                  <h5 class="mb-0">
-                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" style="color: #ed2a26; text-decoration: none;">
-                      Slide 2
-                    </button>
-                  </h5>
-                </div>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-                  <div class="card-body">
-                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. 
-                    <a href="#" title="Edit" class="gray-s"><i class="uil uil-edit-alt" style="color: #ed2a26;"></i></a>
-                  </div>
-                </div>
-              </div>
-              <div class="card">
-                <div class="card-header" id="headingThree">
-                  <h5 class="mb-0">
-                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree" style="color: #ed2a26; text-decoration: none;">
-                      Slide 3
-                    </button>
-                  </h5>
-                </div>
-                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
-                  <div class="card-body">
-                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. 
-                    <a href="#" title="Edit" class="gray-s"><i class="uil uil-edit-alt" style="color: #ed2a26;"></i></a>
-                  </div>
-                </div>
-              </div>
+                {% endfor %}
             </div>
           </div>
-
-          <div class="col-lg-9" id="quiz_form">
-            <!-- <div style="padding: 20px; border: 2px solid #ed2a26; border-radius: 20px; background-color: #ffecec;">
-              <div class="content">
-                  <button class="btn btn-danger">Add Question</button>
-                  <br>
-                  <form method="POST" action="{% url 'home:platform' course lesson_name  %}">
-                    {% csrf_token %}
-                    <input placeholder="description" type="text" name="description" id="id_description" class="form-control" aria-label="Text input with checkbox" style="margin: 10px; padding: 20px; border: 1px solid black; border-radius: 8px;">
-                    <input placeholder="Question" type="text" name="question" id="id_question" class="form-control" aria-label="Text input with checkbox" style="height:100px; width:100%; margin: 10px; padding: 20px; border: 1px solid black; border-radius: 8px;">
-                    <div class="input-group mb-3">
-                          <input placeholder="Option 1" type="text" name="option1" id="id_option1" class="form-control" aria-label="Text input with checkbox" style="margin: 10px; padding: 20px; border: 1px solid black; border-radius: 8px;">
-                          <input placeholder="Option 2" type="text" name="option2" id="id_option2" class="form-control" aria-label="Text input with checkbox" style="margin: 10px; padding: 20px; border: 1px solid black; border-radius: 8px;">
-                          <input placeholder="Option 3" type="text" name="option3" id="id_option3" class="form-control" aria-label="Text input with checkbox" style="margin: 10px; padding: 20px; border: 1px solid black; border-radius: 8px;">
-                          <input placeholder="Option 4" type="text" name="option4" id="id_option4" class="form-control" aria-label="Text input with checkbox" style="margin: 10px; padding: 20px; border: 1px solid black; border-radius: 8px;">
-                    </div>  
-              </div>
-                    <center><button class="btn btn-success" type="submit">SAVE</button></center>
-            </form>
-            </div> -->
-            <!-- <form method="post"  action="{% url 'home:platform' course lesson_name %}"  enctype="multipart/form-data">
-              {% csrf_token %}
-              <input type="file" name="myfile">
-              <button type="submit">Upload</button>
-            </form> -->
-          
-            <form action="{% url 'home:platform' course lesson_name %}" method="POST" enctype="multipart/form-data">
-              {% csrf_token %}
-              <div class="step-content">
-                 <div class="step-tab-panel step-tab-location" id="tab_step3">
-                  <div class="tab-from-content">
-                    <!-- <div class="title-icon">
-                      <h3 class="title"><i class="uil uil-film"></i>Course Content</h3>
-                    </div> -->
-                    <div class="course__form">
-                      <div class="row">
-                        <div class="col-lg-12">		
-                          <div class="extra_info">		
-                            <h4 class="part__title">New Content</h4>
+          <div class="col-lg-9">
+            <div id="Tutorial">
+              <form action="{% url 'home:platform' course lesson_name 0 %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="step-content">
+                  <div class="step-tab-panel" id="tutorial">
+                    <div class="tab-from-content">
+                      <div class="title-icon">
+                        <h3 class="title"><i class="uil uil-film"></i>Tutorial Content</h3>
+                      </div>
+                      <div class="course__form">
+                        <div class="view_info10">
+                          <div class="row">
+                            <div class="col-lg-12 col-md-12">															
+                              <div class="ui search focus mt-30 lbel25">
+                                <label>Title</label>
+                                <div class="ui left icon input swdh19">
+                                  <input class="prompt srch_explore" type="text" name="title" id="id_title" placeholder="Title">
+                                </div>
+                              </div>					
+                            </div>
                           </div>
-                          <div class="view_info10">
-                            <div class="row">
-                              <div class="col-lg-12 col-md-12">															
-                                <div class="ui search focus mt-30 lbel25">
-                                  <label>Description</label>
-                                  <div class="ui left icon input swdh19">
-                                    <input class="prompt srch_explore" type="text" placeholder="Question description" name="description" data-purpose="edit-course-title" maxlength="200" id="id_description" value="">
-                                  </div>
-                                </div>									
-                              </div>
+                          <div class="row">
+                            <div class="col-lg-12 col-md-12">															
+                              <div class="ui search focus mt-30 lbel25">
+                                <label>Description</label>
+                                <div class="ui left icon input swdh19">
+                                  <input class="prompt srch_explore" type="text" name="description" id="id_description" placeholder="Description">
+                                </div>
+                              </div>					
                             </div>
-                            <div class="row">
-                              <div class="col-lg-12 col-md-12">															
-                                <div class="ui search focus mt-30 lbel25">
-                                  <label>Add Question / Add image</label>
-                                  <div class="ui left icon input swdh19">
-                                    <input class="prompt srch_explore" type="text" placeholder="Type your question here or chose an image or audio file" name="question" data-purpose="edit-course-title" maxlength="200" id="id_question" value="">
-                                    <input type="file" name="myfile">
-                                  </div>
-                                </div>									
-                              </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-lg-12 col-md-12">															
+                              <div class="ui search focus mt-30 lbel25">
+                                <label>Add Content</label>
+                                <div class="ui left icon input swdh19">
+                                  <textarea type="text" name="content" id="id_content" placeholder="Content" style="width: 100%; height: 300%;"></textarea>
+                                </div>
+                              </div>					
                             </div>
-                            <!-- <div class="row">
-                              <div class="col-lg-12 col-md-12">															
-                                <div class="ui search focus mt-30 lbel25">
-                                  <label>Upload an image (if required)</label>
-                                  <div class="ui left icon input swdh19">
-                                    <input type="file" name="myfile">
-                                  </div>
-                                </div>									
+                          </div>
+                          <div class="row">
+                            <div class="col-lg-12 col-md-12">
+                              <div class="ui search focus mt-30 lbel25">
+                                <label>Upload Video File</label>
+                              <input id="video_file" name="video_file" type="file">
                               </div>
-                            </div> -->
-                            <div class="row">
-                              <div class="col-lg-6 col-md-12">															
-                                <div class="ui search focus mt-30 lbel25">
-                                  <div class="row">
-                                    <div class="col-lg-1">
-                                      <input type="radio" id="id_true1" name="true1" value="true" style="font-size: 20px;">
-                                    </div>
-                                    <div class="col-lg-3">
-                                      <label>Option 1</label>
-                                    </div>
-                                  </div>
-                                  <div class="ui left icon input swdh19">   
-                                    <input class="prompt srch_explore" type="text" placeholder="Option 1" name="option1" data-purpose="edit-course-title" maxlength="60" id="id_option1" value="">															
-                                  </div>
-                                </div>									
-                              </div>
-                              <div class="col-lg-6 col-md-12">															
-                                <div class="ui search focus mt-30 lbel25">
-                                  <div class="row">
-                                    <div class="col-lg-1">
-                                      <input type="radio" id="id_true2" name="true2" value="true" style="font-size: 20px;">
-                                    </div>
-                                    <div class="col-lg-3">
-                                      <label>Option 2</label>
-                                    </div>
-                                  </div>
-                                  <div class="ui left icon input swdh19">
-                                    <input class="prompt srch_explore" type="text" placeholder="Option 2" name="option2" data-purpose="edit-course-title" maxlength="60" id="id_option2" value="">															
-                                  </div>
-                                </div>									
-                              </div>
-                              <div class="col-lg-6 col-md-12">															
-                                <div class="ui search focus mt-30 lbel25">
-                                  <div class="row">
-                                    <div class="col-lg-1">
-                                      <input type="radio" id="id_true3" name="true3" value="true" style="font-size: 20px;">
-                                    </div>
-                                    <div class="col-lg-3">
-                                      <label>Option 3</label>
-                                    </div>
-                                  </div>
-                                  <div class="ui left icon input swdh19">
-                                    <input class="prompt srch_explore" type="text" placeholder="Option 3" name="option3" data-purpose="edit-course-title" maxlength="60" id="id_option3" value="">															
-                                  </div>
-                                </div>									
-                              </div>
-                              <div class="col-lg-6 col-md-12">															
-                                <div class="ui search focus mt-30 lbel25">
-                                  <div class="row">
-                                    <div class="col-lg-1">
-                                      <input type="radio" id="id_true4" name="true4" value="true" style="font-size: 20px;">
-                                    </div>
-                                    <div class="col-lg-3">
-                                      <label>Option 4</label>
-                                    </div>
-                                  </div>
-                                  <div class="ui left icon input swdh19">
-                                    <input class="prompt srch_explore" type="text" placeholder="Option 4" name="option4" data-purpose="edit-course-title" maxlength="60" id="id_option4" value="">															
-                                  </div>
-                                </div>									
-                              </div>   
-                            </div>
-                          <div class="header_right">
+                          </div>
+                          </div>
+                          <div class="header_center">
                             <button type="submit" class="btn1542">Submit</button>
                           </div>
-                
-              
-            </form>
-        
-          </div>
-          
-        
+                        </div>
+                      </div>
+                      
+                    </div>
+                  </div>  
+                </div>
+              </form>
+            </div>
+            <div id="FillUps">
+              <form action="{% url 'home:platform' course lesson_name 1 %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="step-content">
+                  <div class="step-tab-panel">
+                    <div class="tab-from-content">
+                      <div class="title-icon">
+                        <h3 class="title"><i class="uil uil-film"></i>Fill in the blanks</h3>
+                      </div>
+                      <div class="course__form">
+                        <div class="view_info10">
+                          <div class="row">
+                            <div class="col-lg-12 col-md-12">															
+                              <div class="ui search focus mt-30 lbel25">
+                                <label>Title</label>
+                                <div class="ui left icon input swdh19">
+                                  <input class="prompt srch_explore" type="text" name="title" id="id_title" placeholder="Title">
+                                </div>
+                              </div>					
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-lg-12 col-md-12">															
+                              <div class="ui search focus mt-30 lbel25">
+                                <label>Description</label>
+                                <div class="ui left icon input swdh19">
+                                  <input class="prompt srch_explore" type="text" name="description" id="id_description" placeholder="Description">
+                                </div>
+                              </div>					
+                            </div>
+                          </div>
+                          <div class="row" id="FILLUP">
+                            <div class="col-lg-6 col-md-12" id="repeatFillUp">
+                              <div class="ui search focus mt-30 lbel25">
+                                <label>Upload Image File</label>
+                              <input id="image_file" name="image_file" type="file">
+                              </div>
+                            </div>
+                            <div class="col-lg-6 col-md-12">
+                              <div class="ui search focus mt-30 lbel25">
+                                <label>Correct Answer</label>
+                                <div class="ui left icon input swdh19">
+                                  <input class="prompt srch_explore" type="text" name="answer" id="id_answer" placeholder="Correct answer">
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <br>
+                          <div class="header_center">
+                            <button type="submit" class="btn1542">Submit</button>
+                          </div>
+                        </div>
+                      </div>
+                      
+                    </div>
+                  </div>  
+                </div>
+              </form>
+            </div>
+            <div id="ImageMCQs">
+              <form action="{% url 'home:platform' course lesson_name 2 %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="step-content">
+                  <div class="step-tab-panel" >
+                    <div class="tab-from-content">
+                      <div class="title-icon">
+                        <h3 class="title"><i class="uil uil-film"></i>MCQs (Image as Options)</h3>
+                      </div>
+                      <div class="course__form">
+                        <div class="view_info10">
+                              <div class="row">
+                                <div class="col-lg-12 col-md-12">															
+                                  <div class="ui search focus mt-30 lbel25">
+                                    <label>Title</label>
+                                    <div class="ui left icon input swdh19">
+                                      <input class="prompt srch_explore" type="text" name="title" id="id_title" placeholder="Title">
+                                    </div>
+                                  </div>					
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-lg-12 col-md-12">															
+                                  <div class="ui search focus mt-30 lbel25">
+                                    <label>Description</label>
+                                    <div class="ui left icon input swdh19">
+                                      <input class="prompt srch_explore" type="text" name="description" id="id_description" placeholder="Description">
+                                    </div>
+                                  </div>					
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-lg-12 col-md-12">															
+                                  <div class="ui search focus mt-30 lbel25">
+                                    <label>Add Question</label>
+                                    <div class="ui left icon input swdh19">
+                                      <input class="prompt srch_explore" type="text" name="question" id="id_question" placeholder="Question">
+                                      <!-- <label for="file">
+                                        <i class="fa fa-image"></i>
+                                        <input type="file" id="file" style="display: none" name="question_image" multiple="" data-original-title="upload photos">
+                                        <div id="filename"></div>
+                                      </label>
+                                      <label for="_file">
+                                        <i class="fa fa-microphone"></i>
+                                        <input type="file" id="_file" style="display: none" name="question_audio" accept="mp3" multiple="" data-original-title="upload photos">
+                                        <div id="_filename"></div>
+                                      </label> -->
+                                    </div>
+                                  </div>					
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-lg-6 col-md-6">	
+                                  <div class="ui search focus mt-30 lbel25">
+                                    <label>Option 1</label>
+                                    <div class="ui left icon input swdh19">
+                                      <!-- <label> -->
+                                        <!-- <input class="prompt srch_explore" type="text" name="" placeholder="Option 1"> -->
+                                        <label class="checkbox1"><input type="checkbox" name="true1"  value="" id="id_true1" ></label>
+                                        <label for="file1">
+                                          <i class="fa fa-image"></i>
+                                          <input type="file" id="file1" style="display: none" name="option1_image" multiple="" data-original-title="upload photos">
+                                          <div id="filename1"></div>
+                                        </label>
+                                  </div>
+                                </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6">															
+                                  <div class="ui search focus mt-30 lbel25">
+                                    <label>Option 2</label>
+                                    <div class="ui left icon input swdh19">
+                                      <!-- <input class="prompt srch_explore" type="text" name="option2" id="id_option2" placeholder="Option 2"> -->
+                                      <label class="checkbox1"><input type="checkbox" name="true2"  value="" id="id_true2" ></label>
+                                      <label for="file2">
+                                        <i class="fa fa-image"></i>
+                                        <input type="file" id="file2" style="display: none" name="option2_image" multiple="" data-original-title="upload photos">
+                                        <div id="filename2"></div>
+                                      </label>
+                                    </div>
+                                    </div>
+                                  </div>
+                              </div>
+                             
+                              <div class="row">
+                                <div class="col-lg-6 col-md-6">															
+                                  <div class="ui search focus mt-30 lbel25">
+                                    <label>Option 3</label>
+                                    <div class="ui left icon input swdh19">
+                                      <!-- <input class="prompt srch_explore" type="text" name="option3" id="id_option3" placeholder="Option 3"> -->
+                                      <label class="checkbox1"><input type="checkbox" name="true3"  value="" id="id_true3" ></label>
+                                      <label for="file3">
+                                        <i class="fa fa-image"></i>
+                                        <input type="file" id="file3" style="display: none" name="option3_image"  multiple="" data-original-title="upload photos">
+                                        <div id="filename3"></div>
+                                      </label>
+                                      
+                                    </div>
+                                  </div>					
+                                </div>
+                                <div class="col-lg-6 col-md-6">															
+                                  <div class="ui search focus mt-30 lbel25">
+                                    <label>Option 4</label>
+                                    <div class="ui left icon input swdh19">
+                                      <!-- <input class="prompt srch_explore" type="text" name="option4" id="id_option4" placeholder="Option 4"> -->
+                                      <label class="checkbox1"><input type="checkbox" name="true4"  value="" id="id_true4" ></label> 
+                                      <label for="file4">
+                                        <i class="fa fa-image"></i>
+                                        <input type="file" id="file4" style="display: none" name="option4_image" multiple="" data-original-title="upload photos">
+                                        <div id="filename4"></div>
+                                      </label>
+                                      
+                                    </div>
+                                  </div>					
+                                </div>
+                              </div>
+                        </div>
+                        <div class="header_center">
+                          <button type="submit" class="btn1542">Submit</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div> 
+              </form>
+            </div>
+            <div id="TextMCQs">
+              <form action="{% url 'home:platform' course lesson_name 3 %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="step-content">
+                  <div class="step-tab-panel" >
+                    <div class="tab-from-content">
+                      <div class="title-icon">
+                        <h3 class="title"><i class="uil uil-film"></i>MCQs (Text as Options)</h3>
+                      </div>
+                      <div class="course__form">
+                        <div class="view_info10">
+                              <div class="row">
+                                <div class="col-lg-12 col-md-12">															
+                                  <div class="ui search focus mt-30 lbel25">
+                                    <label>Title</label>
+                                    <div class="ui left icon input swdh19">
+                                      <input class="prompt srch_explore" type="text" name="title" id="id_title" placeholder="Title">
+                                    </div>
+                                  </div>					
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-lg-12 col-md-12">															
+                                  <div class="ui search focus mt-30 lbel25">
+                                    <label>Description</label>
+                                    <div class="ui left icon input swdh19">
+                                      <input class="prompt srch_explore" type="text" name="description" id="id_description" placeholder="Description">
+                                    </div>
+                                  </div>					
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-lg-12 col-md-12">															
+                                  <div class="ui search focus mt-30 lbel25">
+                                    <label>Add Question</label>
+                                    <div class="ui left icon input swdh19">
+                                      <input class="prompt srch_explore" type="text" name="question" id="id_question" placeholder="Question">
+                                    </div>
+                                  </div>					
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-lg-6 col-md-6">	
+                                  <div class="ui search focus mt-30 lbel25">
+                                    <label>Option 1</label>
+                                    <div class="ui left icon input swdh19">
+                                      <!-- <label> -->
+                                        <input class="prompt srch_explore" type="text" name="option1" id="id_option1" placeholder="Option 1">
+                                        <label class="checkbox1"><input type="checkbox" name="true1"  value="" id="id_true1" ></label>
+                                  </div>
+                                </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6">															
+                                  <div class="ui search focus mt-30 lbel25">
+                                    <label>Option 2</label>
+                                    <div class="ui left icon input swdh19">
+                                      <input class="prompt srch_explore" type="text" name="option2" id="id_option2" placeholder="Option 2">
+                                      <label class="checkbox1"><input type="checkbox" name="true2"  value="" id="id_true2" ></label>
+                                    </div>
+                                    </div>
+                                  </div>
+                              </div>
+                             
+                              <div class="row">
+                                <div class="col-lg-6 col-md-6">															
+                                  <div class="ui search focus mt-30 lbel25">
+                                    <label>Option 3</label>
+                                    <div class="ui left icon input swdh19">
+                                      <input class="prompt srch_explore" type="text" name="option3" id="id_option3" placeholder="Option 3">
+                                      <label class="checkbox1"><input type="checkbox" name="true3"  value="" id="id_true3" ></label>
+                                    </div>
+                                  </div>					
+                                </div>
+                                <div class="col-lg-6 col-md-6">															
+                                  <div class="ui search focus mt-30 lbel25">
+                                    <label>Option 4</label>
+                                    <div class="ui left icon input swdh19">
+                                      <input class="prompt srch_explore" type="text" name="option4" id="id_option4" placeholder="Option 4">
+                                      <label class="checkbox1"><input type="checkbox" name="true4"  value="" id="id_true4" ></label>
+                                    </div>
+                                  </div>					
+                                </div>
+                              </div>
+                        </div>
+                        <br>
+                        <div class="header_center">
+                          <button type="submit" class="btn1542">Submit</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div> 
+              </form>
+            </div>
+            
+            <br>
+            
+        </div>
       </div>
+      <br>
   </div>
-</div>
+  </div>
 
 <script>
-// Get the modal
-var modal = document.getElementById("myModal");
+var input1 = document.getElementById( 'file1' );
+var infoArea1 = document.getElementById( 'filename1' );
+var input2 = document.getElementById( 'file2' );
+var infoArea2 = document.getElementById( 'filename2' );
+var input3 = document.getElementById( 'file3' );
+var infoArea3 = document.getElementById( 'filename3' );
+var input4 = document.getElementById( 'file4' );
+var infoArea4 = document.getElementById( 'filename4' );
 
-// Get the button that opens the modal
-var btn = document.getElementById("myBtn");
+input1.addEventListener( 'change', showFileName1 );
+input2.addEventListener( 'change', showFileName2);
+input3.addEventListener( 'change', showFileName3 );
+input4.addEventListener( 'change', showFileName4 );
 
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
-
-// When the user clicks the button, open the modal
-btn.onclick = function() {
-  modal.style.display = "block";
+function showFileName1( event ) {
+  var input = event.srcElement;
+  var fileName = input.files[0].name;
+  infoArea1.textContent = fileName;
 }
 
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-  modal.style.display = "none";
+function showFileName2( event ) {
+  var input = event.srcElement;
+  var fileName = input.files[0].name;
+  infoArea2.textContent = fileName;
 }
 
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
+function showFileName3( event ) {
+  var input = event.srcElement;
+  var fileName = input.files[0].name;
+  infoArea3.textContent = fileName;
+}
+
+function showFileName4( event ) {
+  var input = event.srcElement;
+  var fileName = input.files[0].name;
+  infoArea4.textContent = fileName;
+}
+
+function repeatDivElement() {
+  for(var i = 1; i <= 3; i++) { 
+  var str = document.getElementById('repeatFillUp'), 
+  span = document.createElement('div'); 
+  span.innerHTML = str; 
+  console.log(span);
+  var body = document.getElementById('FILLUP'); 
+  
+  console.log("Body is: " + body);
+  body.appendChild(str); 
+}
 }
 </script>
 

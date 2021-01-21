@@ -1,5 +1,3 @@
-
-// === Timer === //
 var count = new Date("july 1,2020 00:00:00").getTime();
 var x = setInterval(function() {
 	var now =  new Date().getTime();

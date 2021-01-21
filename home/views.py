@@ -40,7 +40,7 @@ authe = firebase.auth()
 cred = credentials.Certificate('heutagogy-2020-6959a4a76c88.json')
 firebase_admin.initialize_app(cred)
 db = firestore.client()
-ImageStorage = firebase.storage()
+
 teachers_collection =  db.collection('Schools').document('School 1').collection('Teachers')
 students_collection =  db.collection('Schools').document('School 1').collection('Students') 
 courses_collection =  db.collection('Schools').document('School 1').collection('Courses')
@@ -53,6 +53,13 @@ def landing(request):
 def password_reset_email(request):
     return render(request, 'home/email.html')
 
+def forgot_password(request):
+    if request.method=="POST":
+        email = request.POST['email']
+        authe.send_password_reset_email(email)
+        return redirect('home:password_reset_email')
+    return render(request, 'home/forgot_password.html')
+
 def signin(request):
     print(authe.current_user)
     if request.method=="POST":
@@ -60,6 +67,8 @@ def signin(request):
         data = request.POST.dict()
         email = data.get('emailaddress')
         password = data.get('password')
+        if data.get('remember_me')=="false":
+            request.session.set_expiry(0)
         print(email, password)
         try:
             user = authe.sign_in_with_email_and_password(email, password)
@@ -79,13 +88,14 @@ def signin(request):
                 messages.warning(request, 'Invalid login credentials')
             elif str(error) == "TOO_MANY_ATTEMPTS_TRY_LATER : Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later.":
                 messages.warning(request, 'TOO_MANY_ATTEMPTS_TRY_LATER : Access to this account has been temporarily disabled due to many failed login attempts.')
-            return render(request, 'home/sign_in.html')
+            return redirect('home:signin')
     return render(request, 'home/sign_in.html')
 
 def signup(request):
     if request.method=="POST":
         ## Get the form data
         data = request.POST.dict()
+        print(data)
         fullname = data.get('fullname')
         email = data.get('emailaddress')
         password = data.get('password')
@@ -94,7 +104,7 @@ def signup(request):
         ## Create a new user
         try:
             user = authe.create_user_with_email_and_password(email, password)
-        
+            # authe.send_email_verification(user['localId'])
             ## Get the UID of the user
             uid = user['localId']
 
@@ -147,7 +157,6 @@ def courses(request):
     if authe.current_user!=None:
         user = authe.current_user
         uid = user['localId']
-        
         results = teachers_collection.where('uid', '==', uid).get()[0].to_dict()
         # print(json.dumps(results['courses']))
         if len(results['Profile'])==0:
@@ -255,7 +264,8 @@ def create_new_lesson(request, course):
         return render(request, 'home/createnewlesson.html', {'create_course_active': 'active', 'course': course})
     return render(request, 'home/sign_in.html') 
 
-def platform(request, course, lname):
+def platform(request, course, lname, slide_type=0):
+    print(slide_type)
     contentdic={}
     cid = courses_collection.where('course_name', '==', course).get()[0].to_dict()['course_id']
     print(cid, lname, course)
@@ -266,90 +276,227 @@ def platform(request, course, lname):
     contentdic['lesson_name'] = lesson['lesson_name']
     contentdic['description'] = lesson['description']
     contentdic['course_active'] = 'active'
-    contentdic['course'] = course 
+    contentdic['course'] = course
+    print(lesson)
+    slide_contents = courses_collection.document(cid).collection('Lessons').document(lid).collection('Content')
+    print(len(slide_contents.get()))
+    contentdic['slides']=[]
+    i=1
+    for content in slide_contents.get():
+        slide_dict=content.to_dict()
+        print(slide_dict)
+        s_d={}
+        s_d['id']=str(i)
+        i+=1
+        s_d['name']=slide_dict['name']
+        s_d['type']=slide_dict['type']
+        s_d['description']=slide_dict['description']
+        contentdic['slides'].append(s_d)
+    print(contentdic['slides'])
+    fs = FileSystemStorage()
+    client = storage.Client()
+    bucket = client.get_bucket('heutagogy-2020.appspot.com')
+    imageBlob = bucket.blob("/")
 
-    if request.method == 'POST' and request.FILES['myfile']:
-        
-        myfile = request.FILES['myfile']
-        fs = FileSystemStorage()
-        filename = fs.save(myfile.name, myfile)
-        uploaded_file_url = fs.url(filename)
-        print(uploaded_file_url)
-        client = storage.Client()
-        bucket = client.get_bucket('heutagogy-2020.appspot.com')
-        imageBlob = bucket.blob("/")
-        imagePath = "media\\" + uploaded_file_url[7:]
-        imageBlob = bucket.blob("QuizImages/" + uploaded_file_url[7:])
-        imageBlob.upload_from_filename(imagePath)
-        imageBlob.make_public()
-        URL=imageBlob.public_url
-        print(URL)
-        
-        quiz = []
+    ## Slide Type l0 : Tutorial
+    if request.method=="POST" and slide_type==0:
         data = request.POST.dict()
-        print(data)
+        name = data.get('title')
+        description = data.get('description')
+        text_content = data.get('content')
+        video_url = ""
+        files = request.FILES.dict()
+        if 'video_file' in files:
+            video_file = request.FILES['video_file']
+            filename = fs.save(video_file.name, video_file)
+            uploaded_file_url = fs.url(filename)
+            print(uploaded_file_url)
+            videoPath = "media\\" + uploaded_file_url[7:]
+            imageBlob = bucket.blob("SlideVideos/" + uploaded_file_url[7:])
+            imageBlob.upload_from_filename(videoPath)
+            imageBlob.make_public()
+            video_url = imageBlob.public_url
+
+        l = len(list(slide_contents.get()))
+        slide_contents.document(lid+'S'+str(l+1)).set({
+            'name': name,
+            'sid': lid+'S'+str(l+1),
+            'subject': contentdic['course'],
+            'type': "l0",
+            'description': description,
+            'content': text_content,
+            'videoURL': video_url
+            
+        })
+        return render(request, 'platform/platform.html',contentdic)
+
+    ## Slide Type q0 : Fill in the blanks
+    if request.method=="POST" and slide_type==1:
+        data = request.POST.dict()
+        name = data.get('title')
+        description = data.get('description')
+        answer = data.get('answer')
+        image_url = ""
+        files = request.FILES.dict()
+        if 'image_file' in files:
+            image_file = request.FILES['image_file']
+            filename = fs.save(image_file.name, image_file)
+            uploaded_file_url = fs.url(filename)
+            imagePath = "media\\" + uploaded_file_url[7:]
+            imageBlob = bucket.blob("SlideImages/" + uploaded_file_url[7:])
+            imageBlob.upload_from_filename(imagePath)
+            imageBlob.make_public()
+            image_url = imageBlob.public_url
+
+        l = len(list(slide_contents.get()))
+        slide_contents.document(lid+'S'+str(l+1)).set({
+            'name': name,
+            'sid': lid+'S'+str(l+1),
+            'subject': contentdic['course'],
+            'type': "q0",
+            'description': description,
+            'pictures': [{
+                'correct_text': answer,
+                'picture': image_url
+            }]
+            
+        })
+        return render(request, 'platform/platform.html',contentdic)
+
+    ## Slide Type q1 : MCQs (Image as options)
+    if request.method=="POST" and slide_type==2:
+        print("IN Image mCQs")
+        data = request.POST.dict()
+        name = data.get('title')
+        description = data.get('description')
         question = data.get('question')
-        option1 = data.get('option1')
         if 'true1' in data:
             check1 = True
         else:
             check1 = False
-        option2 = data.get('option2')
+        
         if 'true2' in data:
             check2 = True
         else:
             check2 = False
-        option3 = data.get('option3')
+        
         if 'true3' in data:
             check3 = True
         else:
             check3 = False
-        option4 = data.get('option4')
+        
         if 'true4' in data:
             check4 = True
         else:
             check4 = False
-        print(check4)
-        description = data.get('description')
-        
-        quiz.append({
-            'image': URL,
-            'question': question,
-            'options': [
-                {
-                'text': option1,
-                'choice': check1
-                },
-                {
-                'text': option2,
-                'choice': check2
-                },
-                {
-                'text': option3,
-                'choice': check3
-                },
-                {
-                'text': option4,
-                'choice': check4
-                }
-            ]
-        })
-        print(quiz)
-        print(contentdic)
-        cid = contentdic['cid']
-        lid = contentdic['lid']
-        print(cid, lid)
-        content = courses_collection.document(cid).collection('Lessons').document(lid).collection('Content')
-        l = len(list(content.get()))
-        content.document('S'+str(l+1)).set({
+
+        URL=['']*4
+
+        for i in range(1, 5):
+            filename = fs.save(request.FILES['option' + str(i) + '_image'].name, request.FILES['option' + str(i) + '_image'])
+            uploaded_file_url = fs.url(filename)
+            imagePath = "media\\" + uploaded_file_url[7:]
+            imageBlob = bucket.blob("SlideImages/" + uploaded_file_url[7:])
+            imageBlob.upload_from_filename(imagePath)
+            imageBlob.make_public()
+            URL[i-1] = imageBlob.public_url
+            
+        l = len(list(slide_contents.get()))
+        slide_contents.document(lid+'S'+str(l+1)).set({
+            'name': name,
             'sid': 'S'+str(l+1),
             'subject': contentdic['course'],
-            'questions': quiz,
-            'description': description
+            'questions': [{
+                'question': question,
+                'options': [
+                    {
+                    'picture': URL[0],
+                    'correct': check1
+                    },
+                    {
+                    'picture': URL[1],
+                    'correct': check2
+                    },
+                    {
+                    'picture': URL[2],
+                    'correct': check3
+                    },
+                    {
+                    'picture': URL[3],
+                    'correct': check4
+                    }
+                ]
+            }],
+            'description': description,
+            'type': "q1"
         })
+        return render(request, 'platform/platform.html',contentdic)
 
-    
-    return render(request, 'platform/platform.html',contentdic)
+    ## Slide Type q2 : MCQs (Text as options)
+    if request.method=="POST" and slide_type==3:
+        print("IN Text mCQs")
+        data = request.POST.dict()
+        name = data.get('title')
+        description = data.get('description')
+        question = data.get('question')
+        option1 = data.get('option1')
+        option2 = data.get('option2')
+        option3 = data.get('option3')
+        option4 = data.get('option4')
+
+        if 'true1' in data:
+            check1 = True
+        else:
+            check1 = False
+        
+        if 'true2' in data:
+            check2 = True
+        else:
+            check2 = False
+        
+        if 'true3' in data:
+            check3 = True
+        else:
+            check3 = False
+        
+        if 'true4' in data:
+            check4 = True
+        else:
+            check4 = False
+
+
+        l = len(list(slide_contents.get()))
+        slide_contents.document(lid+'S'+str(l+1)).set({
+            'name': name,
+            'sid': 'S'+str(l+1),
+            'subject': contentdic['course'],
+            'questions': [{
+                'question': question,
+                'options': [
+                    {
+                    'text': option1,
+                    'choice': check1
+                    },
+                    {
+                    'text': option2,
+                    'choice': check2
+                    },
+                    {
+                    'text': option3,
+                    'choice': check3
+                    },
+                    {
+                    'text': option4,
+                    'choice': check4
+                    }
+                ]
+            }],
+            'description': description,
+            'type': "q2"
+        })
+        return render(request, 'platform/platform.html',contentdic)
+ 
+    return render(request, 'platform/platform.html', contentdic)
 
 
 

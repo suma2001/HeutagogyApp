@@ -16,6 +16,7 @@
 </ul>
 {% endif %}
 
+
 <div class="sign_in_up_bg">
     <div class="container">
         <div class="row justify-content-lg-center justify-content-md-center">
@@ -32,33 +33,35 @@
                     <p>Log In to Your Edututs+ Account!</p>
                     <!-- <button class="social_lnk_btn color_btn_fb"><i class="uil uil-facebook-f"></i>Continue with Facebook</button>
                     <button class="social_lnk_btn mt-15 color_btn_tw"><i class="uil uil-twitter"></i>Continue with Twitter</button>-->
-                    <button class="social_lnk_btn mt-15 color_btn_fb"><i class="uil uil-google"></i>Continue with Google</button> 
+                    <!-- <button class="social_lnk_btn mt-15 color_btn_fb"><i class="uil uil-google"></i>Continue with Google</button>  -->
                     
                     <form action="{% url 'home:signin' %}" method="POST">
                         {% csrf_token %}
                         <div class="ui search focus mt-15">
                             <div class="ui left icon input swdh11 swdh19">
-                                <input class="prompt srch_explore" type="email" name="emailaddress"  id="id_email" required="" maxlength="64" placeholder="Email Address">															
+                                <input class="prompt srch_explore" type="email" name="emailaddress"  id="id_email" required="" value="" maxlength="64" placeholder="Email Address">															
                                 <i class="uil uil-envelope icon icon2"></i>
                             </div>
                         </div>
-                        <div class="ui search focus mt-15">
+                        <div class="input-group ui search focus mt-15">
                             <div class="ui left icon input swdh11 swdh19">
-                                <input class="prompt srch_explore" type="password" name="password"  id="id_password" required="" maxlength="64" placeholder="Password">
+                                <input type="password" class="form-control pwd prompt srch_explore" name="password"  id="id_password" required="" value="" placeholder="Password">
+                                <button class="btn reveal" type="button"><i class="fa fa-eye"></i></button>
                                 <i class="uil uil-key-skeleton-alt icon icon2"></i>
-                            </div>
+                                
+                            </div>       
                         </div>
                         <div class="ui form mt-30 checkbox_sign">
                             <div class="inline field">
                                 <div class="ui checkbox mncheck">
-                                    <input type="checkbox" tabindex="0" class="hidden">
+                                    <input type="checkbox" name="remember_me" id="id_remember_me" tabindex="0">
                                     <label>Remember Me</label>
                                 </div>
                             </div>
                         </div>
-                        <button class="login-btn" type="submit">Sign In</button>
+                        <button class="login-btn" type="submit" onclick="clearInp()">Sign In</button>
                     </form>
-                    <p class="sgntrm145">Or <a href="forgot_password.html">Forgot Password</a>.</p>
+                    <p class="sgntrm145">Or <a href="{% url 'home:forgot_password' %}">Forgot Password</a>.</p>
 
                     <p class="mb-0 mt-30">Already have an account? <a href="{% url 'home:signup' %}">Sign up</a></p>
                 </div>
@@ -69,3 +72,19 @@
     </div>				
 </div>
 
+<script>
+    $(".reveal").on('click',function() {
+    var $pwd = $(".pwd");
+    if ($pwd.attr('type') === 'password') {
+        $pwd.attr('type', 'text');
+    } else {
+        $pwd.attr('type', 'password');
+    }
+});
+
+function clearInp() {
+    document.getElementsByTagName("input").value = "";
+}
+
+
+</script>
