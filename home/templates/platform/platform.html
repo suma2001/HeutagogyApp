@@ -86,9 +86,9 @@ body {font-family: 'Roboto', sans-serif;}
                   <li><a href="#FillUps" onclick="repeatDivElement()">Fill in the blanks</a></li>
                   <li><a href="#ImageMCQs" aria-controls="ImageMCQs">MCQs (Image as options)</a></li>
                   <li><a href="#TextMCQs">MCQs (Text as options)</a></li>
-                  <li><a href="#">Drag Drop Image</a></li>
-                  <li><a href="#">Drag Drop Audio</a></li>
-                  <li><a href="#">Drag Drop Text</a></li>
+                  <li><a href="#DragDropImage">Drag Drop Image</a></li>
+                  <li><a href="#DragDropAudio">Drag Drop Audio</a></li>
+                  <li><a href="#DragDropText">Drag Drop Text</a></li>
               </ul>
           </div>
           </div>         						
@@ -179,8 +179,6 @@ body {font-family: 'Roboto', sans-serif;}
               </form>
             </div>
             <div id="FillUps">
-              <form action="{% url 'home:platform' course lesson_name 1 %}" method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
                 <div class="step-content">
                   <div class="step-tab-panel">
                     <div class="tab-from-content">
@@ -189,6 +187,22 @@ body {font-family: 'Roboto', sans-serif;}
                       </div>
                       <div class="course__form">
                         <div class="view_info10">
+                          <form action="{% url 'home:platform' course lesson_name 11 %}" method="POST">
+                            {% csrf_token %}
+                            <div class="row">
+                              <div class="col-lg-10 col-md-10">															
+                                <div class="ui search focus mt-30 lbel25">
+                                  <label>Number of questions</label>
+                                  <div class="ui left icon input swdh19">
+                                    <input class="prompt srch_explore" type="text" name="number_1" id="id_number_1" placeholder="Number of questions" value="{{number_1}}">
+                                    <button type="submit" class="btn1542">Submit</button>
+                                  </div>
+                                </div>					
+                              </div>
+                            </div>
+                          </form>
+                          <form action="{% url 'home:platform' course lesson_name 1 %}" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
                           <div class="row">
                             <div class="col-lg-12 col-md-12">															
                               <div class="ui search focus mt-30 lbel25">
@@ -209,22 +223,24 @@ body {font-family: 'Roboto', sans-serif;}
                               </div>					
                             </div>
                           </div>
+                          {% for i in number_1 %}
                           <div class="row" id="FILLUP">
                             <div class="col-lg-6 col-md-12" id="repeatFillUp">
                               <div class="ui search focus mt-30 lbel25">
                                 <label>Upload Image File</label>
-                              <input id="image_file" name="image_file" type="file">
+                              <input id="image_file{{i}}" name="image_file{{i}}" type="file">
                               </div>
                             </div>
                             <div class="col-lg-6 col-md-12">
                               <div class="ui search focus mt-30 lbel25">
                                 <label>Correct Answer</label>
                                 <div class="ui left icon input swdh19">
-                                  <input class="prompt srch_explore" type="text" name="answer" id="id_answer" placeholder="Correct answer">
+                                  <input class="prompt srch_explore" type="text" name="answer{{i}}" id="id_answer{{i}}" placeholder="Correct answer">
                                 </div>
                               </div>
                             </div>
                           </div>
+                          {% endfor %}
                           <br>
                           <div class="header_center">
                             <button type="submit" class="btn1542">Submit</button>
@@ -238,16 +254,32 @@ body {font-family: 'Roboto', sans-serif;}
               </form>
             </div>
             <div id="ImageMCQs">
-              <form action="{% url 'home:platform' course lesson_name 2 %}" method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
+              
                 <div class="step-content">
                   <div class="step-tab-panel" >
                     <div class="tab-from-content">
                       <div class="title-icon">
                         <h3 class="title"><i class="uil uil-film"></i>MCQs (Image as Options)</h3>
                       </div>
+                      
                       <div class="course__form">
                         <div class="view_info10">
+                          <form action="{% url 'home:platform' course lesson_name 21 %}" method="POST">
+                            {% csrf_token %}
+                            <div class="row">
+                              <div class="col-lg-10 col-md-10">															
+                                <div class="ui search focus mt-30 lbel25">
+                                  <label>Number of questions</label>
+                                  <div class="ui left icon input swdh19">
+                                    <input class="prompt srch_explore" type="text" name="number_2" id="id_number_2" placeholder="Number of questions" value="{{number_2}}">
+                                    <button type="submit" class="btn1542">Submit</button>
+                                  </div>
+                                </div>					
+                              </div>
+                            </div>
+                          </form>
+                          <form action="{% url 'home:platform' course lesson_name 2 %}" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
                               <div class="row">
                                 <div class="col-lg-12 col-md-12">															
                                   <div class="ui search focus mt-30 lbel25">
@@ -268,22 +300,13 @@ body {font-family: 'Roboto', sans-serif;}
                                   </div>					
                                 </div>
                               </div>
+                              {% for i in number_2 %}
                               <div class="row">
                                 <div class="col-lg-12 col-md-12">															
                                   <div class="ui search focus mt-30 lbel25">
-                                    <label>Add Question</label>
+                                    <label>Add Question {{i}}</label>
                                     <div class="ui left icon input swdh19">
-                                      <input class="prompt srch_explore" type="text" name="question" id="id_question" placeholder="Question">
-                                      <!-- <label for="file">
-                                        <i class="fa fa-image"></i>
-                                        <input type="file" id="file" style="display: none" name="question_image" multiple="" data-original-title="upload photos">
-                                        <div id="filename"></div>
-                                      </label>
-                                      <label for="_file">
-                                        <i class="fa fa-microphone"></i>
-                                        <input type="file" id="_file" style="display: none" name="question_audio" accept="mp3" multiple="" data-original-title="upload photos">
-                                        <div id="_filename"></div>
-                                      </label> -->
+                                      <input class="prompt srch_explore" type="text" name="question{{i}}" id="id_question{{i}}" placeholder="Question">
                                     </div>
                                   </div>					
                                 </div>
@@ -295,11 +318,11 @@ body {font-family: 'Roboto', sans-serif;}
                                     <div class="ui left icon input swdh19">
                                       <!-- <label> -->
                                         <!-- <input class="prompt srch_explore" type="text" name="" placeholder="Option 1"> -->
-                                        <label class="checkbox1"><input type="checkbox" name="true1"  value="" id="id_true1" ></label>
-                                        <label for="file1">
+                                        <label class="checkbox1"><input type="checkbox" name="true{{i}}1"  value="" id="id_true{{i}}1" ></label>
+                                        <label for="file{{i}}1">
                                           <i class="fa fa-image"></i>
-                                          <input type="file" id="file1" style="display: none" name="option1_image" multiple="" data-original-title="upload photos">
-                                          <div id="filename1"></div>
+                                          <input type="file" id="file{{i}}1" style="display: none" name="option{{i}}1_image" multiple="" data-original-title="upload photos">
+                                          <div id="filename{{i}}1"></div>
                                         </label>
                                   </div>
                                 </div>
@@ -309,11 +332,11 @@ body {font-family: 'Roboto', sans-serif;}
                                     <label>Option 2</label>
                                     <div class="ui left icon input swdh19">
                                       <!-- <input class="prompt srch_explore" type="text" name="option2" id="id_option2" placeholder="Option 2"> -->
-                                      <label class="checkbox1"><input type="checkbox" name="true2"  value="" id="id_true2" ></label>
-                                      <label for="file2">
+                                      <label class="checkbox1"><input type="checkbox" name="true{{i}}2"  value="" id="id_true{{i}}2" ></label>
+                                      <label for="file{{i}}2">
                                         <i class="fa fa-image"></i>
-                                        <input type="file" id="file2" style="display: none" name="option2_image" multiple="" data-original-title="upload photos">
-                                        <div id="filename2"></div>
+                                        <input type="file" id="file{{i}}2" style="display: none" name="option{{i}}2_image" multiple="" data-original-title="upload photos">
+                                        <div id="filename{{i}}2"></div>
                                       </label>
                                     </div>
                                     </div>
@@ -326,11 +349,11 @@ body {font-family: 'Roboto', sans-serif;}
                                     <label>Option 3</label>
                                     <div class="ui left icon input swdh19">
                                       <!-- <input class="prompt srch_explore" type="text" name="option3" id="id_option3" placeholder="Option 3"> -->
-                                      <label class="checkbox1"><input type="checkbox" name="true3"  value="" id="id_true3" ></label>
-                                      <label for="file3">
+                                      <label class="checkbox1"><input type="checkbox" name="true{{i}}3"  value="" id="id_true{{i}}3" ></label>
+                                      <label for="file{{i}}3">
                                         <i class="fa fa-image"></i>
-                                        <input type="file" id="file3" style="display: none" name="option3_image"  multiple="" data-original-title="upload photos">
-                                        <div id="filename3"></div>
+                                        <input type="file" id="file{{i}}3" style="display: none" name="option{{i}}3_image"  multiple="" data-original-title="upload photos">
+                                        <div id="filename{{i}}3"></div>
                                       </label>
                                       
                                     </div>
@@ -341,17 +364,18 @@ body {font-family: 'Roboto', sans-serif;}
                                     <label>Option 4</label>
                                     <div class="ui left icon input swdh19">
                                       <!-- <input class="prompt srch_explore" type="text" name="option4" id="id_option4" placeholder="Option 4"> -->
-                                      <label class="checkbox1"><input type="checkbox" name="true4"  value="" id="id_true4" ></label> 
-                                      <label for="file4">
+                                      <label class="checkbox1"><input type="checkbox" name="true{{i}}4"  value="" id="id_true{{i}}4" ></label> 
+                                      <label for="file{{i}}4">
                                         <i class="fa fa-image"></i>
-                                        <input type="file" id="file4" style="display: none" name="option4_image" multiple="" data-original-title="upload photos">
-                                        <div id="filename4"></div>
+                                        <input type="file" id="file{{i}}4" style="display: none" name="option{{i}}4_image" multiple="" data-original-title="upload photos">
+                                        <div id="filename{{i}}4"></div>
                                       </label>
                                       
                                     </div>
                                   </div>					
                                 </div>
                               </div>
+                              {% endfor %}
                         </div>
                         <div class="header_center">
                           <button type="submit" class="btn1542">Submit</button>
@@ -363,8 +387,7 @@ body {font-family: 'Roboto', sans-serif;}
               </form>
             </div>
             <div id="TextMCQs">
-              <form action="{% url 'home:platform' course lesson_name 3 %}" method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
+              
                 <div class="step-content">
                   <div class="step-tab-panel" >
                     <div class="tab-from-content">
@@ -373,6 +396,22 @@ body {font-family: 'Roboto', sans-serif;}
                       </div>
                       <div class="course__form">
                         <div class="view_info10">
+                              <form action="{% url 'home:platform' course lesson_name 31 %}" method="POST">
+                                {% csrf_token %}
+                                <div class="row">
+                                  <div class="col-lg-10 col-md-10">															
+                                    <div class="ui search focus mt-30 lbel25">
+                                      <label>Number of questions</label>
+                                      <div class="ui left icon input swdh19">
+                                        <input class="prompt srch_explore" type="text" name="number_3" id="id_number_3" placeholder="Number of questions">
+                                        <button type="submit" class="btn1542">Submit</button>
+                                      </div>
+                                    </div>					
+                                  </div>
+                                </div>
+                              </form>
+                              <form action="{% url 'home:platform' course lesson_name 3 %}" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
                               <div class="row">
                                 <div class="col-lg-12 col-md-12">															
                                   <div class="ui search focus mt-30 lbel25">
@@ -393,12 +432,13 @@ body {font-family: 'Roboto', sans-serif;}
                                   </div>					
                                 </div>
                               </div>
+                              {% for i in number_3 %}
                               <div class="row">
                                 <div class="col-lg-12 col-md-12">															
                                   <div class="ui search focus mt-30 lbel25">
-                                    <label>Add Question</label>
+                                    <label><b>Add Question {{i}}</b></label>
                                     <div class="ui left icon input swdh19">
-                                      <input class="prompt srch_explore" type="text" name="question" id="id_question" placeholder="Question">
+                                      <input class="prompt srch_explore" type="text" name="question{{i}}" id="id_question{{i}}" placeholder="Question">
                                     </div>
                                   </div>					
                                 </div>
@@ -409,8 +449,8 @@ body {font-family: 'Roboto', sans-serif;}
                                     <label>Option 1</label>
                                     <div class="ui left icon input swdh19">
                                       <!-- <label> -->
-                                        <input class="prompt srch_explore" type="text" name="option1" id="id_option1" placeholder="Option 1">
-                                        <label class="checkbox1"><input type="checkbox" name="true1"  value="" id="id_true1" ></label>
+                                        <input class="prompt srch_explore" type="text" name="option{{i}}1" id="id_option{{i}}1" placeholder="Option 1">
+                                        <label class="checkbox1"><input type="checkbox" name="true{{i}}1"  value="" id="id_true{{i}}1" ></label>
                                   </div>
                                 </div>
                                 </div>
@@ -418,20 +458,19 @@ body {font-family: 'Roboto', sans-serif;}
                                   <div class="ui search focus mt-30 lbel25">
                                     <label>Option 2</label>
                                     <div class="ui left icon input swdh19">
-                                      <input class="prompt srch_explore" type="text" name="option2" id="id_option2" placeholder="Option 2">
-                                      <label class="checkbox1"><input type="checkbox" name="true2"  value="" id="id_true2" ></label>
+                                      <input class="prompt srch_explore" type="text" name="option{{i}}2" id="id_option{{i}}2" placeholder="Option 2">
+                                      <label class="checkbox1"><input type="checkbox" name="true{{i}}2"  value="" id="id_true{{i}}2" ></label>
                                     </div>
                                     </div>
                                   </div>
                               </div>
-                             
                               <div class="row">
                                 <div class="col-lg-6 col-md-6">															
                                   <div class="ui search focus mt-30 lbel25">
                                     <label>Option 3</label>
                                     <div class="ui left icon input swdh19">
-                                      <input class="prompt srch_explore" type="text" name="option3" id="id_option3" placeholder="Option 3">
-                                      <label class="checkbox1"><input type="checkbox" name="true3"  value="" id="id_true3" ></label>
+                                      <input class="prompt srch_explore" type="text" name="option{{i}}3" id="id_option{{i}}3" placeholder="Option 3">
+                                      <label class="checkbox1"><input type="checkbox" name="true{{i}}3"  value="" id="id_true{{i}}3" ></label>
                                     </div>
                                   </div>					
                                 </div>
@@ -439,12 +478,13 @@ body {font-family: 'Roboto', sans-serif;}
                                   <div class="ui search focus mt-30 lbel25">
                                     <label>Option 4</label>
                                     <div class="ui left icon input swdh19">
-                                      <input class="prompt srch_explore" type="text" name="option4" id="id_option4" placeholder="Option 4">
-                                      <label class="checkbox1"><input type="checkbox" name="true4"  value="" id="id_true4" ></label>
+                                      <input class="prompt srch_explore" type="text" name="option{{i}}4" id="id_option{{i}}4" placeholder="Option 4">
+                                      <label class="checkbox1"><input type="checkbox" name="true{{i}}4"  value="" id="id_true{{i}}4" ></label>
                                     </div>
                                   </div>					
                                 </div>
                               </div>
+                              {% endfor %}
                         </div>
                         <br>
                         <div class="header_center">
@@ -456,7 +496,234 @@ body {font-family: 'Roboto', sans-serif;}
                 </div> 
               </form>
             </div>
-            
+            <div id="DragDropImage">
+              <div class="step-content">
+                <div class="step-tab-panel" >
+                  <div class="tab-from-content">
+                    <div class="title-icon">
+                      <h3 class="title"><i class="uil uil-film"></i>Drag Drop Image</h3>
+                    </div>
+                    <div class="course__form">
+                      <div class="view_info10">
+                        
+                        <form action="{% url 'home:platform' course lesson_name 41 %}" method="POST">
+                          {% csrf_token %}
+                          <div class="row">
+                            <div class="col-lg-10 col-md-10">															
+                              <div class="ui search focus mt-30 lbel25">
+                                <label>Title</label>
+                                <div class="ui left icon input swdh19">
+                                  <input class="prompt srch_explore" type="text" name="number_4" id="id_number_4" placeholder="Number of questions">
+                                  <button type="submit" class="btn1542">Submit</button>
+                                </div>
+                              </div>					
+                            </div>
+                          </div>
+                        </form>
+                        <form action="{% url 'home:platform' course lesson_name 4 %}" method="POST" enctype="multipart/form-data">
+                          {% csrf_token %}
+                            <div class="row">
+                              <div class="col-lg-12 col-md-12">															
+                                <div class="ui search focus mt-30 lbel25">
+                                  <label>Title</label>
+                                  <div class="ui left icon input swdh19">
+                                    <input class="prompt srch_explore" type="text" name="title" id="id_title" placeholder="Title">
+                                  </div>
+                                </div>					
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-lg-12 col-md-12">															
+                                <div class="ui search focus mt-30 lbel25">
+                                  <label>Description</label>
+                                  <div class="ui left icon input swdh19">
+                                    <input class="prompt srch_explore" type="text" name="description" id="id_description" placeholder="Description">
+                                  </div>
+                                </div>					
+                              </div>
+                            </div>
+                            {% for i in number_4 %}
+                            <div class="row" id="FILLUP">
+                              <div class="col-lg-6 col-md-12" id="repeatFillUp">
+                                <div class="ui search focus mt-30 lbel25">
+                                  <label>Upload Image File</label>
+                                <input id="image_file{{i}}" name="image_file{{i}}" type="file">
+                                </div>
+                              </div>
+                              <div class="col-lg-6 col-md-12">
+                                <div class="ui search focus mt-30 lbel25">
+                                  <label>Correct Match</label>
+                                  <div class="ui left icon input swdh19">
+                                    <input class="prompt srch_explore" type="text" name="answer{{i}}" id="id_answer{{i}}" placeholder="Correct answer">
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            {% endfor %}
+                      </div>
+                      <br>
+                      <div class="header_center">
+                        <button type="submit" class="btn1542">Submit</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div> 
+            </form>
+          </div>
+          <div id="DragDropAudio">
+            <div class="step-content">
+              <div class="step-tab-panel" >
+                <div class="tab-from-content">
+                  <div class="title-icon">
+                    <h3 class="title"><i class="uil uil-film"></i>Drag Drop Audio</h3>
+                  </div>
+                  <div class="course__form">
+                    <div class="view_info10">
+                      
+                      <form action="{% url 'home:platform' course lesson_name 51 %}" method="POST">
+                        {% csrf_token %}
+                        <div class="row">
+                          <div class="col-lg-10 col-md-10">															
+                            <div class="ui search focus mt-30 lbel25">
+                              <label>Title</label>
+                              <div class="ui left icon input swdh19">
+                                <input class="prompt srch_explore" type="text" name="number_5" id="id_number_5" placeholder="Number of questions">
+                                <button type="submit" class="btn1542">Submit</button>
+                              </div>
+                            </div>					
+                          </div>
+                        </div>
+                      </form>
+                      <form action="{% url 'home:platform' course lesson_name 5 %}" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                          <div class="row">
+                            <div class="col-lg-12 col-md-12">															
+                              <div class="ui search focus mt-30 lbel25">
+                                <label>Title</label>
+                                <div class="ui left icon input swdh19">
+                                  <input class="prompt srch_explore" type="text" name="title" id="id_title" placeholder="Title">
+                                </div>
+                              </div>					
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-lg-12 col-md-12">															
+                              <div class="ui search focus mt-30 lbel25">
+                                <label>Description</label>
+                                <div class="ui left icon input swdh19">
+                                  <input class="prompt srch_explore" type="text" name="description" id="id_description" placeholder="Description">
+                                </div>
+                              </div>					
+                            </div>
+                          </div>
+                          {% for i in number_5 %}
+                          <div class="row" id="FILLUP">
+                            <div class="col-lg-6 col-md-12" id="repeatFillUp">
+                              <div class="ui search focus mt-30 lbel25">
+                                <label>Upload Audio File</label>
+                              <input id="audio_file{{i}}" name="audio_file{{i}}" type="file">
+                              </div>
+                            </div>
+                            <div class="col-lg-6 col-md-12">
+                              <div class="ui search focus mt-30 lbel25">
+                                <label>Correct Match</label>
+                                <div class="ui left icon input swdh19">
+                                  <input class="prompt srch_explore" type="text" name="answer{{i}}" id="id_answer{{i}}" placeholder="Correct answer">
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          {% endfor %}
+                    </div>
+                    <br>
+                    <div class="header_center">
+                      <button type="submit" class="btn1542">Submit</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> 
+          </form>
+        </div>
+            <div id="DragDropText">
+                <div class="step-content">
+                  <div class="step-tab-panel" >
+                    <div class="tab-from-content">
+                      <div class="title-icon">
+                        <h3 class="title"><i class="uil uil-film"></i>Drag Drop Text</h3>
+                      </div>
+                      <div class="course__form">
+                        <div class="view_info10">
+                          
+                          <form action="{% url 'home:platform' course lesson_name 61 %}" method="POST">
+                            {% csrf_token %}
+                            <div class="row">
+                              <div class="col-lg-10 col-md-10">															
+                                <div class="ui search focus mt-30 lbel25">
+                                  <label>Title</label>
+                                  <div class="ui left icon input swdh19">
+                                    <input class="prompt srch_explore" type="text" name="number_6" id="id_number_6" placeholder="Number of questions">
+                                    <button type="submit" class="btn1542">Submit</button>
+                                  </div>
+                                </div>					
+                              </div>
+                            </div>
+                          </form>
+                          <form action="{% url 'home:platform' course lesson_name 6 %}" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                              <div class="row">
+                                <div class="col-lg-12 col-md-12">															
+                                  <div class="ui search focus mt-30 lbel25">
+                                    <label>Title</label>
+                                    <div class="ui left icon input swdh19">
+                                      <input class="prompt srch_explore" type="text" name="title" id="id_title" placeholder="Title">
+                                    </div>
+                                  </div>					
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-lg-12 col-md-12">															
+                                  <div class="ui search focus mt-30 lbel25">
+                                    <label>Description</label>
+                                    <div class="ui left icon input swdh19">
+                                      <input class="prompt srch_explore" type="text" name="description" id="id_description" placeholder="Description">
+                                    </div>
+                                  </div>					
+                                </div>
+                              </div>
+                              {% for i in number_6 %}
+                              <div class="row">
+                                <div class="col-lg-12 col-md-12">															
+                                  <div class="ui search focus mt-30 lbel25">
+                                    <label>Add a correct pair</label>
+                                      <div class="row">
+                                        <div class="column mr-5 mb-5">
+                                          <div class="ui left icon input swdh19">
+                                            <input class="prompt srch_explore" type="text" name="text{{i}}1" id="id_text{{i}}1" placeholder="Column A">
+                                          </div>
+                                        </div>
+                                        <div class="column mr-5 mb-5">
+                                          <div class="ui left icon input swdh19">
+                                            <input class="prompt srch_explore" type="text" name="text{{i}}2" id="id_text{{i}}2" placeholder="Column B">
+                                          </div>
+                                        </div>
+                                      </div>
+                                  </div>					
+                                </div>
+                              </div>
+                              {% endfor %}
+                        </div>
+                        <br>
+                        <div class="header_center">
+                          <button type="submit" class="btn1542">Submit</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div> 
+              </form>
+            </div>
             <br>
             
         </div>
@@ -466,56 +733,83 @@ body {font-family: 'Roboto', sans-serif;}
   </div>
 
 <script>
-var input1 = document.getElementById( 'file1' );
-var infoArea1 = document.getElementById( 'filename1' );
-var input2 = document.getElementById( 'file2' );
-var infoArea2 = document.getElementById( 'filename2' );
-var input3 = document.getElementById( 'file3' );
-var infoArea3 = document.getElementById( 'filename3' );
-var input4 = document.getElementById( 'file4' );
-var infoArea4 = document.getElementById( 'filename4' );
 
-input1.addEventListener( 'change', showFileName1 );
-input2.addEventListener( 'change', showFileName2);
-input3.addEventListener( 'change', showFileName3 );
-input4.addEventListener( 'change', showFileName4 );
+var input11 = document.getElementById( 'file11' );
+var infoArea11 = document.getElementById( 'filename11' );
+var input12 = document.getElementById( 'file12' );
+var infoArea12 = document.getElementById( 'filename12' );
+var input13 = document.getElementById( 'file13' );
+var infoArea13 = document.getElementById( 'filename13' );
+var input14 = document.getElementById( 'file14' );
+var infoArea14 = document.getElementById( 'filename14' );
 
-function showFileName1( event ) {
+var input21 = document.getElementById( 'file21' );
+var infoArea21 = document.getElementById( 'filename21' );
+var input22 = document.getElementById( 'file22' );
+var infoArea22 = document.getElementById( 'filename22' );
+var input23 = document.getElementById( 'file23' );
+var infoArea23 = document.getElementById( 'filename23' );
+var input24 = document.getElementById( 'file24' );
+var infoArea24 = document.getElementById( 'filename24' );
+
+input11.addEventListener( 'change', showFileName11 );
+input12.addEventListener( 'change', showFileName12);
+input13.addEventListener( 'change', showFileName13 );
+input14.addEventListener( 'change', showFileName14 );
+
+input21.addEventListener( 'change', showFileName21 );
+input22.addEventListener( 'change', showFileName22);
+input23.addEventListener( 'change', showFileName23 );
+input24.addEventListener( 'change', showFileName24 );
+
+function showFileName11( event ) {
   var input = event.srcElement;
   var fileName = input.files[0].name;
-  infoArea1.textContent = fileName;
+  infoArea11.textContent = fileName;
 }
 
-function showFileName2( event ) {
+function showFileName12( event ) {
   var input = event.srcElement;
   var fileName = input.files[0].name;
-  infoArea2.textContent = fileName;
+  infoArea12.textContent = fileName;
 }
 
-function showFileName3( event ) {
+function showFileName13( event ) {
   var input = event.srcElement;
   var fileName = input.files[0].name;
-  infoArea3.textContent = fileName;
+  infoArea13.textContent = fileName;
 }
 
-function showFileName4( event ) {
+function showFileName14( event ) {
   var input = event.srcElement;
   var fileName = input.files[0].name;
-  infoArea4.textContent = fileName;
+  infoArea14.textContent = fileName;
 }
 
-function repeatDivElement() {
-  for(var i = 1; i <= 3; i++) { 
-  var str = document.getElementById('repeatFillUp'), 
-  span = document.createElement('div'); 
-  span.innerHTML = str; 
-  console.log(span);
-  var body = document.getElementById('FILLUP'); 
-  
-  console.log("Body is: " + body);
-  body.appendChild(str); 
+function showFileName21( event ) {
+  var input = event.srcElement;
+  var fileName = input.files[0].name;
+  infoArea21.textContent = fileName;
 }
+
+function showFileName22( event ) {
+  var input = event.srcElement;
+  var fileName = input.files[0].name;
+  infoArea22.textContent = fileName;
 }
+
+function showFileName23( event ) {
+  var input = event.srcElement;
+  var fileName = input.files[0].name;
+  infoArea23.textContent = fileName;
+}
+
+function showFileName24( event ) {
+  var input = event.srcElement;
+  var fileName = input.files[0].name;
+  infoArea24.textContent = fileName;
+}
+
 </script>
 
 </body>

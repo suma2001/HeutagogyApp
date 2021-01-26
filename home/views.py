@@ -18,6 +18,7 @@ import os
 import datetime
 import urllib
 import uuid
+contentdic={}
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="./heutagogy-2020-6959a4a76c88.json"
 firebase = firebase.FirebaseApplication('https://heutagogy-2020.firebaseio.com')
@@ -266,7 +267,7 @@ def create_new_lesson(request, course):
 
 def platform(request, course, lname, slide_type=0):
     print(slide_type)
-    contentdic={}
+    
     cid = courses_collection.where('course_name', '==', course).get()[0].to_dict()['course_id']
     print(cid, lname, course)
     lid = courses_collection.document(cid).collection('Lessons').where('lesson_name', '==', lname).get()[0].to_dict()['lesson_id']
@@ -296,7 +297,44 @@ def platform(request, course, lname, slide_type=0):
     fs = FileSystemStorage()
     client = storage.Client()
     bucket = client.get_bucket('heutagogy-2020.appspot.com')
-    imageBlob = bucket.blob("/")
+    imageBlob = bucket.blob("/")    
+
+    if request.method=='POST' and slide_type==11:
+        number = request.POST['number_1']
+        print(number)
+        contentdic['number_1'] = range(1, int(number)+1)
+        return render(request, 'platform/platform.html',contentdic)
+
+    if request.method=='POST' and slide_type==21:
+        print("HEELOOOOOO")
+        number = request.POST['number_2']
+        print(number)
+        contentdic['number_2'] = range(1, int(number)+1)
+        return render(request, 'platform/platform.html',contentdic)
+
+    if request.method=='POST' and slide_type==31:
+        number = request.POST['number_3']
+        print(number)
+        contentdic['number_3'] = range(1, int(number)+1)
+        return render(request, 'platform/platform.html',contentdic)
+
+    if request.method=='POST' and slide_type==41:
+        number = request.POST['number_4']
+        print(number)
+        contentdic['number_4'] = range(1, int(number)+1)
+        return render(request, 'platform/platform.html',contentdic)
+
+    if request.method=='POST' and slide_type==51:
+        number = request.POST['number_5']
+        print(number)
+        contentdic['number_5'] = range(1, int(number)+1)
+        return render(request, 'platform/platform.html',contentdic)
+
+    if request.method=='POST' and slide_type==61:
+        number = request.POST['number_6']
+        print(number)
+        contentdic['number_6'] = range(1, int(number)+1)
+        return render(request, 'platform/platform.html',contentdic)
 
     ## Slide Type l0 : Tutorial
     if request.method=="POST" and slide_type==0:
@@ -335,11 +373,15 @@ def platform(request, course, lname, slide_type=0):
         data = request.POST.dict()
         name = data.get('title')
         description = data.get('description')
-        answer = data.get('answer')
+        
         image_url = ""
         files = request.FILES.dict()
-        if 'image_file' in files:
-            image_file = request.FILES['image_file']
+        print(str(contentdic['number_1'])[9])
+        num = int(str(contentdic['number_1'])[9])
+        pictures=[]
+        for i in range(1, num):
+            answer = data.get('answer' + str(i))
+            image_file = request.FILES['image_file' + str(i)]
             filename = fs.save(image_file.name, image_file)
             uploaded_file_url = fs.url(filename)
             imagePath = "media\\" + uploaded_file_url[7:]
@@ -347,6 +389,10 @@ def platform(request, course, lname, slide_type=0):
             imageBlob.upload_from_filename(imagePath)
             imageBlob.make_public()
             image_url = imageBlob.public_url
+            pictures.append({
+                'correct_text': answer,
+                'picture': image_url
+            })
 
         l = len(list(slide_contents.get()))
         slide_contents.document(lid+'S'+str(l+1)).set({
@@ -355,60 +401,59 @@ def platform(request, course, lname, slide_type=0):
             'subject': contentdic['course'],
             'type': "q0",
             'description': description,
-            'pictures': [{
-                'correct_text': answer,
-                'picture': image_url
-            }]
+            'pictures': pictures
             
         })
         return render(request, 'platform/platform.html',contentdic)
 
     ## Slide Type q1 : MCQs (Image as options)
     if request.method=="POST" and slide_type==2:
-        print("IN Image mCQs")
+        print("IN Image mCQs:")
         data = request.POST.dict()
+        print()
+        print()
+        print(data)
         name = data.get('title')
         description = data.get('description')
-        question = data.get('question')
-        if 'true1' in data:
-            check1 = True
-        else:
-            check1 = False
-        
-        if 'true2' in data:
-            check2 = True
-        else:
-            check2 = False
-        
-        if 'true3' in data:
-            check3 = True
-        else:
-            check3 = False
-        
-        if 'true4' in data:
-            check4 = True
-        else:
-            check4 = False
-
-        URL=['']*4
-
-        for i in range(1, 5):
-            filename = fs.save(request.FILES['option' + str(i) + '_image'].name, request.FILES['option' + str(i) + '_image'])
-            uploaded_file_url = fs.url(filename)
-            imagePath = "media\\" + uploaded_file_url[7:]
-            imageBlob = bucket.blob("SlideImages/" + uploaded_file_url[7:])
-            imageBlob.upload_from_filename(imagePath)
-            imageBlob.make_public()
-            URL[i-1] = imageBlob.public_url
+        print(str(contentdic['number_2'])[9])
+        num = int(str(contentdic['number_2'])[9])
+        questions=[]
+        for i in range(1, num):
+            ques={}
+            question = data.get('question' + str(i))
+            print(question)
+            if 'true'+str(i)+'1' in data:
+                check1 = True
+            else:
+                check1 = False
             
-        l = len(list(slide_contents.get()))
-        slide_contents.document(lid+'S'+str(l+1)).set({
-            'name': name,
-            'sid': 'S'+str(l+1),
-            'subject': contentdic['course'],
-            'questions': [{
-                'question': question,
-                'options': [
+            if 'true'+str(i)+'2' in data:
+                check2 = True
+            else:
+                check2 = False
+            
+            if 'true'+str(i)+'3' in data:
+                check3 = True
+            else:
+                check3 = False
+            
+            if 'true'+str(i)+'4' in data:
+                check4 = True
+            else:
+                check4 = False
+
+            URL=['']*4
+            print(request.FILES.dict())
+            for j in range(1, 5):
+                filename = fs.save(request.FILES['option' + str(i) + str(j) + '_image'].name, request.FILES['option' + str(i) + str(j) + '_image'])
+                uploaded_file_url = fs.url(filename)
+                imagePath = "media\\" + uploaded_file_url[7:]
+                imageBlob = bucket.blob("SlideImages/" + uploaded_file_url[7:])
+                imageBlob.upload_from_filename(imagePath)
+                imageBlob.make_public()
+                URL[j-1] = imageBlob.public_url
+            ques['question'] = question
+            ques['options'] = [
                     {
                     'picture': URL[0],
                     'correct': check1
@@ -426,7 +471,15 @@ def platform(request, course, lname, slide_type=0):
                     'correct': check4
                     }
                 ]
-            }],
+            print(ques)
+            questions.append(ques)
+            
+        l = len(list(slide_contents.get()))
+        slide_contents.document(lid+'S'+str(l+1)).set({
+            'name': name,
+            'sid': 'S'+str(l+1),
+            'subject': contentdic['course'],
+            'questions': questions,
             'description': description,
             'type': "q1"
         })
@@ -438,39 +491,37 @@ def platform(request, course, lname, slide_type=0):
         data = request.POST.dict()
         name = data.get('title')
         description = data.get('description')
-        question = data.get('question')
-        option1 = data.get('option1')
-        option2 = data.get('option2')
-        option3 = data.get('option3')
-        option4 = data.get('option4')
+        print(str(contentdic['number_3'])[9])
+        num = int(str(contentdic['number_3'])[9])
+        questions=[]
 
-        if 'true1' in data:
-            check1 = True
-        else:
-            check1 = False
-        
-        if 'true2' in data:
-            check2 = True
-        else:
-            check2 = False
-        
-        if 'true3' in data:
-            check3 = True
-        else:
-            check3 = False
-        
-        if 'true4' in data:
-            check4 = True
-        else:
-            check4 = False
+        for i in range(1, num):
+            question = data.get('question'+str(i))
+            option1 = data.get('option'+str(i)+'1')
+            option2 = data.get('option'+str(i)+'2')
+            option3 = data.get('option'+str(i)+'3')
+            option4 = data.get('option'+str(i)+'4')
 
-
-        l = len(list(slide_contents.get()))
-        slide_contents.document(lid+'S'+str(l+1)).set({
-            'name': name,
-            'sid': 'S'+str(l+1),
-            'subject': contentdic['course'],
-            'questions': [{
+            if 'true'+str(i)+'1' in data:
+                check1 = True
+            else:
+                check1 = False
+            
+            if 'true'+str(i)+'2' in data:
+                check2 = True
+            else:
+                check2 = False
+            
+            if 'true'+str(i)+'3' in data:
+                check3 = True
+            else:
+                check3 = False
+            
+            if 'true'+str(i)+'4' in data:
+                check4 = True
+            else:
+                check4 = False
+            questions.append({
                 'question': question,
                 'options': [
                     {
@@ -490,12 +541,120 @@ def platform(request, course, lname, slide_type=0):
                     'choice': check4
                     }
                 ]
-            }],
+            })
+
+        l = len(list(slide_contents.get()))
+        slide_contents.document(lid+'S'+str(l+1)).set({
+            'name': name,
+            'sid': 'S'+str(l+1),
+            'subject': contentdic['course'],
+            'questions': questions,
             'description': description,
             'type': "q2"
         })
         return render(request, 'platform/platform.html',contentdic)
- 
+
+    ## Slide Type q3 : Drag Drop Images
+    if request.method=="POST" and slide_type==4:
+        data = request.POST.dict()
+        name = data.get('title')
+        description = data.get('description')
+
+        print(str(contentdic['number_4'])[9])
+        num = int(str(contentdic['number_4'])[9])
+        pictures=[]
+
+        for i in range(1, num):
+            answer = data.get('answer'+str(i))
+            image_file = request.FILES['image_file' + str(i)]
+            filename = fs.save(image_file.name, image_file)
+            uploaded_file_url = fs.url(filename)
+            imagePath = "media\\" + uploaded_file_url[7:]
+            imageBlob = bucket.blob("SlideImages/" + uploaded_file_url[7:])
+            imageBlob.upload_from_filename(imagePath)
+            imageBlob.make_public()
+            image_url = imageBlob.public_url
+
+            pictures.append({
+                'description': answer,
+                'picture': image_url
+            })
+
+        l = len(list(slide_contents.get()))
+        slide_contents.document(lid+'S'+str(l+1)).set({
+            'name': name,
+            'sid': 'S'+str(l+1),
+            'subject': contentdic['course'],
+            'pictures': pictures,
+            'description': description,
+            'type': "q3"
+        })
+
+    ## Slide Type q4 : Drag Drop Audios
+    if request.method=="POST" and slide_type==5:
+        data = request.POST.dict()
+        name = data.get('title')
+        description = data.get('description')
+
+        print(str(contentdic['number_5'])[9])
+        num = int(str(contentdic['number_5'])[9])
+        audios=[]
+
+        for i in range(1, num):
+            answer = data.get('answer'+str(i))
+            audio_file = request.FILES['audio_file' + str(i)]
+            filename = fs.save(audio_file.name, audio_file)
+            uploaded_file_url = fs.url(filename)
+            imagePath = "media\\" + uploaded_file_url[7:]
+            imageBlob = bucket.blob("SlideAudios/" + uploaded_file_url[7:])
+            imageBlob.upload_from_filename(imagePath)
+            imageBlob.make_public()
+            audio_url = imageBlob.public_url
+
+            audios.append({
+                'description': answer,
+                'audio': audio_url
+            })
+
+        l = len(list(slide_contents.get()))
+        slide_contents.document(lid+'S'+str(l+1)).set({
+            'name': name,
+            'sid': 'S'+str(l+1),
+            'subject': contentdic['course'],
+            'audios': audios,
+            'description': description,
+            'type': "q3"
+        })
+
+    ## Slide Type q5 : Drag Drop Text
+    if request.method=="POST" and slide_type==6:
+        data = request.POST.dict()
+        name = data.get('title')
+        description = data.get('description')
+
+        print(str(contentdic['number_6'])[9])
+        num = int(str(contentdic['number_6'])[9])
+        questions=[]
+
+        for i in range(1, num):
+            text1 = data.get('text'+str(i)+'1')
+            text2 = data.get('text'+str(i)+'2')
+            questions.append({
+                'first': text1,
+                'second': text2
+            })
+
+        l = len(list(slide_contents.get()))
+        slide_contents.document(lid+'S'+str(l+1)).set({
+            'name': name,
+            'sid': 'S'+str(l+1),
+            'subject': contentdic['course'],
+            'questions': questions,
+            'description': description,
+            'type': "q5"
+        })
+        slide_type=0
+
     return render(request, 'platform/platform.html', contentdic)
 
 
@@ -529,20 +688,10 @@ def addquestion(request, id):
             'subject': contentdic['course'],
             'questions': quiz
         })
-    # if request.method=="POST" and id==2:
-    #     print(contentdic)
-    #     cid = contentdic['cid']
-    #     lid = contentdic['lid']
-    #     print(cid, lid)
-    #     content = courses_collection.document(cid).collection('Lessons').document(lid).collection('Content')
-    #     l = len(list(content.get()))
-    #     content.document('S'+str(l+1)).set({
-    #         'sid': 'S'+str(l+1),
-    #         'subject': contentdic['course'],
-    #         'questions': quiz
-    #     })
-    #     quiz=[]
+    
     return render(request, 'platform/platform.html',contentdic)
+
+
 
 def simple_upload(request):
     if request.method == 'POST' and request.FILES['myfile']:
@@ -553,6 +702,3 @@ def simple_upload(request):
         print(uploaded_file_url)
         return render(request, 'home/courses.html')
     return render(request, 'home/courses.html')
-
-def studio(request):
-    return render(request, 'studio/studio.html')

@@ -21,7 +21,6 @@ urlpatterns = [
     path('platform/<course>/<lname>/<int:slide_type>/', views.platform, name='platform'),
     path('addquestion/<int:id>/', views.addquestion, name='addquestion'),
     path('simple_upload/', views.simple_upload, name='simple_upload'),
-    path('studio/', views.studio, name='studio'),
 ]
 
 if settings.DEBUG:
