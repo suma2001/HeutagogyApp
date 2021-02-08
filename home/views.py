@@ -18,6 +18,8 @@ import os
 import datetime
 import urllib
 import uuid
+import random
+
 contentdic={}
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="./heutagogy-2020-6959a4a76c88.json"
@@ -239,7 +241,7 @@ def create_new_course(request):
             # context = {'course_active': 'active'}
             # return HttpResponseRedirect(reverse('home:instructor_dashboard', kwargs={'course_active': 'active'}))
             messages.success(request, 'Course created successfully.')
-            return redirect('courses')
+            return redirect('home:courses')
         return render(request, 'home/createnewcourse.html', {'create_course_active': 'active'})
     return render(request, 'home/sign_in.html')
 
@@ -266,7 +268,7 @@ def create_new_lesson(request, course):
     return render(request, 'home/sign_in.html') 
 
 def platform(request, course, lname, slide_type=0):
-    print(slide_type)
+    print(type(slide_type))
     
     cid = courses_collection.where('course_name', '==', course).get()[0].to_dict()['course_id']
     print(cid, lname, course)
@@ -278,14 +280,14 @@ def platform(request, course, lname, slide_type=0):
     contentdic['description'] = lesson['description']
     contentdic['course_active'] = 'active'
     contentdic['course'] = course
-    print(lesson)
+    # print(lesson)
     slide_contents = courses_collection.document(cid).collection('Lessons').document(lid).collection('Content')
-    print(len(slide_contents.get()))
+    # print(len(slide_contents.get()))
     contentdic['slides']=[]
     i=1
     for content in slide_contents.get():
         slide_dict=content.to_dict()
-        print(slide_dict)
+        # print(slide_dict)
         s_d={}
         s_d['id']=str(i)
         i+=1
@@ -293,7 +295,7 @@ def platform(request, course, lname, slide_type=0):
         s_d['type']=slide_dict['type']
         s_d['description']=slide_dict['description']
         contentdic['slides'].append(s_d)
-    print(contentdic['slides'])
+    # print(contentdic['slides'])
     fs = FileSystemStorage()
     client = storage.Client()
     bucket = client.get_bucket('heutagogy-2020.appspot.com')
@@ -336,6 +338,121 @@ def platform(request, course, lname, slide_type=0):
         contentdic['number_6'] = range(1, int(number)+1)
         return render(request, 'platform/platform.html',contentdic)
 
+    if request.method=='POST' and slide_type==71:
+        print("HI NUMBER 7")
+        number = request.POST['number_7']
+        print(number)
+        contentdic['number_7'] = range(1, int(number)+1)
+        return render(request, 'platform/platform.html',contentdic)
+
+    if request.method=='POST' and slide_type==101:
+        print("HI NUMBER 10")
+        number = request.POST['number_10']
+        print(number)
+        contentdic['number_10'] = range(1, int(number)+1)
+        return render(request, 'platform/platform.html',contentdic)
+
+    if request.method=='POST' and slide_type==91:
+        print("HI NUMBER 9")
+        number = request.POST['number_9']
+        print(number)
+        contentdic['number_9'] = range(1, int(number)+1)
+        return render(request, 'platform/platform.html',contentdic)
+
+    ## Slide Type q7 : Fill in the missing values
+    if request.method=='POST' and slide_type==8:
+        print("HIIIIIIIIIIIIIIII")
+        
+        data = request.POST.dict()
+        name = data.get('title')
+        description = data.get('description')
+        start = int(data.get('start'))
+        end = int(data.get('end'))
+        missinglist = data.get('missinglist')
+        missinglist = missinglist.split(', ')   
+        missingList = []
+        for i in missinglist:
+            missingList.append(int(i))
+
+        l = len(list(slide_contents.get()))
+        contents = slide_contents.document(lid+'S'+str(l+1))
+        contents.set({
+            'name': name,
+            'sid': lid+'S'+str(l+1),
+            'subject': contentdic['course'],
+            'type': "q7",
+            'description': description,
+            'start': start,
+            'end': end,
+            'missingList': missingList
+            
+        })
+        return render(request, 'platform/platform.html',contentdic)
+
+    ## Slide Type q9 : Drag Drop Order
+    if request.method=='POST' and slide_type==10:
+        print("HIIIIIIIIIIIIIIII")
+        
+        data = request.POST.dict()
+        name = data.get('title')
+        description = data.get('description')
+        
+        print(str(contentdic['number_10'])[9])
+        num = int(str(contentdic['number_10'])[9])   
+        questions=[]
+        for i in range(1, num):
+            question = data.get('question' + str(i))
+            split_question = question.split(' ')
+            questions.append({'question': split_question})
+
+        l = len(list(slide_contents.get()))
+        contents = slide_contents.document(lid+'S'+str(l+1))
+        contents.set({
+            'name': name,
+            'sid': lid+'S'+str(l+1),
+            'subject': contentdic['course'],
+            'type': "q9",
+            'description': description,
+            'questions': questions,
+            'numques': num-1
+            
+        })
+        return render(request, 'platform/platform.html',contentdic)
+
+    ## Slide Type q8 : Drag Drop Multiple
+    if request.method=='POST' and slide_type==9:
+        print("HIIIIIIIIIIIIIIII")
+        
+        data = request.POST.dict()
+        name = data.get('title')
+        description = data.get('description')
+        category = data.get('category')
+        category = category.split(', ')
+        print(str(contentdic['number_9'])[9])
+        num = int(str(contentdic['number_9'])[9])   
+        questions=[]
+        for i in range(1, num):
+            name = data.get('name' + str(i))
+            cate = data.get('category' + str(i))
+            questions.append({
+                    'first': cate,
+                    'second': name
+                })
+
+        l = len(list(slide_contents.get()))
+        contents = slide_contents.document(lid+'S'+str(l+1))
+        contents.set({
+            'name': name,
+            'sid': lid+'S'+str(l+1),
+            'subject': contentdic['course'],
+            'type': "q8",
+            'description': description,
+            'questions': questions,
+            'categories': category
+            
+        })
+        return render(request, 'platform/platform.html',contentdic)
+
     ## Slide Type l0 : Tutorial
     if request.method=="POST" and slide_type==0:
         data = request.POST.dict()
@@ -368,7 +485,7 @@ def platform(request, course, lname, slide_type=0):
         })
         return render(request, 'platform/platform.html',contentdic)
 
-    ## Slide Type q0 : Fill in the blanks
+    ## Slide Type q0 : Fill in the blanks (Images)
     if request.method=="POST" and slide_type==1:
         data = request.POST.dict()
         name = data.get('title')
@@ -402,6 +519,36 @@ def platform(request, course, lname, slide_type=0):
             'type': "q0",
             'description': description,
             'pictures': pictures
+            
+        })
+        return render(request, 'platform/platform.html',contentdic)
+  
+    ## Slide Type q6 : Fill in the blanks (Text)
+    if request.method=="POST" and slide_type==7:
+        data = request.POST.dict()
+        name = data.get('title')
+        description = data.get('description')
+        
+        print(str(contentdic['number_7'])[9])
+        num = int(str(contentdic['number_7'])[9])   
+        questions=[]
+        for i in range(1, num):
+            question = data.get('question' + str(i))
+            answer = data.get('answer' + str(i))
+            questions.append({
+                'question': question,
+                'correct_text': answer
+            })
+
+        l = len(list(slide_contents.get()))
+        contents = slide_contents.document(lid+'S'+str(l+1))
+        contents.set({
+            'name': name,
+            'sid': lid+'S'+str(l+1),
+            'subject': contentdic['course'],
+            'type': "q6",
+            'description': description,
+            'questions': questions
             
         })
         return render(request, 'platform/platform.html',contentdic)
@@ -456,19 +603,23 @@ def platform(request, course, lname, slide_type=0):
             ques['options'] = [
                     {
                     'picture': URL[0],
-                    'correct': check1
+                    'correct': check1,
+                    'text': ""
                     },
                     {
                     'picture': URL[1],
-                    'correct': check2
+                    'correct': check2,
+                    'text': ""
                     },
                     {
                     'picture': URL[2],
-                    'correct': check3
+                    'correct': check3,
+                    'text': ""
                     },
                     {
                     'picture': URL[3],
-                    'correct': check4
+                    'correct': check4,
+                    'text': ""
                     }
                 ]
             print(ques)
@@ -602,7 +753,8 @@ def platform(request, course, lname, slide_type=0):
 
         for i in range(1, num):
             answer = data.get('answer'+str(i))
-            audio_file = request.FILES['audio_file' + str(i)]
+            if 'audio_file' in request.FILES.dict(): 
+                audio_file = request.FILES['audio_file' + str(i)]
             filename = fs.save(audio_file.name, audio_file)
             uploaded_file_url = fs.url(filename)
             imagePath = "media\\" + uploaded_file_url[7:]
@@ -654,10 +806,20 @@ def platform(request, course, lname, slide_type=0):
             'type': "q5"
         })
         slide_type=0
-
     return render(request, 'platform/platform.html', contentdic)
 
+    
 
+def edit(request, name):
+    # cid = contentdic['cid']
+    # lid = contentdic['lid']
+    
+    slide_content= courses_collection.document('C8').collection('Lessons').document('C8L1').collection('Content').where('name', '==', name).get()[0].to_dict()
+    print("Hi ", name)
+    print(slide_content)
+    contentdic['slide'] = slide_content
+    print(json.dumps(contentdic,sort_keys=True, indent=4))
+    return render(request, 'platform/platform.html', contentdic)
 
 def addquestion(request, id):
     if request.method=="POST" and id==1:

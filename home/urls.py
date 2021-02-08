@@ -19,6 +19,7 @@ urlpatterns = [
     path('courses/', views.courses, name='courses'),
     path('action_course/<course>/', views.action_course, name='action_course'),
     path('platform/<course>/<lname>/<int:slide_type>/', views.platform, name='platform'),
+    path('platform/edit/<name>/', views.edit, name='edit'),
     path('addquestion/<int:id>/', views.addquestion, name='addquestion'),
     path('simple_upload/', views.simple_upload, name='simple_upload'),
 ]

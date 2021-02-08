@@ -83,12 +83,16 @@ body {font-family: 'Roboto', sans-serif;}
               
               <ul class="dropdown-menu">
                   <li><a href="#Tutorial" aria-controls="tutorial">Tutorial</a></li>
-                  <li><a href="#FillUps" onclick="repeatDivElement()">Fill in the blanks</a></li>
+                  <li><a href="#FillUpsImages" onclick="repeatDivElement()">Fill in the blanks (Images)</a></li>
+                  <li><a href="#FillUpsText">Fill in the blanks (Text)</a></li>
+                  <li><a href="#FillUpsMissing">Fill in the missing Values</a></li>
                   <li><a href="#ImageMCQs" aria-controls="ImageMCQs">MCQs (Image as options)</a></li>
                   <li><a href="#TextMCQs">MCQs (Text as options)</a></li>
                   <li><a href="#DragDropImage">Drag Drop Image</a></li>
                   <li><a href="#DragDropAudio">Drag Drop Audio</a></li>
                   <li><a href="#DragDropText">Drag Drop Text</a></li>
+                  <li><a href="#DragDropOrder">Drag Drop Order</a></li>
+                  <li><a href="#DragDropMultiple">Drag Drop Multiple</a></li>
               </ul>
           </div>
           </div>         						
@@ -110,13 +114,14 @@ body {font-family: 'Roboto', sans-serif;}
                   <div id="collapse{{slide.id}}" class="collapse" aria-labelledby="heading{{slide.id}}" data-parent="#accordion">
                     <div class="card-body">
                       {{slide.description}}
-                      <a href="#" title="Edit" class="gray-s"><i class="uil uil-edit-alt" style="color: #ed2a26;"></i></a>
+                      <a href="{% url 'home:edit' slide.name %}" title="Edit" class="gray-s"><i class="uil uil-edit-alt" style="color: #ed2a26;"></i></a>
                     </div>
                   </div>
                 </div>
                 {% endfor %}
             </div>
           </div>
+          
           <div class="col-lg-9">
             <div id="Tutorial">
               <form action="{% url 'home:platform' course lesson_name 0 %}" method="POST" enctype="multipart/form-data">
@@ -178,12 +183,12 @@ body {font-family: 'Roboto', sans-serif;}
                 </div>
               </form>
             </div>
-            <div id="FillUps">
+            <div id="FillUpsImages">
                 <div class="step-content">
                   <div class="step-tab-panel">
                     <div class="tab-from-content">
                       <div class="title-icon">
-                        <h3 class="title"><i class="uil uil-film"></i>Fill in the blanks</h3>
+                        <h3 class="title"><i class="uil uil-film"></i>Fill in the blanks (Images)</h3>
                       </div>
                       <div class="course__form">
                         <div class="view_info10">
@@ -254,138 +259,138 @@ body {font-family: 'Roboto', sans-serif;}
               </form>
             </div>
             <div id="ImageMCQs">
-              
-                <div class="step-content">
-                  <div class="step-tab-panel" >
-                    <div class="tab-from-content">
-                      <div class="title-icon">
-                        <h3 class="title"><i class="uil uil-film"></i>MCQs (Image as Options)</h3>
-                      </div>
-                      
-                      <div class="course__form">
-                        <div class="view_info10">
-                          <form action="{% url 'home:platform' course lesson_name 21 %}" method="POST">
-                            {% csrf_token %}
+                
+              <div class="step-content">
+                <div class="step-tab-panel" >
+                  <div class="tab-from-content">
+                    <div class="title-icon">
+                      <h3 class="title"><i class="uil uil-film"></i>MCQs (Image as Options)</h3>
+                    </div>
+                    
+                    <div class="course__form">
+                      <div class="view_info10">
+                        <form action="{% url 'home:platform' course lesson_name 21 %}" method="POST">
+                          {% csrf_token %}
+                          <div class="row">
+                            <div class="col-lg-10 col-md-10">															
+                              <div class="ui search focus mt-30 lbel25">
+                                <label>Number of questions</label>
+                                <div class="ui left icon input swdh19">
+                                  <input class="prompt srch_explore" type="text" name="number_2" id="id_number_2" placeholder="Number of questions" value="{{number_2}}">
+                                  <button type="submit" class="btn1542">Submit</button>
+                                </div>
+                              </div>					
+                            </div>
+                          </div>
+                        </form>
+                        <form action="{% url 'home:platform' course lesson_name 2 %}" method="POST" enctype="multipart/form-data">
+                          {% csrf_token %}
                             <div class="row">
-                              <div class="col-lg-10 col-md-10">															
+                              <div class="col-lg-12 col-md-12">															
                                 <div class="ui search focus mt-30 lbel25">
-                                  <label>Number of questions</label>
+                                  <label>Title</label>
                                   <div class="ui left icon input swdh19">
-                                    <input class="prompt srch_explore" type="text" name="number_2" id="id_number_2" placeholder="Number of questions" value="{{number_2}}">
-                                    <button type="submit" class="btn1542">Submit</button>
+                                    <input class="prompt srch_explore" type="text" name="title" id="id_title" placeholder="Title">
                                   </div>
                                 </div>					
                               </div>
                             </div>
-                          </form>
-                          <form action="{% url 'home:platform' course lesson_name 2 %}" method="POST" enctype="multipart/form-data">
-                            {% csrf_token %}
-                              <div class="row">
-                                <div class="col-lg-12 col-md-12">															
-                                  <div class="ui search focus mt-30 lbel25">
-                                    <label>Title</label>
-                                    <div class="ui left icon input swdh19">
-                                      <input class="prompt srch_explore" type="text" name="title" id="id_title" placeholder="Title">
-                                    </div>
-                                  </div>					
+                            <div class="row">
+                              <div class="col-lg-12 col-md-12">															
+                                <div class="ui search focus mt-30 lbel25">
+                                  <label>Description</label>
+                                  <div class="ui left icon input swdh19">
+                                    <input class="prompt srch_explore" type="text" name="description" id="id_description" placeholder="Description">
+                                  </div>
+                                </div>					
+                              </div>
+                            </div>
+                            {% for i in number_2 %}
+                            <div class="row">
+                              <div class="col-lg-12 col-md-12">															
+                                <div class="ui search focus mt-30 lbel25">
+                                  <label>Add Question {{i}}</label>
+                                  <div class="ui left icon input swdh19">
+                                    <input class="prompt srch_explore" type="text" name="question{{i}}" id="id_question{{i}}" placeholder="Question">
+                                  </div>
+                                </div>					
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-lg-6 col-md-6">	
+                                <div class="ui search focus mt-30 lbel25">
+                                  <label>Option 1</label>
+                                  <div class="ui left icon input swdh19">
+                                    <!-- <label> -->
+                                      <!-- <input class="prompt srch_explore" type="text" name="" placeholder="Option 1"> -->
+                                      <label class="checkbox1"><input type="checkbox" name="true{{i}}1"  value="" id="id_true{{i}}1" ></label>
+                                      <label for="file{{i}}1">
+                                        <i class="fa fa-image"></i>
+                                        <input type="file" id="file{{i}}1" style="display: none" name="option{{i}}1_image" multiple="" data-original-title="upload photos">
+                                        <div id="filename{{i}}1"></div>
+                                      </label>
                                 </div>
                               </div>
-                              <div class="row">
-                                <div class="col-lg-12 col-md-12">															
-                                  <div class="ui search focus mt-30 lbel25">
-                                    <label>Description</label>
-                                    <div class="ui left icon input swdh19">
-                                      <input class="prompt srch_explore" type="text" name="description" id="id_description" placeholder="Description">
-                                    </div>
-                                  </div>					
-                                </div>
                               </div>
-                              {% for i in number_2 %}
-                              <div class="row">
-                                <div class="col-lg-12 col-md-12">															
-                                  <div class="ui search focus mt-30 lbel25">
-                                    <label>Add Question {{i}}</label>
-                                    <div class="ui left icon input swdh19">
-                                      <input class="prompt srch_explore" type="text" name="question{{i}}" id="id_question{{i}}" placeholder="Question">
-                                    </div>
-                                  </div>					
-                                </div>
-                              </div>
-                              <div class="row">
-                                <div class="col-lg-6 col-md-6">	
-                                  <div class="ui search focus mt-30 lbel25">
-                                    <label>Option 1</label>
-                                    <div class="ui left icon input swdh19">
-                                      <!-- <label> -->
-                                        <!-- <input class="prompt srch_explore" type="text" name="" placeholder="Option 1"> -->
-                                        <label class="checkbox1"><input type="checkbox" name="true{{i}}1"  value="" id="id_true{{i}}1" ></label>
-                                        <label for="file{{i}}1">
-                                          <i class="fa fa-image"></i>
-                                          <input type="file" id="file{{i}}1" style="display: none" name="option{{i}}1_image" multiple="" data-original-title="upload photos">
-                                          <div id="filename{{i}}1"></div>
-                                        </label>
+                              <div class="col-lg-6 col-md-6">															
+                                <div class="ui search focus mt-30 lbel25">
+                                  <label>Option 2</label>
+                                  <div class="ui left icon input swdh19">
+                                    <!-- <input class="prompt srch_explore" type="text" name="option2" id="id_option2" placeholder="Option 2"> -->
+                                    <label class="checkbox1"><input type="checkbox" name="true{{i}}2"  value="" id="id_true{{i}}2" ></label>
+                                    <label for="file{{i}}2">
+                                      <i class="fa fa-image"></i>
+                                      <input type="file" id="file{{i}}2" style="display: none" name="option{{i}}2_image" multiple="" data-original-title="upload photos">
+                                      <div id="filename{{i}}2"></div>
+                                    </label>
+                                  </div>
                                   </div>
                                 </div>
-                                </div>
-                                <div class="col-lg-6 col-md-6">															
-                                  <div class="ui search focus mt-30 lbel25">
-                                    <label>Option 2</label>
-                                    <div class="ui left icon input swdh19">
-                                      <!-- <input class="prompt srch_explore" type="text" name="option2" id="id_option2" placeholder="Option 2"> -->
-                                      <label class="checkbox1"><input type="checkbox" name="true{{i}}2"  value="" id="id_true{{i}}2" ></label>
-                                      <label for="file{{i}}2">
-                                        <i class="fa fa-image"></i>
-                                        <input type="file" id="file{{i}}2" style="display: none" name="option{{i}}2_image" multiple="" data-original-title="upload photos">
-                                        <div id="filename{{i}}2"></div>
-                                      </label>
-                                    </div>
-                                    </div>
+                            </div>
+                          
+                            <div class="row">
+                              <div class="col-lg-6 col-md-6">															
+                                <div class="ui search focus mt-30 lbel25">
+                                  <label>Option 3</label>
+                                  <div class="ui left icon input swdh19">
+                                    <!-- <input class="prompt srch_explore" type="text" name="option3" id="id_option3" placeholder="Option 3"> -->
+                                    <label class="checkbox1"><input type="checkbox" name="true{{i}}3"  value="" id="id_true{{i}}3" ></label>
+                                    <label for="file{{i}}3">
+                                      <i class="fa fa-image"></i>
+                                      <input type="file" id="file{{i}}3" style="display: none" name="option{{i}}3_image"  multiple="" data-original-title="upload photos">
+                                      <div id="filename{{i}}3"></div>
+                                    </label>
+                                    
                                   </div>
+                                </div>					
                               </div>
-                             
-                              <div class="row">
-                                <div class="col-lg-6 col-md-6">															
-                                  <div class="ui search focus mt-30 lbel25">
-                                    <label>Option 3</label>
-                                    <div class="ui left icon input swdh19">
-                                      <!-- <input class="prompt srch_explore" type="text" name="option3" id="id_option3" placeholder="Option 3"> -->
-                                      <label class="checkbox1"><input type="checkbox" name="true{{i}}3"  value="" id="id_true{{i}}3" ></label>
-                                      <label for="file{{i}}3">
-                                        <i class="fa fa-image"></i>
-                                        <input type="file" id="file{{i}}3" style="display: none" name="option{{i}}3_image"  multiple="" data-original-title="upload photos">
-                                        <div id="filename{{i}}3"></div>
-                                      </label>
-                                      
-                                    </div>
-                                  </div>					
-                                </div>
-                                <div class="col-lg-6 col-md-6">															
-                                  <div class="ui search focus mt-30 lbel25">
-                                    <label>Option 4</label>
-                                    <div class="ui left icon input swdh19">
-                                      <!-- <input class="prompt srch_explore" type="text" name="option4" id="id_option4" placeholder="Option 4"> -->
-                                      <label class="checkbox1"><input type="checkbox" name="true{{i}}4"  value="" id="id_true{{i}}4" ></label> 
-                                      <label for="file{{i}}4">
-                                        <i class="fa fa-image"></i>
-                                        <input type="file" id="file{{i}}4" style="display: none" name="option{{i}}4_image" multiple="" data-original-title="upload photos">
-                                        <div id="filename{{i}}4"></div>
-                                      </label>
-                                      
-                                    </div>
-                                  </div>					
-                                </div>
+                              <div class="col-lg-6 col-md-6">															
+                                <div class="ui search focus mt-30 lbel25">
+                                  <label>Option 4</label>
+                                  <div class="ui left icon input swdh19">
+                                    <!-- <input class="prompt srch_explore" type="text" name="option4" id="id_option4" placeholder="Option 4"> -->
+                                    <label class="checkbox1"><input type="checkbox" name="true{{i}}4"  value="" id="id_true{{i}}4" ></label> 
+                                    <label for="file{{i}}4">
+                                      <i class="fa fa-image"></i>
+                                      <input type="file" id="file{{i}}4" style="display: none" name="option{{i}}4_image" multiple="" data-original-title="upload photos">
+                                      <div id="filename{{i}}4"></div>
+                                    </label>
+                                    
+                                  </div>
+                                </div>					
                               </div>
-                              {% endfor %}
-                        </div>
-                        <div class="header_center">
-                          <button type="submit" class="btn1542">Submit</button>
-                        </div>
+                            </div>
+                            {% endfor %}
+                      </div>
+                      <div class="header_center">
+                        <button type="submit" class="btn1542">Submit</button>
                       </div>
                     </div>
                   </div>
-                </div> 
-              </form>
-            </div>
+                </div>
+              </div> 
+            </form>
+          </div>
             <div id="TextMCQs">
               
                 <div class="step-content">
@@ -645,9 +650,9 @@ body {font-family: 'Roboto', sans-serif;}
               </div>
             </div> 
           </form>
-        </div>
+          </div>
             <div id="DragDropText">
-                <div class="step-content">
+              <div class="step-content">
                   <div class="step-tab-panel" >
                     <div class="tab-from-content">
                       <div class="title-icon">
@@ -721,12 +726,317 @@ body {font-family: 'Roboto', sans-serif;}
                       </div>
                     </div>
                   </div>
-                </div> 
+              </div> 
               </form>
             </div>
+            <div id="FillUpsText">
+              <div class="step-content">
+                <div class="step-tab-panel">
+                  <div class="tab-from-content">
+                    <div class="title-icon">
+                      <h3 class="title"><i class="uil uil-film"></i>Fill in the blanks (Text)</h3>
+                    </div>
+                    <div class="course__form">
+                      <div class="view_info10">
+                        <form action="{% url 'home:platform' course lesson_name 71 %}" method="POST">
+                          {% csrf_token %}
+                          <div class="row">
+                            <div class="col-lg-10 col-md-10">															
+                              <div class="ui search focus mt-30 lbel25">
+                                <label>Number of questions</label>
+                                <div class="ui left icon input swdh19">
+                                  <input class="prompt srch_explore" type="text" name="number_7" id="id_number_7" placeholder="Number of questions" value="{{number_7}}">
+                                  <button type="submit" class="btn1542">Submit</button>
+                                </div>
+                              </div>					
+                            </div>
+                          </div>
+                        </form>
+                        <form action="{% url 'home:platform' course lesson_name 7 %}" method="POST" enctype="multipart/form-data">
+                          {% csrf_token %}
+                        <div class="row">
+                          <div class="col-lg-12 col-md-12">															
+                            <div class="ui search focus mt-30 lbel25">
+                              <label>Title</label>
+                              <div class="ui left icon input swdh19">
+                                <input class="prompt srch_explore" type="text" name="title" id="id_title" placeholder="Title">
+                              </div>
+                            </div>					
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-lg-12 col-md-12">															
+                            <div class="ui search focus mt-30 lbel25">
+                              <label>Description</label>
+                              <div class="ui left icon input swdh19">
+                                <input class="prompt srch_explore" type="text" name="description" id="id_description" placeholder="Description">
+                              </div>
+                            </div>					
+                          </div>
+                        </div>
+                        {% for i in number_7 %}
+                        <div class="row">
+                          <div class="col-lg-6 col-md-12">
+                            <div class="ui search focus mt-30 lbel25">
+                              <label>Question</label>
+                              <div class="ui left icon input swdh19">
+                                <input class="prompt srch_explore" type="text" name="question{{i}}" id="id_question{{i}}" placeholder="Enter question along with blank">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-lg-6 col-md-12">
+                            <div class="ui search focus mt-30 lbel25">
+                              <label>Correct Answer</label>
+                              <div class="ui left icon input swdh19">
+                                <input class="prompt srch_explore" type="text" name="answer{{i}}" id="id_answer{{i}}" placeholder="Correct answer">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        {% endfor %}
+                        <br>
+                        <div class="header_center">
+                          <button type="submit" class="btn1542">Submit</button>
+                        </div>
+                      </div>
+                    </div>
+                    
+                  </div>
+                </div>  
+              </div>
+            </form>
+          </div>
+          <div id="FillUpsMissing">
+            <div class="step-content">
+              <div class="step-tab-panel">
+                <div class="tab-from-content">
+                  <div class="title-icon">
+                    <h3 class="title"><i class="uil uil-film"></i>Fill in the Missing values</h3>
+                  </div>
+                  <div class="course__form">
+                    <div class="view_info10">
+                      <form action="{% url 'home:platform' course lesson_name 8 %}" method="POST">
+                        {% csrf_token %}
+                      <div class="row">
+                        <div class="col-lg-12 col-md-12">															
+                          <div class="ui search focus mt-30 lbel25">
+                            <label>Title</label>
+                            <div class="ui left icon input swdh19">
+                              <input class="prompt srch_explore" type="text" name="title" id="id_title" placeholder="Title">
+                            </div>
+                          </div>					
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-lg-12 col-md-12">															
+                          <div class="ui search focus mt-30 lbel25">
+                            <label>Description</label>
+                            <div class="ui left icon input swdh19">
+                              <input class="prompt srch_explore" type="text" name="description" id="id_description" placeholder="Description">
+                            </div>
+                          </div>					
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-lg-4 col-md-4">
+                          <div class="ui search focus mt-30 lbel25">
+                            <label>Start Number</label>
+                            <div class="ui left icon input swdh19">
+                              <input class="prompt srch_explore" type="text" name="start" id="id_start" placeholder="Enter start number">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4">
+                          <div class="ui search focus mt-30 lbel25">
+                            <label>End Number</label>
+                            <div class="ui left icon input swdh19">
+                              <input class="prompt srch_explore" type="text" name="end" id="id_end" placeholder="Enter end number">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-lg-12 col-md-12">															
+                          <div class="ui search focus mt-30 lbel25">
+                            <label>Enter missing numbers list</label>
+                            <div class="ui left icon input swdh19">
+                              <input class="prompt srch_explore" type="text" name="missinglist" id="id_missinglist" placeholder="Missing List (Eg: 2, 4, 7, 10, ...)">
+                            </div>
+                          </div>					
+                        </div>
+                      </div>
+                      <br>
+                      <div class="header_center">
+                        <button type="submit" class="btn1542">Submit</button>
+                      </div>
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>  
+            </div>
+          </form>
+        </div>
+          <div id="DragDropMultiple">
+            <div class="step-content">
+              <div class="step-tab-panel" >
+                <div class="tab-from-content">
+                  <div class="title-icon">
+                    <h3 class="title"><i class="uil uil-film"></i>Drag Drop Multiple</h3>
+                  </div>
+                  <div class="course__form">
+                    <div class="view_info10">
+                      <form action="{% url 'home:platform' course lesson_name 91 %}" method="POST">
+                        {% csrf_token %}
+                        <div class="row">
+                          <div class="col-lg-10 col-md-10">															
+                            <div class="ui search focus mt-30 lbel25">
+                              <label>Number of names</label>
+                              <div class="ui left icon input swdh19">
+                                <input class="prompt srch_explore" type="text" name="number_9" id="id_number_9" placeholder="Number of names" value="{{number_9}}">
+                                <button type="submit" class="btn1542">Submit</button>
+                              </div>
+                            </div>					
+                          </div>
+                        </div>
+                      </form>
+                      <form action="{% url 'home:platform' course lesson_name 10 %}" method="POST" >
+                        {% csrf_token %}
+                          <div class="row">
+                            <div class="col-lg-12 col-md-12">															
+                              <div class="ui search focus mt-30 lbel25">
+                                <label>Title</label>
+                                <div class="ui left icon input swdh19">
+                                  <input class="prompt srch_explore" type="text" name="title" id="id_title" placeholder="Title">
+                                </div>
+                              </div>					
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-lg-12 col-md-12">															
+                              <div class="ui search focus mt-30 lbel25">
+                                <label>Description</label>
+                                <div class="ui left icon input swdh19">
+                                  <input class="prompt srch_explore" type="text" name="description" id="id_description" placeholder="Description">
+                                </div>
+                              </div>					
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-lg-12 col-md-12">															
+                              <div class="ui search focus mt-30 lbel25">
+                                <label>Add category list</label>
+                                <div class="ui left icon input swdh19">
+                                  <input class="prompt srch_explore" type="text" name="category" id="id_category" placeholder="Category List (Eg: Name, Place, Animal ...)">
+                                </div>
+                              </div>					
+                            </div>
+                          </div>
+                          {% for i in number_9 %}
+                          <div class="row">
+                            <div class="col-lg-12 col-md-12">															
+                              <div class="ui search focus mt-30 lbel25">
+                                <label>Add a correct pair</label>
+                                  <div class="row">
+                                    <div class="col-lg-6 mr-5 mb-5">
+                                      <div class="ui left icon input swdh19">
+                                        <input class="prompt srch_explore" type="text" name="name{{i}}" id="id_name{{i}}" placeholder="Name">
+                                      </div>
+                                    </div>
+                                    <div class="col-lg-6 mr-5 mb-5">
+                                      <div class="ui left icon input swdh19">
+                                        <input class="prompt srch_explore" type="text" name="category{{i}}" id="id_category{{i}}" placeholder="Category">
+                                      </div>
+                                    </div>
+                                  </div>
+                              </div>					
+                            </div>
+                          </div>
+                          {% endfor %}
+                    </div>
+                    <br>
+                    <div class="header_center">
+                      <button type="submit" class="btn1542">Submit</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> 
+          </form>
+          </div>
+          <div id="DragDropOrder">
+            <div class="step-content">
+              <div class="step-tab-panel">
+                <div class="tab-from-content">
+                  <div class="title-icon">
+                    <h3 class="title"><i class="uil uil-film"></i>Drag Drop Order</h3>
+                  </div>
+                  <div class="course__form">
+                    <div class="view_info10">
+                      <form action="{% url 'home:platform' course lesson_name 101 %}" method="POST">
+                        {% csrf_token %}
+                        <div class="row">
+                          <div class="col-lg-10 col-md-10">															
+                            <div class="ui search focus mt-30 lbel25">
+                              <label>Number of questions</label>
+                              <div class="ui left icon input swdh19">
+                                <input class="prompt srch_explore" type="text" name="number_10" id="id_number_10" placeholder="Number of questions" value="{{number_10}}">
+                                <button type="submit" class="btn1542">Submit</button>
+                              </div>
+                            </div>					
+                          </div>
+                        </div>
+                      </form>
+                      <form action="{% url 'home:platform' course lesson_name 10 %}" method="POST">
+                        {% csrf_token %}
+                      <div class="row">
+                        <div class="col-lg-12 col-md-12">															
+                          <div class="ui search focus mt-30 lbel25">
+                            <label>Title</label>
+                            <div class="ui left icon input swdh19">
+                              <input class="prompt srch_explore" type="text" name="title" id="id_title" placeholder="Title">
+                            </div>
+                          </div>					
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-lg-12 col-md-12">															
+                          <div class="ui search focus mt-30 lbel25">
+                            <label>Description</label>
+                            <div class="ui left icon input swdh19">
+                              <input class="prompt srch_explore" type="text" name="description" id="id_description" placeholder="Description">
+                            </div>
+                          </div>					
+                        </div>
+                      </div>
+                      {% for i in number_10 %}
+                      <div class="row">
+                        <div class="col-lg-12 col-md-12">
+                          <div class="ui search focus mt-30 lbel25">
+                            <label>Question</label>
+                            <div class="ui left icon input swdh19">
+                              <input class="prompt srch_explore" type="text" name="question{{i}}" id="id_question{{i}}" placeholder="Enter the unjumbled string">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      {% endfor %}
+                      <br>
+                      <div class="header_center">
+                        <button type="submit" class="btn1542">Submit</button>
+                      </div>
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>  
+            </div>
+          </form>
+        </div>
             <br>
             
         </div>
+          
       </div>
       <br>
   </div>
