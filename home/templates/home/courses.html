@@ -30,6 +30,7 @@
 											<thead class="thead-s">
 												<tr>
 													<th class="text-center" scope="col">S No.</th>
+													<th class="text-center" scope="col">Course ID</th>
 													<th class="text-center" scope="col">Title</th>
 													<th class="text-center" scope="col">Action</th>
 												</tr>
@@ -38,7 +39,8 @@
                                                 {% for course in courses %}
                                                     <tr data-toggle="collapse" data-target="#demo5" class="accordion-toggle">
                                                         <td class="text-center">{{forloop.counter}}</td>
-                                                        <td class="cell-ta text-center">{{course}}</td>
+														<td class="cell-ta text-center">{{course.0}}</td>
+														<td class="cell-ta text-center">{{course.1}}</td>
                                                         
                                                         <td class="text-center">
                                                             <a href="{% url 'home:action_course' course %}" title="Edit" class="gray-s"><i class="uil uil-edit-alt"></i></a>

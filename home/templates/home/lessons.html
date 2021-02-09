@@ -13,7 +13,7 @@
 			<div class="container-fluid">			
 				<div class="row">
 					<div class="col-lg-10 col-md-4 col-sm-9">	
-                        <h2 class="st_title"><i class="uil uil-book-alt"></i>Lessons for Course {{course}}</h2>
+                        <h2 class="st_title"><i class="uil uil-book-alt"></i>Lessons for Course {{course}} {{cid}}</h2>
 					</div>
 					<div class="col-lg-2 col-md-3 col-sm-3">	
                         <a href="{% url 'home:create_new_lesson' course %}"><i class="fas fa-plus-circle"></i></a>
@@ -30,6 +30,7 @@
 											<thead class="thead-s">
 												<tr>
 													<th class="text-center" scope="col">S No.</th>
+													<th class="text-center" scope="col">Lesson ID</th>
 													<th class="text-center" scope="col">Title</th>
 													<th class="text-center" scope="col">Action</th>
 												</tr>
@@ -38,10 +39,11 @@
                                                 {% for lesson in lessons %}
                                                     <tr data-toggle="collapse" data-target="#demo5" class="accordion-toggle">
                                                         <td class="text-center">{{forloop.counter}}</td>
-                                                        <td class="cell-ta text-center">{{lesson}}</td>
+														<td class="cell-ta text-center">{{lesson.0}}</td>
+														<td class="cell-ta text-center">{{lesson.1}}</td>
                                                         
                                                         <td class="text-center">
-                                                            <a href="{% url 'home:platform' course lesson 0 %}" title="Edit" class="gray-s"><i class="uil uil-edit-alt"></i></a>
+                                                            <a href="{% url 'home:platform' cid lesson 0 %}" title="Edit" class="gray-s"><i class="uil uil-edit-alt"></i></a>
                                                             <a href="#" title="Delete" class="gray-s"><i class="uil uil-trash-alt"></i></a>    
                                                         </td>
                                                     </tr>
