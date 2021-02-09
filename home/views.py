@@ -161,6 +161,7 @@ def courses(request):
         user = authe.current_user
         uid = user['localId']
         results = teachers_collection.where('uid', '==', uid).get()[0].to_dict()
+        # print(results)
         # print(json.dumps(results['courses']))
         if len(results['Profile'])==0:
             url = "https://www.vippng.com/png/detail/356-3563531_transparent-human-icon-png.png"
