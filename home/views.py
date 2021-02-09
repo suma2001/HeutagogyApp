@@ -169,7 +169,7 @@ def courses(request):
             url = results['Profile']
         dic=[]
         for c in results['courses']:
-            dic.append(courses_collection.where('course_id', '==', 'C' + str(c)).get()[0].to_dict()['course_name'])
+            dic.append(('C' + str(c), courses_collection.where('course_id', '==', 'C' + str(c)).get()[0].to_dict()['course_name']))
             # print()
             # l=len(list(coll.get()))
             # lessons=[]
@@ -183,14 +183,17 @@ def courses(request):
 
 
 def action_course(request, course):
-    cid = courses_collection.where('course_name', '==', course).get()[0].to_dict()['course_id']
+    print("WOADSFGHJKMNB VCX : ", course)
+    course = eval(course)
+    cid = course[0]
+    cname = course[1]
     coll = courses_collection.document(cid).collection('Lessons')
     l=len(list(coll.get()))
     lessons=[]
     for i in range(l):
-        lessons.append(coll.get()[i].to_dict()['lesson_name'])
+        lessons.append((coll.get()[i].to_dict()['lesson_id'], coll.get()[i].to_dict()['lesson_name']))
     print(lessons)
-    return render(request, 'home/lessons.html', {'lessons': lessons, 'course_active': 'active', 'course': course})
+    return render(request, 'home/lessons.html', {'lessons': lessons, 'course_active': 'active', 'course': cname, 'cid': cid})
 
 
 def create_new_course(request):
@@ -268,19 +271,22 @@ def create_new_lesson(request, course):
         return render(request, 'home/createnewlesson.html', {'create_course_active': 'active', 'course': course})
     return render(request, 'home/sign_in.html') 
 
-def platform(request, course, lname, slide_type=0):
-    print(type(slide_type))
-    
-    cid = courses_collection.where('course_name', '==', course).get()[0].to_dict()['course_id']
-    print(cid, lname, course)
-    lid = courses_collection.document(cid).collection('Lessons').where('lesson_name', '==', lname).get()[0].to_dict()['lesson_id']
-    lesson = courses_collection.document(cid).collection('Lessons').where('lesson_name', '==', lname).get()[0].to_dict()
+def platform(request, cid, lname, slide_type=0):
+    print(type(slide_type), cid, lname)
+    lesson = eval(lname)
+    lid = lesson[0]
+    lname = lesson[1]
+    cname = courses_collection.document(cid).get().to_dict()['course_name']
+    print(cid, lname)
+    # lid = courses_collection.document(cid).collection('Lessons').where('lesson_name', '==', lname).get()[0].to_dict()['lesson_id']
+    lesson = courses_collection.document(cid).collection('Lessons').document(lid).get().to_dict()
+    print(lesson)
     contentdic['cid'] = cid
     contentdic['lid'] = lid
     contentdic['lesson_name'] = lesson['lesson_name']
     contentdic['description'] = lesson['description']
     contentdic['course_active'] = 'active'
-    contentdic['course'] = course
+    contentdic['course'] = cname
     # print(lesson)
     slide_contents = courses_collection.document(cid).collection('Lessons').document(lid).collection('Content')
     # print(len(slide_contents.get()))
