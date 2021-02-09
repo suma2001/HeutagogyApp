@@ -398,7 +398,7 @@ def platform(request, course, lname, slide_type=0):
         name = data.get('title')
         description = data.get('description')
         
-        print(str(contentdic['number_10'])[9])
+        # print(str(contentdic['number_10'])[9])
         num = int(str(contentdic['number_10'])[9])   
         questions=[]
         for i in range(1, num):
@@ -460,9 +460,10 @@ def platform(request, course, lname, slide_type=0):
         name = data.get('title')
         description = data.get('description')
         text_content = data.get('content')
+        youtubeUrl =  data.get('url')
         video_url = ""
         files = request.FILES.dict()
-        if 'video_file' in files:
+        if not youtubeUrl and 'video_file' in files:
             video_file = request.FILES['video_file']
             filename = fs.save(video_file.name, video_file)
             uploaded_file_url = fs.url(filename)
@@ -481,8 +482,7 @@ def platform(request, course, lname, slide_type=0):
             'type': "l0",
             'description': description,
             'content': text_content,
-            'videoURL': video_url
-            
+            'videoURL': video_url if video_url else youtubeUrl 
         })
         return render(request, 'platform/platform.html',contentdic)
 
