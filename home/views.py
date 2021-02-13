@@ -311,59 +311,7 @@ def platform(request, cid, lid, slide_type=0):
         contentdic['number'] = range(1, int(number)+1)
         # messages.success(request, "Number of questions added.")
         return render(request, 'platform/platform.html',contentdic)
-
-    if request.method=='POST' and slide_type==21:
-        print("HEELOOOOOO")
-        number = request.POST['number_2']
-        print(number)
-        contentdic['number_2'] = range(1, int(number)+1)
-        return render(request, 'platform/platform.html',contentdic)
-
-    if request.method=='POST' and slide_type==31:
-        number = request.POST['number_3']
-        print(number)
-        contentdic['number_3'] = range(1, int(number)+1)
-        return render(request, 'platform/platform.html',contentdic)
-
-    if request.method=='POST' and slide_type==41:
-        number = request.POST['number_4']
-        print(number)
-        contentdic['number_4'] = range(1, int(number)+1)
-        return render(request, 'platform/platform.html',contentdic)
-
-    if request.method=='POST' and slide_type==51:
-        number = request.POST['number_5']
-        print(number)
-        contentdic['number_5'] = range(1, int(number)+1)
-        return render(request, 'platform/platform.html',contentdic)
-
-    if request.method=='POST' and slide_type==61:
-        number = request.POST['number_6']
-        print(number)
-        contentdic['number_6'] = range(1, int(number)+1)
-        return render(request, 'platform/platform.html',contentdic)
-
-    if request.method=='POST' and slide_type==71:
-        print("HI NUMBER 7")
-        number = request.POST['number_7']
-        print(number)
-        contentdic['number_7'] = range(1, int(number)+1)
-        return render(request, 'platform/platform.html',contentdic)
-
-    if request.method=='POST' and slide_type==101:
-        print("HI NUMBER 10")
-        number = request.POST['number_10']
-        print(number)
-        contentdic['number_10'] = range(1, int(number)+1)
-        return render(request, 'platform/platform.html',contentdic)
-
-    if request.method=='POST' and slide_type==91:
-        print("HI NUMBER 9")
-        number = request.POST['number_9']
-        print(number)
-        contentdic['number_9'] = range(1, int(number)+1)
-        return render(request, 'platform/platform.html',contentdic)
-
+        
     ## Slide Type q7 : Fill in the missing values
     if request.method=='POST' and slide_type==8:
         print("HIIIIIIIIIIIIIIII")
