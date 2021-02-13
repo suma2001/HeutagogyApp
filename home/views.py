@@ -161,7 +161,7 @@ def courses(request):
         user = authe.current_user
         uid = user['localId']
         results = teachers_collection.where('uid', '==', uid).get()[0].to_dict()
-        # print(results)
+        print(results['courses'])
         # print(json.dumps(results['courses']))
         if len(results['Profile'])==0:
             url = "https://www.vippng.com/png/detail/356-3563531_transparent-human-icon-png.png"
@@ -305,9 +305,11 @@ def platform(request, cid, lid, slide_type=0):
     imageBlob = bucket.blob("/")    
 
     if request.method=='POST' and slide_type==11:
-        number = request.POST['number_1']
+        print("ertyukjbc")
+        number = request.POST['number']
         print(number)
-        contentdic['number_1'] = range(1, int(number)+1)
+        contentdic['number'] = range(1, int(number)+1)
+        # messages.success(request, "Number of questions added.")
         return render(request, 'platform/platform.html',contentdic)
 
     if request.method=='POST' and slide_type==21:
@@ -631,7 +633,7 @@ def platform(request, cid, lid, slide_type=0):
         l = len(list(slide_contents.get()))
         slide_contents.document(lid+'S'+str(l+1)).set({
             'name': name,
-            'sid': 'S'+str(l+1),
+            'sid': lid+'S'+str(l+1),
             'subject': contentdic['course'],
             'questions': questions,
             'description': description,
@@ -676,7 +678,7 @@ def platform(request, cid, lid, slide_type=0):
             else:
                 check4 = False
             questions.append({
-                'question': question,
+                'text': question,
                 'options': [
                     {
                     'text': option1,
@@ -700,7 +702,7 @@ def platform(request, cid, lid, slide_type=0):
         l = len(list(slide_contents.get()))
         slide_contents.document(lid+'S'+str(l+1)).set({
             'name': name,
-            'sid': 'S'+str(l+1),
+            'sid': lid+'S'+str(l+1),
             'subject': contentdic['course'],
             'questions': questions,
             'description': description,
@@ -737,7 +739,7 @@ def platform(request, cid, lid, slide_type=0):
         l = len(list(slide_contents.get()))
         slide_contents.document(lid+'S'+str(l+1)).set({
             'name': name,
-            'sid': 'S'+str(l+1),
+            'sid': lid+'S'+str(l+1),
             'subject': contentdic['course'],
             'pictures': pictures,
             'description': description,
@@ -774,7 +776,7 @@ def platform(request, cid, lid, slide_type=0):
         l = len(list(slide_contents.get()))
         slide_contents.document(lid+'S'+str(l+1)).set({
             'name': name,
-            'sid': 'S'+str(l+1),
+            'sid': lid+'S'+str(l+1),
             'subject': contentdic['course'],
             'audios': audios,
             'description': description,
@@ -802,7 +804,7 @@ def platform(request, cid, lid, slide_type=0):
         l = len(list(slide_contents.get()))
         slide_contents.document(lid+'S'+str(l+1)).set({
             'name': name,
-            'sid': 'S'+str(l+1),
+            'sid': lid+'S'+str(l+1),
             'subject': contentdic['course'],
             'questions': questions,
             'description': description,

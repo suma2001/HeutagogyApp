@@ -61,10 +61,55 @@ body {font-family: 'Roboto', sans-serif;}
   background-color: #ffecec;
   border-color:  #ed2a26;
 }
+.inv {
+    display: none;
+}
 
+#snackbar {
+  visibility: hidden;
+  min-width: 250px;
+  margin-left: -125px;
+  background-color: #ed2a26;
+  color: #fff;
+  text-align: center;
+  border-radius: 2px;
+  padding: 16px;
+  position: fixed;
+  z-index: 1;
+  left: 50%;
+  bottom: 30px;
+  font-size: 17px;
+}
+
+#snackbar.show {
+  visibility: visible;
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+@-webkit-keyframes fadein {
+  from {bottom: 0; opacity: 0;} 
+  to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+  from {bottom: 30px; opacity: 1;} 
+  to {bottom: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
 </style>
 </head>
 <body>
+  <div id="snackbar">Submitted !</div>
   <div class="wrapper">
       <div class="container">
         <div class="row">
@@ -75,10 +120,9 @@ body {font-family: 'Roboto', sans-serif;}
             </h2>
             <h4>{{description}}</h4>
           </div>	
-          <div class="col-lg-2">	
+          <!-- <div class="col-lg-2">	
             <div class="dropdown">
               <button class="btn dropdown-toggle" type="button" data-toggle="dropdown" style="background-color: #ed2a26; color: white;">Add Slide
-              <!-- <span class="caret"></span> -->
               </button>
               
               <ul class="dropdown-menu">
@@ -95,7 +139,7 @@ body {font-family: 'Roboto', sans-serif;}
                   <li><a href="#DragDropMultiple">Drag Drop Multiple</a></li>
               </ul>
           </div>
-          </div>         						
+                    </div>         						 -->
         </div>
         <br><br>
         <div class="row">
@@ -123,152 +167,346 @@ body {font-family: 'Roboto', sans-serif;}
           </div>
           
           <div class="col-lg-9">
-            <div id="Tutorial">
-              <form action="{% url 'home:platform' cid lid 0 %}" method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
-                <div class="step-content">
-                  <div class="step-tab-panel" id="tutorial">
-                    <div class="tab-from-content">
-                      <div class="title-icon">
-                        <h3 class="title"><i class="uil uil-film"></i>Tutorial Content</h3>
-                      </div>
-                      <div class="course__form">
-                        <div class="view_info10">
-                          <div class="row">
-                            <div class="col-lg-12 col-md-12">															
-                              <div class="ui search focus mt-30 lbel25">
-                                <label>Title</label>
-                                <div class="ui left icon input swdh19">
-                                  <input class="prompt srch_explore" type="text" name="title" id="id_title" placeholder="Title">
-                                </div>
-                              </div>					
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-lg-12 col-md-12">															
-                              <div class="ui search focus mt-30 lbel25">
-                                <label>Description</label>
-                                <div class="ui left icon input swdh19">
-                                  <input class="prompt srch_explore" type="text" name="description" id="id_description" placeholder="Description">
-                                </div>
-                              </div>					
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-lg-12 col-md-12">															
-                              <div class="ui search focus mt-30 lbel25">
-                                <label>Add Content</label>
-                                <div class="ui left icon input swdh19">
-                                  <textarea type="text" name="content" id="id_content" placeholder="Content" style="width: 100%; height: 300%;"></textarea>
-                                </div>
-                              </div>					
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-lg-12 col-md-12">															
-                              <div class="ui search focus mt-30 lbel25">
-                                <label>Add YouTube URL</label>
-                                <div class="ui left icon input swdh19">
-                                  <input class="prompt srch_explore" type="text" name="url" id="id_url" placeholder="YouTube URL">
-                                </div>
-                              </div>					
-                            </div>
-                          </div>
-                          <label>(OR)</label>
-                          <div class="row">
-                            <div class="col-lg-12 col-md-12">
-                              <div class="ui search focus mt-30 lbel25">
-                                <label>Upload Video File</label>
-                              <input id="video_file" name="video_file" type="file">
-                              </div>
-                          </div>
-                          </div>
-                          <div class="header_center">
-                            <button type="submit" class="btn1542">Submit</button>
-                          </div>
+           
+            <select id="target" class="selectpicker" style="padding: 10px;">
+              <option value="">Add Slide</option>
+              <option value="l0" style="padding: 10px;">Tutorial</option>
+              <option value="q1">Fill in the blanks (Images)</option>
+              <option value="q2">Fill in the blanks (Text)</option>
+              <option value="q3">Fill in the missing Values</option>
+              <option value="q4">MCQs (Image as options)</option>
+              <option value="q5">MCQs (Text as options)</option>
+              <option value="q6">Drag Drop Image</option>
+              <option value="q7">Drag Drop Audio</option>
+              <option value="q8">Drag Drop Text</option>
+              <option value="q9">Drag Drop Order</option>
+              <option value="q10">Drag Drop Multiple</option>
+          <select>
+
+            <div class="course__form">
+              <div class="view_info10">
+                <form action="{% url 'home:platform' cid lid 11 %}" method="POST">
+                  {% csrf_token %}
+                  <div class="ui search focus mt-30 lbel25">
+                    <label>Number of questions</label>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-6 col-md-6">
+                        <div class="ui left icon input swdh19">
+                          <input class="prompt srch_explore" type="text" name="number" id="id_number" placeholder="Number of questions" value="{{number}}">
                         </div>
                       </div>
-                      
+                      <br>
+                    <div class="col-lg-6 col-md-6">
+                      <button type="submit" class="btn1542" onclick="myFunction()">Submit</button>
                     </div>
-                  </div>  
-                </div>
-              </form>
+                  </div>
+
+                </form>
+              </div>
             </div>
+  
+          <div id="l0" class="inv">
+            <form action="{% url 'home:platform' cid lid 0 %}" method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="step-content">
+                <div class="step-tab-panel" id="tutorial">
+                  <div class="tab-from-content">
+                    <div class="title-icon">
+                      <h3 class="title"><i class="uil uil-film"></i>Tutorial Content</h3>
+                    </div>
+                    <div class="course__form">
+                      <div class="view_info10">
+                        <div class="row">
+                          <div class="col-lg-12 col-md-12">															
+                            <div class="ui search focus mt-30 lbel25">
+                              <label>Title</label>
+                              <div class="ui left icon input swdh19">
+                                <input class="prompt srch_explore" type="text" name="title" id="id_title" placeholder="Title">
+                              </div>
+                            </div>					
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-lg-12 col-md-12">															
+                            <div class="ui search focus mt-30 lbel25">
+                              <label>Description</label>
+                              <div class="ui left icon input swdh19">
+                                <input class="prompt srch_explore" type="text" name="description" id="id_description" placeholder="Description">
+                              </div>
+                            </div>					
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-lg-12 col-md-12">															
+                            <div class="ui search focus mt-30 lbel25">
+                              <label>Add Content</label>
+                              <div class="ui left icon input swdh19">
+                                <textarea type="text" name="content" id="id_content" placeholder="Content" style="width: 100%; height: 300%;"></textarea>
+                              </div>
+                            </div>					
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-lg-12 col-md-12">															
+                            <div class="ui search focus mt-30 lbel25">
+                              <label>Add YouTube URL</label>
+                              <div class="ui left icon input swdh19">
+                                <input class="prompt srch_explore" type="text" name="url" id="id_url" placeholder="YouTube URL">
+                              </div>
+                            </div>					
+                          </div>
+                        </div>
+                        <label>(OR)</label>
+                        <div class="row">
+                          <div class="col-lg-12 col-md-12">
+                            <div class="ui search focus mt-30 lbel25">
+                              <label>Upload Video File</label>
+                            <input id="video_file" name="video_file" type="file">
+                            </div>
+                        </div>
+                        </div>
+                        <div class="header_center">
+                          <button type="submit" class="btn1542">Submit</button>
+                        </div>
+                      </div>
+                    </div>
+                    
+                  </div>
+                </div>  
+              </div>
+            </form>
+          </div>
+          <div id="q1" class="inv">
             <div id="FillUpsImages">
-                <div class="step-content">
-                  <div class="step-tab-panel">
-                    <div class="tab-from-content">
-                      <div class="title-icon">
-                        <h3 class="title"><i class="uil uil-film"></i>Fill in the blanks (Images)</h3>
-                      </div>
-                      <div class="course__form">
-                        <div class="view_info10">
-                          <form action="{% url 'home:platform' cid lid 11 %}" method="POST">
-                            {% csrf_token %}
-                            <div class="row">
-                              <div class="col-lg-10 col-md-10">															
-                                <div class="ui search focus mt-30 lbel25">
-                                  <label>Number of questions</label>
-                                  <div class="ui left icon input swdh19">
-                                    <input class="prompt srch_explore" type="text" name="number_1" id="id_number_1" placeholder="Number of questions" value="{{number_1}}">
-                                    <button type="submit" class="btn1542">Submit</button>
-                                  </div>
-                                </div>					
-                              </div>
-                            </div>
-                          </form>
-                          <form action="{% url 'home:platform' cid lid 1 %}" method="POST" enctype="multipart/form-data">
-                            {% csrf_token %}
+              <div class="step-content">
+                <div class="step-tab-panel">
+                  <div class="tab-from-content">
+                    <div class="title-icon">
+                      <h3 class="title"><i class="uil uil-film"></i>Fill in the blanks (Images)</h3>
+                    </div>
+                    <div class="course__form">
+                      <div class="view_info10">
+                        <!-- <form action="{% url 'home:platform' cid lid 11 %}" method="POST">
+                          {% csrf_token %}
                           <div class="row">
-                            <div class="col-lg-12 col-md-12">															
+                            <div class="col-lg-10 col-md-10">															
                               <div class="ui search focus mt-30 lbel25">
-                                <label>Title</label>
+                                <label>Number of questions</label>
                                 <div class="ui left icon input swdh19">
-                                  <input class="prompt srch_explore" type="text" name="title" id="id_title" placeholder="Title">
+                                  <input class="prompt srch_explore" type="text" name="number_1" id="id_number_1" placeholder="Number of questions" value="{{number_1}}">
+                                  <button type="submit" class="btn1542">Submit</button>
                                 </div>
                               </div>					
                             </div>
                           </div>
-                          <div class="row">
-                            <div class="col-lg-12 col-md-12">															
-                              <div class="ui search focus mt-30 lbel25">
-                                <label>Description</label>
-                                <div class="ui left icon input swdh19">
-                                  <input class="prompt srch_explore" type="text" name="description" id="id_description" placeholder="Description">
-                                </div>
-                              </div>					
-                            </div>
-                          </div>
-                          {% for i in number_1 %}
-                          <div class="row" id="FILLUP">
-                            <div class="col-lg-6 col-md-12" id="repeatFillUp">
-                              <div class="ui search focus mt-30 lbel25">
-                                <label>Upload Image File</label>
-                              <input id="image_file{{i}}" name="image_file{{i}}" type="file">
+                        </form> -->
+                        <form action="{% url 'home:platform' cid lid 1 %}" method="POST" enctype="multipart/form-data">
+                          {% csrf_token %}
+                        <div class="row">
+                          <div class="col-lg-12 col-md-12">															
+                            <div class="ui search focus mt-30 lbel25">
+                              <label>Title</label>
+                              <div class="ui left icon input swdh19">
+                                <input class="prompt srch_explore" type="text" name="title" id="id_title" placeholder="Title">
                               </div>
-                            </div>
-                            <div class="col-lg-6 col-md-12">
-                              <div class="ui search focus mt-30 lbel25">
-                                <label>Correct Answer</label>
-                                <div class="ui left icon input swdh19">
-                                  <input class="prompt srch_explore" type="text" name="answer{{i}}" id="id_answer{{i}}" placeholder="Correct answer">
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          {% endfor %}
-                          <br>
-                          <div class="header_center">
-                            <button type="submit" class="btn1542">Submit</button>
+                            </div>					
                           </div>
                         </div>
+                        <div class="row">
+                          <div class="col-lg-12 col-md-12">															
+                            <div class="ui search focus mt-30 lbel25">
+                              <label>Description</label>
+                              <div class="ui left icon input swdh19">
+                                <input class="prompt srch_explore" type="text" name="description" id="id_description" placeholder="Description">
+                              </div>
+                            </div>					
+                          </div>
+                        </div>
+                        {% for i in number %}
+                        <div class="row" id="FILLUP">
+                          <div class="col-lg-6 col-md-12" id="repeatFillUp">
+                            <div class="ui search focus mt-30 lbel25">
+                              <label>Upload Image File</label>
+                            <input id="image_file{{i}}" name="image_file{{i}}" type="file">
+                            </div>
+                          </div>
+                          <div class="col-lg-6 col-md-12">
+                            <div class="ui search focus mt-30 lbel25">
+                              <label>Correct Answer</label>
+                              <div class="ui left icon input swdh19">
+                                <input class="prompt srch_explore" type="text" name="answer{{i}}" id="id_answer{{i}}" placeholder="Correct answer">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        {% endfor %}
+                        <br>
+                        <div class="header_center">
+                          <button type="submit" class="btn1542">Submit</button>
+                        </div>
                       </div>
-                      
                     </div>
-                  </div>  
-                </div>
-              </form>
-            </div>
+                    
+                  </div>
+                </div>  
+              </div>
+            </form>
+          </div>
+          </div>
+          <div id="q2" class="inv">
+            <div id="FillUpsText">
+              <div class="step-content">
+                <div class="step-tab-panel">
+                  <div class="tab-from-content">
+                    <div class="title-icon">
+                      <h3 class="title"><i class="uil uil-film"></i>Fill in the blanks (Text)</h3>
+                    </div>
+                    <div class="course__form">
+                      <div class="view_info10">
+                        <!-- <form action="{% url 'home:platform' cid lid 71 %}" method="POST">
+                          {% csrf_token %}
+                          <div class="row">
+                            <div class="col-lg-10 col-md-10">															
+                              <div class="ui search focus mt-30 lbel25">
+                                <label>Number of questions</label>
+                                <div class="ui left icon input swdh19">
+                                  <input class="prompt srch_explore" type="text" name="number_7" id="id_number_7" placeholder="Number of questions" value="{{number_7}}">
+                                  <button type="submit" class="btn1542">Submit</button>
+                                </div>
+                              </div>					
+                            </div>
+                          </div>
+                        </form> -->
+                        <form action="{% url 'home:platform' cid lid 7 %}" method="POST" enctype="multipart/form-data">
+                          {% csrf_token %}
+                        <div class="row">
+                          <div class="col-lg-12 col-md-12">															
+                            <div class="ui search focus mt-30 lbel25">
+                              <label>Title</label>
+                              <div class="ui left icon input swdh19">
+                                <input class="prompt srch_explore" type="text" name="title" id="id_title" placeholder="Title">
+                              </div>
+                            </div>					
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-lg-12 col-md-12">															
+                            <div class="ui search focus mt-30 lbel25">
+                              <label>Description</label>
+                              <div class="ui left icon input swdh19">
+                                <input class="prompt srch_explore" type="text" name="description" id="id_description" placeholder="Description">
+                              </div>
+                            </div>					
+                          </div>
+                        </div>
+                        {% for i in number %}
+                        <div class="row">
+                          <div class="col-lg-6 col-md-12">
+                            <div class="ui search focus mt-30 lbel25">
+                              <label>Question</label>
+                              <div class="ui left icon input swdh19">
+                                <input class="prompt srch_explore" type="text" name="question{{i}}" id="id_question{{i}}" placeholder="Enter question along with blank">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-lg-6 col-md-12">
+                            <div class="ui search focus mt-30 lbel25">
+                              <label>Correct Answer</label>
+                              <div class="ui left icon input swdh19">
+                                <input class="prompt srch_explore" type="text" name="answer{{i}}" id="id_answer{{i}}" placeholder="Correct answer">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        {% endfor %}
+                        <br>
+                        <div class="header_center">
+                          <button type="submit" class="btn1542">Submit</button>
+                        </div>
+                      </div>
+                    </div>
+                    
+                  </div>
+                </div>  
+              </div>
+            </form>
+          </div>
+          </div>
+          <div id="q3" class="inv">
+            <div id="FillUpsMissing">
+              <div class="step-content">
+                <div class="step-tab-panel">
+                  <div class="tab-from-content">
+                    <div class="title-icon">
+                      <h3 class="title"><i class="uil uil-film"></i>Fill in the Missing values</h3>
+                    </div>
+                    <div class="course__form">
+                      <div class="view_info10">
+                        <form action="{% url 'home:platform' cid lid 8 %}" method="POST">
+                          {% csrf_token %}
+                        <div class="row">
+                          <div class="col-lg-12 col-md-12">															
+                            <div class="ui search focus mt-30 lbel25">
+                              <label>Title</label>
+                              <div class="ui left icon input swdh19">
+                                <input class="prompt srch_explore" type="text" name="title" id="id_title" placeholder="Title">
+                              </div>
+                            </div>					
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-lg-12 col-md-12">															
+                            <div class="ui search focus mt-30 lbel25">
+                              <label>Description</label>
+                              <div class="ui left icon input swdh19">
+                                <input class="prompt srch_explore" type="text" name="description" id="id_description" placeholder="Description">
+                              </div>
+                            </div>					
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-lg-4 col-md-4">
+                            <div class="ui search focus mt-30 lbel25">
+                              <label>Start Number</label>
+                              <div class="ui left icon input swdh19">
+                                <input class="prompt srch_explore" type="text" name="start" id="id_start" placeholder="Enter start number">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-lg-4 col-md-4">
+                            <div class="ui search focus mt-30 lbel25">
+                              <label>End Number</label>
+                              <div class="ui left icon input swdh19">
+                                <input class="prompt srch_explore" type="text" name="end" id="id_end" placeholder="Enter end number">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-lg-12 col-md-12">															
+                            <div class="ui search focus mt-30 lbel25">
+                              <label>Enter missing numbers list</label>
+                              <div class="ui left icon input swdh19">
+                                <input class="prompt srch_explore" type="text" name="missinglist" id="id_missinglist" placeholder="Missing List (Eg: 2, 4, 7, 10, ...)">
+                              </div>
+                            </div>					
+                          </div>
+                        </div>
+                        <br>
+                        <div class="header_center">
+                          <button type="submit" class="btn1542">Submit</button>
+                        </div>
+                      </div>
+                    </div>
+                    
+                  </div>
+                </div>  
+              </div>
+            </form>
+          </div>
+          </div>
+          <div id="q4" class="inv">
             <div id="ImageMCQs">
                 
               <div class="step-content">
@@ -280,7 +518,7 @@ body {font-family: 'Roboto', sans-serif;}
                     
                     <div class="course__form">
                       <div class="view_info10">
-                        <form action="{% url 'home:platform' cid lid 21 %}" method="POST">
+                        <!-- <form action="{% url 'home:platform' cid lid 21 %}" method="POST">
                           {% csrf_token %}
                           <div class="row">
                             <div class="col-lg-10 col-md-10">															
@@ -293,7 +531,7 @@ body {font-family: 'Roboto', sans-serif;}
                               </div>					
                             </div>
                           </div>
-                        </form>
+                        </form> -->
                         <form action="{% url 'home:platform' cid lid 2 %}" method="POST" enctype="multipart/form-data">
                           {% csrf_token %}
                             <div class="row">
@@ -316,7 +554,7 @@ body {font-family: 'Roboto', sans-serif;}
                                 </div>					
                               </div>
                             </div>
-                            {% for i in number_2 %}
+                            {% for i in number %}
                             <div class="row">
                               <div class="col-lg-12 col-md-12">															
                                 <div class="ui search focus mt-30 lbel25">
@@ -402,116 +640,120 @@ body {font-family: 'Roboto', sans-serif;}
               </div> 
             </form>
           </div>
+          </div>
+          <div id="q5" class="inv">
             <div id="TextMCQs">
               
-                <div class="step-content">
-                  <div class="step-tab-panel" >
-                    <div class="tab-from-content">
-                      <div class="title-icon">
-                        <h3 class="title"><i class="uil uil-film"></i>MCQs (Text as Options)</h3>
+              <div class="step-content">
+                <div class="step-tab-panel" >
+                  <div class="tab-from-content">
+                    <div class="title-icon">
+                      <h3 class="title"><i class="uil uil-film"></i>MCQs (Text as Options)</h3>
+                    </div>
+                    <div class="course__form">
+                      <div class="view_info10">
+                            <!-- <form action="{% url 'home:platform' cid lid 31 %}" method="POST">
+                              {% csrf_token %}
+                              <div class="row">
+                                <div class="col-lg-10 col-md-10">															
+                                  <div class="ui search focus mt-30 lbel25">
+                                    <label>Number of questions</label>
+                                    <div class="ui left icon input swdh19">
+                                      <input class="prompt srch_explore" type="text" name="number_3" id="id_number_3" placeholder="Number of questions">
+                                      <button type="submit" class="btn1542">Submit</button>
+                                    </div>
+                                  </div>					
+                                </div>
+                              </div>
+                            </form> -->
+                            <form action="{% url 'home:platform' cid lid 3 %}" method="POST" enctype="multipart/form-data">
+                              {% csrf_token %}
+                            <div class="row">
+                              <div class="col-lg-12 col-md-12">															
+                                <div class="ui search focus mt-30 lbel25">
+                                  <label>Title</label>
+                                  <div class="ui left icon input swdh19">
+                                    <input class="prompt srch_explore" type="text" name="title" id="id_title" placeholder="Title">
+                                  </div>
+                                </div>					
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-lg-12 col-md-12">															
+                                <div class="ui search focus mt-30 lbel25">
+                                  <label>Description</label>
+                                  <div class="ui left icon input swdh19">
+                                    <input class="prompt srch_explore" type="text" name="description" id="id_description" placeholder="Description">
+                                  </div>
+                                </div>					
+                              </div>
+                            </div>
+                            {% for i in number %}
+                            <div class="row">
+                              <div class="col-lg-12 col-md-12">															
+                                <div class="ui search focus mt-30 lbel25">
+                                  <label><b>Add Question {{i}}</b></label>
+                                  <div class="ui left icon input swdh19">
+                                    <input class="prompt srch_explore" type="text" name="question{{i}}" id="id_question{{i}}" placeholder="Question">
+                                  </div>
+                                </div>					
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-lg-6 col-md-6">	
+                                <div class="ui search focus mt-30 lbel25">
+                                  <label>Option 1</label>
+                                  <div class="ui left icon input swdh19">
+                                    <!-- <label> -->
+                                      <input class="prompt srch_explore" type="text" name="option{{i}}1" id="id_option{{i}}1" placeholder="Option 1">
+                                      <label class="checkbox1"><input type="checkbox" name="true{{i}}1"  value="" id="id_true{{i}}1" ></label>
+                                </div>
+                              </div>
+                              </div>
+                              <div class="col-lg-6 col-md-6">															
+                                <div class="ui search focus mt-30 lbel25">
+                                  <label>Option 2</label>
+                                  <div class="ui left icon input swdh19">
+                                    <input class="prompt srch_explore" type="text" name="option{{i}}2" id="id_option{{i}}2" placeholder="Option 2">
+                                    <label class="checkbox1"><input type="checkbox" name="true{{i}}2"  value="" id="id_true{{i}}2" ></label>
+                                  </div>
+                                  </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-lg-6 col-md-6">															
+                                <div class="ui search focus mt-30 lbel25">
+                                  <label>Option 3</label>
+                                  <div class="ui left icon input swdh19">
+                                    <input class="prompt srch_explore" type="text" name="option{{i}}3" id="id_option{{i}}3" placeholder="Option 3">
+                                    <label class="checkbox1"><input type="checkbox" name="true{{i}}3"  value="" id="id_true{{i}}3" ></label>
+                                  </div>
+                                </div>					
+                              </div>
+                              <div class="col-lg-6 col-md-6">															
+                                <div class="ui search focus mt-30 lbel25">
+                                  <label>Option 4</label>
+                                  <div class="ui left icon input swdh19">
+                                    <input class="prompt srch_explore" type="text" name="option{{i}}4" id="id_option{{i}}4" placeholder="Option 4">
+                                    <label class="checkbox1"><input type="checkbox" name="true{{i}}4"  value="" id="id_true{{i}}4" ></label>
+                                  </div>
+                                </div>					
+                              </div>
+                            </div>
+                            {% endfor %}
                       </div>
-                      <div class="course__form">
-                        <div class="view_info10">
-                              <form action="{% url 'home:platform' cid lid 31 %}" method="POST">
-                                {% csrf_token %}
-                                <div class="row">
-                                  <div class="col-lg-10 col-md-10">															
-                                    <div class="ui search focus mt-30 lbel25">
-                                      <label>Number of questions</label>
-                                      <div class="ui left icon input swdh19">
-                                        <input class="prompt srch_explore" type="text" name="number_3" id="id_number_3" placeholder="Number of questions">
-                                        <button type="submit" class="btn1542">Submit</button>
-                                      </div>
-                                    </div>					
-                                  </div>
-                                </div>
-                              </form>
-                              <form action="{% url 'home:platform' cid lid 3 %}" method="POST" enctype="multipart/form-data">
-                                {% csrf_token %}
-                              <div class="row">
-                                <div class="col-lg-12 col-md-12">															
-                                  <div class="ui search focus mt-30 lbel25">
-                                    <label>Title</label>
-                                    <div class="ui left icon input swdh19">
-                                      <input class="prompt srch_explore" type="text" name="title" id="id_title" placeholder="Title">
-                                    </div>
-                                  </div>					
-                                </div>
-                              </div>
-                              <div class="row">
-                                <div class="col-lg-12 col-md-12">															
-                                  <div class="ui search focus mt-30 lbel25">
-                                    <label>Description</label>
-                                    <div class="ui left icon input swdh19">
-                                      <input class="prompt srch_explore" type="text" name="description" id="id_description" placeholder="Description">
-                                    </div>
-                                  </div>					
-                                </div>
-                              </div>
-                              {% for i in number_3 %}
-                              <div class="row">
-                                <div class="col-lg-12 col-md-12">															
-                                  <div class="ui search focus mt-30 lbel25">
-                                    <label><b>Add Question {{i}}</b></label>
-                                    <div class="ui left icon input swdh19">
-                                      <input class="prompt srch_explore" type="text" name="question{{i}}" id="id_question{{i}}" placeholder="Question">
-                                    </div>
-                                  </div>					
-                                </div>
-                              </div>
-                              <div class="row">
-                                <div class="col-lg-6 col-md-6">	
-                                  <div class="ui search focus mt-30 lbel25">
-                                    <label>Option 1</label>
-                                    <div class="ui left icon input swdh19">
-                                      <!-- <label> -->
-                                        <input class="prompt srch_explore" type="text" name="option{{i}}1" id="id_option{{i}}1" placeholder="Option 1">
-                                        <label class="checkbox1"><input type="checkbox" name="true{{i}}1"  value="" id="id_true{{i}}1" ></label>
-                                  </div>
-                                </div>
-                                </div>
-                                <div class="col-lg-6 col-md-6">															
-                                  <div class="ui search focus mt-30 lbel25">
-                                    <label>Option 2</label>
-                                    <div class="ui left icon input swdh19">
-                                      <input class="prompt srch_explore" type="text" name="option{{i}}2" id="id_option{{i}}2" placeholder="Option 2">
-                                      <label class="checkbox1"><input type="checkbox" name="true{{i}}2"  value="" id="id_true{{i}}2" ></label>
-                                    </div>
-                                    </div>
-                                  </div>
-                              </div>
-                              <div class="row">
-                                <div class="col-lg-6 col-md-6">															
-                                  <div class="ui search focus mt-30 lbel25">
-                                    <label>Option 3</label>
-                                    <div class="ui left icon input swdh19">
-                                      <input class="prompt srch_explore" type="text" name="option{{i}}3" id="id_option{{i}}3" placeholder="Option 3">
-                                      <label class="checkbox1"><input type="checkbox" name="true{{i}}3"  value="" id="id_true{{i}}3" ></label>
-                                    </div>
-                                  </div>					
-                                </div>
-                                <div class="col-lg-6 col-md-6">															
-                                  <div class="ui search focus mt-30 lbel25">
-                                    <label>Option 4</label>
-                                    <div class="ui left icon input swdh19">
-                                      <input class="prompt srch_explore" type="text" name="option{{i}}4" id="id_option{{i}}4" placeholder="Option 4">
-                                      <label class="checkbox1"><input type="checkbox" name="true{{i}}4"  value="" id="id_true{{i}}4" ></label>
-                                    </div>
-                                  </div>					
-                                </div>
-                              </div>
-                              {% endfor %}
-                        </div>
-                        <br>
-                        <div class="header_center">
-                          <button type="submit" class="btn1542">Submit</button>
-                        </div>
+                      <br>
+                      <div class="header_center">
+                        <button type="submit" class="btn1542">Submit</button>
                       </div>
                     </div>
                   </div>
-                </div> 
-              </form>
-            </div>
+                </div>
+              </div> 
+            </form>
+          </div>
+          </div>
+          <div id="q6" class="inv">
             <div id="DragDropImage">
               <div class="step-content">
                 <div class="step-tab-panel" >
@@ -522,7 +764,7 @@ body {font-family: 'Roboto', sans-serif;}
                     <div class="course__form">
                       <div class="view_info10">
                         
-                        <form action="{% url 'home:platform' cid lid 41 %}" method="POST">
+                        <!-- <form action="{% url 'home:platform' cid lid 41 %}" method="POST">
                           {% csrf_token %}
                           <div class="row">
                             <div class="col-lg-10 col-md-10">															
@@ -535,7 +777,7 @@ body {font-family: 'Roboto', sans-serif;}
                               </div>					
                             </div>
                           </div>
-                        </form>
+                        </form> -->
                         <form action="{% url 'home:platform' cid lid 4 %}" method="POST" enctype="multipart/form-data">
                           {% csrf_token %}
                             <div class="row">
@@ -558,7 +800,7 @@ body {font-family: 'Roboto', sans-serif;}
                                 </div>					
                               </div>
                             </div>
-                            {% for i in number_4 %}
+                            {% for i in number %}
                             <div class="row" id="FILLUP">
                               <div class="col-lg-6 col-md-12" id="repeatFillUp">
                                 <div class="ui search focus mt-30 lbel25">
@@ -587,81 +829,85 @@ body {font-family: 'Roboto', sans-serif;}
               </div> 
             </form>
           </div>
-          <div id="DragDropAudio">
-            <div class="step-content">
-              <div class="step-tab-panel" >
-                <div class="tab-from-content">
-                  <div class="title-icon">
-                    <h3 class="title"><i class="uil uil-film"></i>Drag Drop Audio</h3>
-                  </div>
-                  <div class="course__form">
-                    <div class="view_info10">
-                      
-                      <form action="{% url 'home:platform' cid lid 51 %}" method="POST">
-                        {% csrf_token %}
-                        <div class="row">
-                          <div class="col-lg-10 col-md-10">															
-                            <div class="ui search focus mt-30 lbel25">
-                              <label>Title</label>
-                              <div class="ui left icon input swdh19">
-                                <input class="prompt srch_explore" type="text" name="number_5" id="id_number_5" placeholder="Number of questions">
-                                <button type="submit" class="btn1542">Submit</button>
-                              </div>
-                            </div>					
-                          </div>
-                        </div>
-                      </form>
-                      <form action="{% url 'home:platform' cid lid 5 %}" method="POST" enctype="multipart/form-data">
-                        {% csrf_token %}
+          </div>
+          <div id="q7" class="inv">
+            <div id="DragDropAudio">
+              <div class="step-content">
+                <div class="step-tab-panel" >
+                  <div class="tab-from-content">
+                    <div class="title-icon">
+                      <h3 class="title"><i class="uil uil-film"></i>Drag Drop Audio</h3>
+                    </div>
+                    <div class="course__form">
+                      <div class="view_info10">
+                        
+                        <!-- <form action="{% url 'home:platform' cid lid 51 %}" method="POST">
+                          {% csrf_token %}
                           <div class="row">
-                            <div class="col-lg-12 col-md-12">															
+                            <div class="col-lg-10 col-md-10">															
                               <div class="ui search focus mt-30 lbel25">
                                 <label>Title</label>
                                 <div class="ui left icon input swdh19">
-                                  <input class="prompt srch_explore" type="text" name="title" id="id_title" placeholder="Title">
+                                  <input class="prompt srch_explore" type="text" name="number_5" id="id_number_5" placeholder="Number of questions">
+                                  <button type="submit" class="btn1542">Submit</button>
                                 </div>
                               </div>					
                             </div>
                           </div>
-                          <div class="row">
-                            <div class="col-lg-12 col-md-12">															
-                              <div class="ui search focus mt-30 lbel25">
-                                <label>Description</label>
-                                <div class="ui left icon input swdh19">
-                                  <input class="prompt srch_explore" type="text" name="description" id="id_description" placeholder="Description">
-                                </div>
-                              </div>					
-                            </div>
-                          </div>
-                          {% for i in number_5 %}
-                          <div class="row" id="FILLUP">
-                            <div class="col-lg-6 col-md-12" id="repeatFillUp">
-                              <div class="ui search focus mt-30 lbel25">
-                                <label>Upload Audio File</label>
-                              <input id="audio_file{{i}}" name="audio_file{{i}}" type="file">
+                        </form> -->
+                        <form action="{% url 'home:platform' cid lid 5 %}" method="POST" enctype="multipart/form-data">
+                          {% csrf_token %}
+                            <div class="row">
+                              <div class="col-lg-12 col-md-12">															
+                                <div class="ui search focus mt-30 lbel25">
+                                  <label>Title</label>
+                                  <div class="ui left icon input swdh19">
+                                    <input class="prompt srch_explore" type="text" name="title" id="id_title" placeholder="Title">
+                                  </div>
+                                </div>					
                               </div>
                             </div>
-                            <div class="col-lg-6 col-md-12">
-                              <div class="ui search focus mt-30 lbel25">
-                                <label>Correct Match</label>
-                                <div class="ui left icon input swdh19">
-                                  <input class="prompt srch_explore" type="text" name="answer{{i}}" id="id_answer{{i}}" placeholder="Correct answer">
+                            <div class="row">
+                              <div class="col-lg-12 col-md-12">															
+                                <div class="ui search focus mt-30 lbel25">
+                                  <label>Description</label>
+                                  <div class="ui left icon input swdh19">
+                                    <input class="prompt srch_explore" type="text" name="description" id="id_description" placeholder="Description">
+                                  </div>
+                                </div>					
+                              </div>
+                            </div>
+                            {% for i in number %}
+                            <div class="row" id="FILLUP">
+                              <div class="col-lg-6 col-md-12" id="repeatFillUp">
+                                <div class="ui search focus mt-30 lbel25">
+                                  <label>Upload Audio File</label>
+                                <input id="audio_file{{i}}" name="audio_file{{i}}" type="file">
+                                </div>
+                              </div>
+                              <div class="col-lg-6 col-md-12">
+                                <div class="ui search focus mt-30 lbel25">
+                                  <label>Correct Match</label>
+                                  <div class="ui left icon input swdh19">
+                                    <input class="prompt srch_explore" type="text" name="answer{{i}}" id="id_answer{{i}}" placeholder="Correct answer">
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                          {% endfor %}
-                    </div>
-                    <br>
-                    <div class="header_center">
-                      <button type="submit" class="btn1542">Submit</button>
+                            {% endfor %}
+                      </div>
+                      <br>
+                      <div class="header_center">
+                        <button type="submit" class="btn1542">Submit</button>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </div> 
-          </form>
+              </div> 
+            </form>
+            </div>
           </div>
+          <div id="q8" class="inv">
             <div id="DragDropText">
               <div class="step-content">
                   <div class="step-tab-panel" >
@@ -672,7 +918,7 @@ body {font-family: 'Roboto', sans-serif;}
                       <div class="course__form">
                         <div class="view_info10">
                           
-                          <form action="{% url 'home:platform' cid lid 61 %}" method="POST">
+                          <!-- <form action="{% url 'home:platform' cid lid 61 %}" method="POST">
                             {% csrf_token %}
                             <div class="row">
                               <div class="col-lg-10 col-md-10">															
@@ -685,7 +931,7 @@ body {font-family: 'Roboto', sans-serif;}
                                 </div>					
                               </div>
                             </div>
-                          </form>
+                          </form> -->
                           <form action="{% url 'home:platform' cid lid 6 %}" method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
                               <div class="row">
@@ -708,7 +954,7 @@ body {font-family: 'Roboto', sans-serif;}
                                   </div>					
                                 </div>
                               </div>
-                              {% for i in number_6 %}
+                              {% for i in number %}
                               <div class="row">
                                 <div class="col-lg-12 col-md-12">															
                                   <div class="ui search focus mt-30 lbel25">
@@ -740,30 +986,32 @@ body {font-family: 'Roboto', sans-serif;}
               </div> 
               </form>
             </div>
-            <div id="FillUpsText">
+          </div>
+          <div id="q9" class="inv">
+            <div id="DragDropOrder">
               <div class="step-content">
                 <div class="step-tab-panel">
                   <div class="tab-from-content">
                     <div class="title-icon">
-                      <h3 class="title"><i class="uil uil-film"></i>Fill in the blanks (Text)</h3>
+                      <h3 class="title"><i class="uil uil-film"></i>Drag Drop Order</h3>
                     </div>
                     <div class="course__form">
                       <div class="view_info10">
-                        <form action="{% url 'home:platform' cid lid 71 %}" method="POST">
+                        <!-- <form action="{% url 'home:platform' cid lid 101 %}" method="POST">
                           {% csrf_token %}
                           <div class="row">
                             <div class="col-lg-10 col-md-10">															
                               <div class="ui search focus mt-30 lbel25">
                                 <label>Number of questions</label>
                                 <div class="ui left icon input swdh19">
-                                  <input class="prompt srch_explore" type="text" name="number_7" id="id_number_7" placeholder="Number of questions" value="{{number_7}}">
+                                  <input class="prompt srch_explore" type="text" name="number_10" id="id_number_10" placeholder="Number of questions" value="{{number_10}}">
                                   <button type="submit" class="btn1542">Submit</button>
                                 </div>
                               </div>					
                             </div>
                           </div>
-                        </form>
-                        <form action="{% url 'home:platform' cid lid 7 %}" method="POST" enctype="multipart/form-data">
+                        </form> -->
+                        <form action="{% url 'home:platform' cid lid 10 %}" method="POST">
                           {% csrf_token %}
                         <div class="row">
                           <div class="col-lg-12 col-md-12">															
@@ -785,21 +1033,13 @@ body {font-family: 'Roboto', sans-serif;}
                             </div>					
                           </div>
                         </div>
-                        {% for i in number_7 %}
+                        {% for i in number %}
                         <div class="row">
-                          <div class="col-lg-6 col-md-12">
+                          <div class="col-lg-12 col-md-12">
                             <div class="ui search focus mt-30 lbel25">
                               <label>Question</label>
                               <div class="ui left icon input swdh19">
-                                <input class="prompt srch_explore" type="text" name="question{{i}}" id="id_question{{i}}" placeholder="Enter question along with blank">
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-lg-6 col-md-12">
-                            <div class="ui search focus mt-30 lbel25">
-                              <label>Correct Answer</label>
-                              <div class="ui left icon input swdh19">
-                                <input class="prompt srch_explore" type="text" name="answer{{i}}" id="id_answer{{i}}" placeholder="Correct answer">
+                                <input class="prompt srch_explore" type="text" name="question{{i}}" id="id_question{{i}}" placeholder="Enter the unjumbled string">
                               </div>
                             </div>
                           </div>
@@ -817,233 +1057,96 @@ body {font-family: 'Roboto', sans-serif;}
               </div>
             </form>
           </div>
-          <div id="FillUpsMissing">
-            <div class="step-content">
-              <div class="step-tab-panel">
-                <div class="tab-from-content">
-                  <div class="title-icon">
-                    <h3 class="title"><i class="uil uil-film"></i>Fill in the Missing values</h3>
-                  </div>
-                  <div class="course__form">
-                    <div class="view_info10">
-                      <form action="{% url 'home:platform' cid lid 8 %}" method="POST">
-                        {% csrf_token %}
-                      <div class="row">
-                        <div class="col-lg-12 col-md-12">															
-                          <div class="ui search focus mt-30 lbel25">
-                            <label>Title</label>
-                            <div class="ui left icon input swdh19">
-                              <input class="prompt srch_explore" type="text" name="title" id="id_title" placeholder="Title">
-                            </div>
-                          </div>					
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-lg-12 col-md-12">															
-                          <div class="ui search focus mt-30 lbel25">
-                            <label>Description</label>
-                            <div class="ui left icon input swdh19">
-                              <input class="prompt srch_explore" type="text" name="description" id="id_description" placeholder="Description">
-                            </div>
-                          </div>					
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-lg-4 col-md-4">
-                          <div class="ui search focus mt-30 lbel25">
-                            <label>Start Number</label>
-                            <div class="ui left icon input swdh19">
-                              <input class="prompt srch_explore" type="text" name="start" id="id_start" placeholder="Enter start number">
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-lg-4 col-md-4">
-                          <div class="ui search focus mt-30 lbel25">
-                            <label>End Number</label>
-                            <div class="ui left icon input swdh19">
-                              <input class="prompt srch_explore" type="text" name="end" id="id_end" placeholder="Enter end number">
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-lg-12 col-md-12">															
-                          <div class="ui search focus mt-30 lbel25">
-                            <label>Enter missing numbers list</label>
-                            <div class="ui left icon input swdh19">
-                              <input class="prompt srch_explore" type="text" name="missinglist" id="id_missinglist" placeholder="Missing List (Eg: 2, 4, 7, 10, ...)">
-                            </div>
-                          </div>					
-                        </div>
-                      </div>
-                      <br>
-                      <div class="header_center">
-                        <button type="submit" class="btn1542">Submit</button>
-                      </div>
-                    </div>
-                  </div>
-                  
-                </div>
-              </div>  
-            </div>
-          </form>
-        </div>
-          <div id="DragDropMultiple">
-            <div class="step-content">
-              <div class="step-tab-panel" >
-                <div class="tab-from-content">
-                  <div class="title-icon">
-                    <h3 class="title"><i class="uil uil-film"></i>Drag Drop Multiple</h3>
-                  </div>
-                  <div class="course__form">
-                    <div class="view_info10">
-                      <form action="{% url 'home:platform' cid lid 91 %}" method="POST">
-                        {% csrf_token %}
-                        <div class="row">
-                          <div class="col-lg-10 col-md-10">															
-                            <div class="ui search focus mt-30 lbel25">
-                              <label>Number of names</label>
-                              <div class="ui left icon input swdh19">
-                                <input class="prompt srch_explore" type="text" name="number_9" id="id_number_9" placeholder="Number of names" value="{{number_9}}">
-                                <button type="submit" class="btn1542">Submit</button>
-                              </div>
-                            </div>					
-                          </div>
-                        </div>
-                      </form>
-                      <form action="{% url 'home:platform' cid lid 9 %}" method="POST" >
-                        {% csrf_token %}
-                          <div class="row">
-                            <div class="col-lg-12 col-md-12">															
-                              <div class="ui search focus mt-30 lbel25">
-                                <label>Title</label>
-                                <div class="ui left icon input swdh19">
-                                  <input class="prompt srch_explore" type="text" name="title" id="id_title" placeholder="Title">
-                                </div>
-                              </div>					
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-lg-12 col-md-12">															
-                              <div class="ui search focus mt-30 lbel25">
-                                <label>Description</label>
-                                <div class="ui left icon input swdh19">
-                                  <input class="prompt srch_explore" type="text" name="description" id="id_description" placeholder="Description">
-                                </div>
-                              </div>					
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-lg-12 col-md-12">															
-                              <div class="ui search focus mt-30 lbel25">
-                                <label>Add category list</label>
-                                <div class="ui left icon input swdh19">
-                                  <input class="prompt srch_explore" type="text" name="category" id="id_category" placeholder="Category List (Eg: Name, Place, Animal ...)">
-                                </div>
-                              </div>					
-                            </div>
-                          </div>
-                          {% for i in number_9 %}
-                          <div class="row">
-                            <div class="col-lg-12 col-md-12">															
-                              <div class="ui search focus mt-30 lbel25">
-                                <label>Add a correct pair</label>
-                                  <div class="row">
-                                    <div class="col-lg-6 mr-5 mb-5">
-                                      <div class="ui left icon input swdh19">
-                                        <input class="prompt srch_explore" type="text" name="name{{i}}" id="id_name{{i}}" placeholder="Name">
-                                      </div>
-                                    </div>
-                                    <div class="col-lg-6 mr-5 mb-5">
-                                      <div class="ui left icon input swdh19">
-                                        <input class="prompt srch_explore" type="text" name="category{{i}}" id="id_category{{i}}" placeholder="Category">
-                                      </div>
-                                    </div>
-                                  </div>
-                              </div>					
-                            </div>
-                          </div>
-                          {% endfor %}
-                    </div>
-                    <br>
-                    <div class="header_center">
-                      <button type="submit" class="btn1542">Submit</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div> 
-          </form>
           </div>
-          <div id="DragDropOrder">
-            <div class="step-content">
-              <div class="step-tab-panel">
-                <div class="tab-from-content">
-                  <div class="title-icon">
-                    <h3 class="title"><i class="uil uil-film"></i>Drag Drop Order</h3>
-                  </div>
-                  <div class="course__form">
-                    <div class="view_info10">
-                      <form action="{% url 'home:platform' cid lid 101 %}" method="POST">
-                        {% csrf_token %}
-                        <div class="row">
-                          <div class="col-lg-10 col-md-10">															
-                            <div class="ui search focus mt-30 lbel25">
-                              <label>Number of questions</label>
-                              <div class="ui left icon input swdh19">
-                                <input class="prompt srch_explore" type="text" name="number_10" id="id_number_10" placeholder="Number of questions" value="{{number_10}}">
-                                <button type="submit" class="btn1542">Submit</button>
+          <div id="q10" class="inv">
+            <div id="DragDropMultiple">
+              <div class="step-content">
+                <div class="step-tab-panel" >
+                  <div class="tab-from-content">
+                    <div class="title-icon">
+                      <h3 class="title"><i class="uil uil-film"></i>Drag Drop Multiple</h3>
+                    </div>
+                    <div class="course__form">
+                      <div class="view_info10">
+                        <!-- <form action="{% url 'home:platform' cid lid 91 %}" method="POST">
+                          {% csrf_token %}
+                          <div class="row">
+                            <div class="col-lg-10 col-md-10">															
+                              <div class="ui search focus mt-30 lbel25">
+                                <label>Number of names</label>
+                                <div class="ui left icon input swdh19">
+                                  <input class="prompt srch_explore" type="text" name="number_9" id="id_number_9" placeholder="Number of names" value="{{number_9}}">
+                                  <button type="submit" class="btn1542">Submit</button>
+                                </div>
+                              </div>					
+                            </div>
+                          </div>
+                        </form> -->
+                        <form action="{% url 'home:platform' cid lid 9 %}" method="POST" >
+                          {% csrf_token %}
+                            <div class="row">
+                              <div class="col-lg-12 col-md-12">															
+                                <div class="ui search focus mt-30 lbel25">
+                                  <label>Title</label>
+                                  <div class="ui left icon input swdh19">
+                                    <input class="prompt srch_explore" type="text" name="title" id="id_title" placeholder="Title">
+                                  </div>
+                                </div>					
                               </div>
-                            </div>					
-                          </div>
-                        </div>
-                      </form>
-                      <form action="{% url 'home:platform' cid lid 10 %}" method="POST">
-                        {% csrf_token %}
-                      <div class="row">
-                        <div class="col-lg-12 col-md-12">															
-                          <div class="ui search focus mt-30 lbel25">
-                            <label>Title</label>
-                            <div class="ui left icon input swdh19">
-                              <input class="prompt srch_explore" type="text" name="title" id="id_title" placeholder="Title">
                             </div>
-                          </div>					
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-lg-12 col-md-12">															
-                          <div class="ui search focus mt-30 lbel25">
-                            <label>Description</label>
-                            <div class="ui left icon input swdh19">
-                              <input class="prompt srch_explore" type="text" name="description" id="id_description" placeholder="Description">
+                            <div class="row">
+                              <div class="col-lg-12 col-md-12">															
+                                <div class="ui search focus mt-30 lbel25">
+                                  <label>Description</label>
+                                  <div class="ui left icon input swdh19">
+                                    <input class="prompt srch_explore" type="text" name="description" id="id_description" placeholder="Description">
+                                  </div>
+                                </div>					
+                              </div>
                             </div>
-                          </div>					
-                        </div>
-                      </div>
-                      {% for i in number_10 %}
-                      <div class="row">
-                        <div class="col-lg-12 col-md-12">
-                          <div class="ui search focus mt-30 lbel25">
-                            <label>Question</label>
-                            <div class="ui left icon input swdh19">
-                              <input class="prompt srch_explore" type="text" name="question{{i}}" id="id_question{{i}}" placeholder="Enter the unjumbled string">
+                            <div class="row">
+                              <div class="col-lg-12 col-md-12">															
+                                <div class="ui search focus mt-30 lbel25">
+                                  <label>Add category list</label>
+                                  <div class="ui left icon input swdh19">
+                                    <input class="prompt srch_explore" type="text" name="category" id="id_category" placeholder="Category List (Eg: Name, Place, Animal ...)">
+                                  </div>
+                                </div>					
+                              </div>
                             </div>
-                          </div>
-                        </div>
+                            {% for i in number %}
+                            <div class="row">
+                              <div class="col-lg-12 col-md-12">															
+                                <div class="ui search focus mt-30 lbel25">
+                                  <label>Add a correct pair</label>
+                                    <div class="row">
+                                      <div class="col-lg-6 mr-5 mb-5">
+                                        <div class="ui left icon input swdh19">
+                                          <input class="prompt srch_explore" type="text" name="name{{i}}" id="id_name{{i}}" placeholder="Name">
+                                        </div>
+                                      </div>
+                                      <div class="col-lg-6 mr-5 mb-5">
+                                        <div class="ui left icon input swdh19">
+                                          <input class="prompt srch_explore" type="text" name="category{{i}}" id="id_category{{i}}" placeholder="Category">
+                                        </div>
+                                      </div>
+                                    </div>
+                                </div>					
+                              </div>
+                            </div>
+                            {% endfor %}
                       </div>
-                      {% endfor %}
                       <br>
                       <div class="header_center">
                         <button type="submit" class="btn1542">Submit</button>
                       </div>
                     </div>
                   </div>
-                  
                 </div>
-              </div>  
+              </div> 
+            </form>
             </div>
-          </form>
-        </div>
+          </div>
             <br>
             
         </div>
@@ -1054,6 +1157,26 @@ body {font-family: 'Roboto', sans-serif;}
   </div>
 
 <script>
+
+document
+  .getElementById('target')
+  .addEventListener('change', function () {
+    'use strict';
+    var vis = document.querySelector('.vis'),   
+      target = document.getElementById(this.value);
+    if (vis !== null) {
+      vis.className = 'inv';
+    }
+    if (target !== null ) {
+      target.className = 'vis';
+    }
+});
+
+function myFunction() {
+  var x = document.getElementById("snackbar");
+  x.className = "show";
+  setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+}
 
 var input11 = document.getElementById( 'file11' );
 var infoArea11 = document.getElementById( 'filename11' );
