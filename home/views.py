@@ -350,8 +350,8 @@ def platform(request, cid, lid, slide_type=0):
         name = data.get('title')
         description = data.get('description')
         
-        # print(str(contentdic['number_10'])[9])
-        num = int(str(contentdic['number_10'])[9])   
+        # print(str(contentdic['number'])[9])
+        num = int(str(contentdic['number'])[9])   
         questions=[]
         for i in range(1, num):
             question = data.get('question' + str(i))
@@ -381,8 +381,8 @@ def platform(request, cid, lid, slide_type=0):
         description = data.get('description')
         category = data.get('category')
         category = category.split(', ')
-        print(str(contentdic['number_9'])[9])
-        num = int(str(contentdic['number_9'])[9])   
+        print(str(contentdic['number'])[9])
+        num = int(str(contentdic['number'])[9])   
         questions=[]
         for i in range(1, num):
             name = data.get('name' + str(i))
@@ -446,8 +446,9 @@ def platform(request, cid, lid, slide_type=0):
         
         image_url = ""
         files = request.FILES.dict()
-        print(str(contentdic['number_1'])[9])
-        num = int(str(contentdic['number_1'])[9])
+        # print(str(contentdic['number'])[9])
+        num = int(str(contentdic['number'])[9])
+        # num=2
         pictures=[]
         for i in range(1, num):
             answer = data.get('answer' + str(i))
@@ -482,8 +483,8 @@ def platform(request, cid, lid, slide_type=0):
         name = data.get('title')
         description = data.get('description')
         
-        print(str(contentdic['number_7'])[9])
-        num = int(str(contentdic['number_7'])[9])   
+        print(str(contentdic['number'])[9])
+        num = int(str(contentdic['number'])[9])   
         questions=[]
         for i in range(1, num):
             question = data.get('question' + str(i))
@@ -515,8 +516,8 @@ def platform(request, cid, lid, slide_type=0):
         print(data)
         name = data.get('title')
         description = data.get('description')
-        print(str(contentdic['number_2'])[9])
-        num = int(str(contentdic['number_2'])[9])
+        print(str(contentdic['number'])[9])
+        num = int(str(contentdic['number'])[9])
         questions=[]
         for i in range(1, num):
             ques={}
@@ -595,8 +596,8 @@ def platform(request, cid, lid, slide_type=0):
         data = request.POST.dict()
         name = data.get('title')
         description = data.get('description')
-        print(str(contentdic['number_3'])[9])
-        num = int(str(contentdic['number_3'])[9])
+        print(str(contentdic['number'])[9])
+        num = int(str(contentdic['number'])[9])
         questions=[]
 
         for i in range(1, num):
@@ -664,8 +665,8 @@ def platform(request, cid, lid, slide_type=0):
         name = data.get('title')
         description = data.get('description')
 
-        print(str(contentdic['number_4'])[9])
-        num = int(str(contentdic['number_4'])[9])
+        print(str(contentdic['number'])[9])
+        num = int(str(contentdic['number'])[9])
         pictures=[]
 
         for i in range(1, num):
@@ -700,8 +701,8 @@ def platform(request, cid, lid, slide_type=0):
         name = data.get('title')
         description = data.get('description')
 
-        print(str(contentdic['number_5'])[9])
-        num = int(str(contentdic['number_5'])[9])
+        print(str(contentdic['number'])[9])
+        num = int(str(contentdic['number'])[9])
         audios=[]
 
         for i in range(1, num):
@@ -737,8 +738,8 @@ def platform(request, cid, lid, slide_type=0):
         name = data.get('title')
         description = data.get('description')
 
-        print(str(contentdic['number_6'])[9])
-        num = int(str(contentdic['number_6'])[9])
+        print(str(contentdic['number'])[9])
+        num = int(str(contentdic['number'])[9])
         questions=[]
 
         for i in range(1, num):
