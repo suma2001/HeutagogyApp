@@ -1,0 +1,1 @@
+web: gunicorn heutagogy.wsgi:application --log-file -
