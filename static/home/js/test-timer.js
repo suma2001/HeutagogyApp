@@ -1,0 +1,1 @@
+function startTimer(){var e=document.getElementById("timer").innerHTML.split(/[:]+/),t=e[0],n=checkSecond(e[1]-1);59==n&&(t-=1),document.getElementById("timer").innerHTML=t+":"+n,console.log(t),setTimeout(startTimer,1e3)}function checkSecond(e){return e<10&&e>=0&&(e="0"+e),e<0&&(e="59"),e}document.getElementById("timer").innerHTML="60:0",startTimer();
