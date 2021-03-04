@@ -23,11 +23,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'b%%(5k578ldixa!r4ke#rrf$v^r(b2b6uu%%r7huotk6m9lt5s'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-DEBUG = False
+# DEBUG = False
 
 # ALLOWED_HOSTS = ['atlheutagogy.pythonanywhere.com' ]
 SECURE_SSL_REDIRECT = True
