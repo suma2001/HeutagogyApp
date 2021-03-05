@@ -24,6 +24,7 @@ cloudinary.config(cloud_name='dc65gx08vn',
                   api_key='146415836349429',
                   api_secret='HlYXd6nOu7KkJwdrWHuNMjJClCs')
 contentdic={}
+contentdic['number'] = range(1,2)
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="./heutagogy-2020-6959a4a76c88.json"
 firebase = firebase.FirebaseApplication('https://heutagogy-2020.firebaseio.com')
@@ -273,7 +274,6 @@ def create_new_lesson(request, course):
         return render(request, 'home/createnewlesson.html', {'create_course_active': 'active', 'course': course})
     return render(request, 'home/sign_in.html') 
 
-number=0
 
 def platform(request, cid, lid, slide_type=0):
     print(slide_type, cid, lid)
@@ -422,7 +422,7 @@ def platform(request, cid, lid, slide_type=0):
         files = request.FILES.dict()
         if not youtubeUrl and 'video_file' in files:
             video_file = request.FILES['video_file']
-            url = cloudinary.uploader.upload(video_file, resource_type="auto")
+            url = cloudinary.uploader.upload(video_file, resource_type="auto", folder="SlideVideos/")
             video_url = url['secure_url']
             # filename = fs.save(video_file.name, video_file)
             # uploaded_file_url = fs.url(filename)
@@ -460,7 +460,7 @@ def platform(request, cid, lid, slide_type=0):
         for i in range(1, num):
             answer = data.get('answer' + str(i))
             image_file = request.FILES['image_file' + str(i)]
-            url = cloudinary.uploader.upload(image_file)
+            url = cloudinary.uploader.upload(image_file, folder="SlideImages/")
             image_url = url['secure_url']
             print(image_url)
             # filename = fs.save(image_file.name, image_file)
@@ -557,7 +557,7 @@ def platform(request, cid, lid, slide_type=0):
             print(request.FILES.dict())
             for j in range(1, 5):
                 # filename = fs.save(request.FILES['option' + str(i) + str(j) + '_image'].name, request.FILES['option' + str(i) + str(j) + '_image'])
-                url = cloudinary.uploader.upload(request.FILES['option' + str(i) + str(j) + '_image'])
+                url = cloudinary.uploader.upload(request.FILES['option' + str(i) + str(j) + '_image'], folder="SlideImages/")
                 # print(url)
                 image_url = url['secure_url']
                 print(image_url)
@@ -687,7 +687,7 @@ def platform(request, cid, lid, slide_type=0):
         for i in range(1, num):
             answer = data.get('answer'+str(i))
             image_file = request.FILES['image_file' + str(i)]
-            url = cloudinary.uploader.upload(image_file)
+            url = cloudinary.uploader.upload(image_file, folder="SlideImages/")
             image_url = url['secure_url']
             print(image_url)
             # filename = fs.save(image_file.name, image_file)
@@ -727,7 +727,7 @@ def platform(request, cid, lid, slide_type=0):
             answer = data.get('answer'+str(i))
             if 'audio_file' in request.FILES.dict(): 
                 audio_file = request.FILES['audio_file' + str(i)]
-            url = cloudinary.uploader.upload(request.FILES['audio_file' + str(i)], resource_type = "auto")
+            url = cloudinary.uploader.upload(request.FILES['audio_file' + str(i)], resource_type = "auto", folder="SlideAudios/")
             audio_url = url['secure_url']
             print(audio_url)
             # filename = fs.save(audio_file.name, audio_file)
