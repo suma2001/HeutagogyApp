@@ -19,7 +19,10 @@ import datetime
 import urllib
 import uuid
 import random
-
+import cloudinary
+cloudinary.config(cloud_name='dc65gx08vn',
+                  api_key='146415836349429',
+                  api_secret='HlYXd6nOu7KkJwdrWHuNMjJClCs')
 contentdic={}
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="./heutagogy-2020-6959a4a76c88.json"
@@ -270,6 +273,8 @@ def create_new_lesson(request, course):
         return render(request, 'home/createnewlesson.html', {'create_course_active': 'active', 'course': course})
     return render(request, 'home/sign_in.html') 
 
+number=0
+
 def platform(request, cid, lid, slide_type=0):
     print(slide_type, cid, lid)
     cname = courses_collection.document(cid).get().to_dict()['course_name']
@@ -417,14 +422,16 @@ def platform(request, cid, lid, slide_type=0):
         files = request.FILES.dict()
         if not youtubeUrl and 'video_file' in files:
             video_file = request.FILES['video_file']
-            filename = fs.save(video_file.name, video_file)
-            uploaded_file_url = fs.url(filename)
-            print(uploaded_file_url)
-            videoPath = "media\\" + uploaded_file_url[7:]
-            imageBlob = bucket.blob("SlideVideos/" + uploaded_file_url[7:])
-            imageBlob.upload_from_filename(videoPath)
-            imageBlob.make_public()
-            video_url = imageBlob.public_url
+            url = cloudinary.uploader.upload(video_file, resource_type="auto")
+            video_url = url['secure_url']
+            # filename = fs.save(video_file.name, video_file)
+            # uploaded_file_url = fs.url(filename)
+            print(video_url)
+            # videoPath = "media\\" + uploaded_file_url[7:]
+            # imageBlob = bucket.blob("SlideVideos/" + uploaded_file_url[7:])
+            # imageBlob.upload_from_filename(videoPath)
+            # imageBlob.make_public()
+            # video_url = imageBlob.public_url
 
         l = len(list(slide_contents.get()))
         slide_contents.document(lid+'S'+str(l+1)).set({
@@ -453,13 +460,16 @@ def platform(request, cid, lid, slide_type=0):
         for i in range(1, num):
             answer = data.get('answer' + str(i))
             image_file = request.FILES['image_file' + str(i)]
-            filename = fs.save(image_file.name, image_file)
-            uploaded_file_url = fs.url(filename)
-            imagePath = "media\\" + uploaded_file_url[7:]
-            imageBlob = bucket.blob("SlideImages/" + uploaded_file_url[7:])
-            imageBlob.upload_from_filename(imagePath)
-            imageBlob.make_public()
-            image_url = imageBlob.public_url
+            url = cloudinary.uploader.upload(image_file)
+            image_url = url['secure_url']
+            print(image_url)
+            # filename = fs.save(image_file.name, image_file)
+            # uploaded_file_url = fs.url(filename)
+            # imagePath = "media\\" + uploaded_file_url[7:]
+            # imageBlob = bucket.blob("SlideImages/" + uploaded_file_url[7:])
+            # imageBlob.upload_from_filename(imagePath)
+            # imageBlob.make_public()
+            
             pictures.append({
                 'correct_text': answer,
                 'picture': image_url
@@ -546,13 +556,18 @@ def platform(request, cid, lid, slide_type=0):
             URL=['']*4
             print(request.FILES.dict())
             for j in range(1, 5):
-                filename = fs.save(request.FILES['option' + str(i) + str(j) + '_image'].name, request.FILES['option' + str(i) + str(j) + '_image'])
-                uploaded_file_url = fs.url(filename)
-                imagePath = "media\\" + uploaded_file_url[7:]
-                imageBlob = bucket.blob("SlideImages/" + uploaded_file_url[7:])
-                imageBlob.upload_from_filename(imagePath)
-                imageBlob.make_public()
-                URL[j-1] = imageBlob.public_url
+                # filename = fs.save(request.FILES['option' + str(i) + str(j) + '_image'].name, request.FILES['option' + str(i) + str(j) + '_image'])
+                url = cloudinary.uploader.upload(request.FILES['option' + str(i) + str(j) + '_image'])
+                # print(url)
+                image_url = url['secure_url']
+                print(image_url)
+                # uploaded_file_url = fs.url(filename)
+                # imagePath = "media\\" + uploaded_file_url[7:]
+                # imageBlob = bucket.blob("SlideImages/" + uploaded_file_url[7:])
+                # imageBlob.upload_from_filename(imagePath)
+                # imageBlob.make_public()
+                # URL[j-1] = imageBlob.public_url
+                URL[j-1] = image_url
             ques['question'] = question
             ques['options'] = [
                     {
@@ -672,13 +687,16 @@ def platform(request, cid, lid, slide_type=0):
         for i in range(1, num):
             answer = data.get('answer'+str(i))
             image_file = request.FILES['image_file' + str(i)]
-            filename = fs.save(image_file.name, image_file)
-            uploaded_file_url = fs.url(filename)
-            imagePath = "media\\" + uploaded_file_url[7:]
-            imageBlob = bucket.blob("SlideImages/" + uploaded_file_url[7:])
-            imageBlob.upload_from_filename(imagePath)
-            imageBlob.make_public()
-            image_url = imageBlob.public_url
+            url = cloudinary.uploader.upload(image_file)
+            image_url = url['secure_url']
+            print(image_url)
+            # filename = fs.save(image_file.name, image_file)
+            # uploaded_file_url = fs.url(filename)
+            # imagePath = "media\\" + uploaded_file_url[7:]
+            # imageBlob = bucket.blob("SlideImages/" + uploaded_file_url[7:])
+            # imageBlob.upload_from_filename(imagePath)
+            # imageBlob.make_public()
+            # image_url = imageBlob.public_url
 
             pictures.append({
                 'description': answer,
@@ -709,13 +727,16 @@ def platform(request, cid, lid, slide_type=0):
             answer = data.get('answer'+str(i))
             if 'audio_file' in request.FILES.dict(): 
                 audio_file = request.FILES['audio_file' + str(i)]
-            filename = fs.save(audio_file.name, audio_file)
-            uploaded_file_url = fs.url(filename)
-            imagePath = "media\\" + uploaded_file_url[7:]
-            imageBlob = bucket.blob("SlideAudios/" + uploaded_file_url[7:])
-            imageBlob.upload_from_filename(imagePath)
-            imageBlob.make_public()
-            audio_url = imageBlob.public_url
+            url = cloudinary.uploader.upload(request.FILES['audio_file' + str(i)], resource_type = "auto")
+            audio_url = url['secure_url']
+            print(audio_url)
+            # filename = fs.save(audio_file.name, audio_file)
+            # uploaded_file_url = fs.url(filename)
+            # imagePath = "media\\" + uploaded_file_url[7:]
+            # imageBlob = bucket.blob("SlideAudios/" + uploaded_file_url[7:])
+            # imageBlob.upload_from_filename(imagePath)
+            # imageBlob.make_public()
+            # audio_url = imageBlob.public_url
 
             audios.append({
                 'description': answer,
