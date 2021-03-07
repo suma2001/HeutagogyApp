@@ -62,6 +62,8 @@ def admin_signin(request):
             print(error)
             if str(error) == "INVALID_PASSWORD":
                 messages.warning(request, 'Invalid login credentials')
+            elif str(error) == "EMAIL_NOT_FOUND":
+                messages.warning(request, 'Email not found')
             elif str(error) == "TOO_MANY_ATTEMPTS_TRY_LATER : Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later.":
                 messages.warning(request, 'TOO_MANY_ATTEMPTS_TRY_LATER : Access to this account has been temporarily disabled due to many failed login attempts.')
             return render(request, 'admins/admin_sign_in.html')
